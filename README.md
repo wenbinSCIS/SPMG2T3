@@ -1,6 +1,6 @@
-# vue-scaffold
+# SPMG2T3
 
-This template should help get you started developing with Vue 3 in Vite.
+SPMG2T3 repo, [Vue 3](https://vuejs.org) scaffolded with [Vite](https://vitejs.dev) using [create-vue](https://github.com/vuejs/create-vue)
 
 ## Recommended IDE Setup
 
@@ -12,6 +12,12 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
+### Ensure NodeJS is version 16 and above
+```sh
+node -v
+```
+
+### Install dependencies
 ```sh
 npm install
 ```
