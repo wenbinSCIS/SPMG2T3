@@ -81,11 +81,13 @@ const sendSRBRRequest = async (roleid) => {
         if(SRBR.length>0){
             skillstext += "<ul>"
             for(sr of SRBR){
+                
                 skillstext += "<li>"
+                skillstext += '<a href="viewcoursebyskill.html/?sid=' + sr.SkillsID +'">'   
                 var skillname = await getSkill(roleid,sr.SkillsID)
                 skillstext += skillname[0].Skillname
              
-                skillstext += "</li>" 
+                skillstext += "</a></li>" 
                 console.log(skillstext)    
             }
             skillstext += "</ul>"
