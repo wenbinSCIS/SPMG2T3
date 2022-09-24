@@ -27,7 +27,7 @@ class Roles(db.Model):
     RoleID = db.Column(db.Integer, primary_key=True)
 
     RoleName = db.Column(db.String(255), nullable=False)
- 
+    
     CreatedBy = db.Column(db.String(255), nullable=False)
 
     Fulfilled = db.Column(db.String(255), nullable=False)
@@ -51,7 +51,7 @@ class Roles(db.Model):
             "CreatedBy": self.CreatedBy,
             "Fulfilled": self.Fulfilled, 
             'Description': self.Description
-     }
+    }
 
 @app.route("/roles")
 def get_all():
@@ -60,9 +60,27 @@ def get_all():
     return jsonify(
         {
             "data": [role.to_dict()
-                     for role in role_list]
+                    for role in role_list]
         }
     ), 200
+    
+@app.route("/createrole",methods=["POST"])
+def create_role():
+    data = request.get_json()
+    
+    Add_Role = Roles(
+        RoleID = data["Role ID"]
+    RoleName = data["Role Name"]
+    CreatedBy = data["Created By"]
+    Fulfilled = " "
+    Description = data["Description"]
+    )
+    try:
+        db.session.add(Add_Role)
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred when adding the role to the database.", "code":500})
+    return {"role data": Add_Role.json(), "code": 201}
 
 
 
