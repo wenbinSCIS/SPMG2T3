@@ -114,6 +114,33 @@ def delete_role_by_ID():
             return jsonify({"message": "An error occurred when deleting the role from the database.", "code":500})
         return {"RoleID": rid,"Success":True, "code": 201}
 
+@app.route("/roles/updateDescriptionbyID",methods=["POST"])
+def update_description_by_ID():
+    '''
+        How to - URL - localhost:5000/roles/updateDescriptionbyID
+        json = {
+        "Role ID":0,
+        "Description": "Testing 123 to see if updating roles work 2"
+    }
+    '''
+    data = request.get_json()
+    if not all(key in data.keys() for key in ( 'Role ID','Description')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."}), 500
+    #Check if role is created in DB
+    role = Roles.query.filter_by(RoleID=data["Role ID"]).first()
+    if not role:
+        return jsonify({
+            "message": "RoleID is not valid."
+        }), 500
+    else:
+        try:
+            db.session.query(Roles).filter(Roles.RoleID == data["Role ID"]).update({'Description': data["Description"]})
+            db.session.commit()
+        except:
+            return jsonify({"message": "An error occurred when updating the description.", "code":500})
+        return {"RoleID": data["Role ID"],"Success":True, "code": 201}
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
