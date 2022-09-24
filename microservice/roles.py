@@ -64,16 +64,27 @@ def get_all():
         }
     ), 200
     
-@app.route("/createrole",methods=["POST"])
+@app.route("/roles/create",methods=["POST"])
 def create_role():
+    '''
+    How to: url - localhost:5000/roles/create
+    json - {
+        "Role Name":"Product Manager 2",
+        "Created By": "Mr Dumb 2",
+        "Description": "Testing 123 to see if adding roles work 2"
+    }
+'''
     data = request.get_json()
+    if not all(key in data.keys() for key in ( 'Role Name','Created By', 'Description')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."}), 500
     
     Add_Role = Roles(
-        RoleID = data["Role ID"]
-    RoleName = data["Role Name"]
-    CreatedBy = data["Created By"]
-    Fulfilled = " "
-    Description = data["Description"]
+        RoleID = 3,
+        RoleName = data["Role Name"],
+        CreatedBy = data["Created By"],
+        Fulfilled = " ",
+        Description = data["Description"]
     )
     try:
         db.session.add(Add_Role)
@@ -82,9 +93,26 @@ def create_role():
         return jsonify({"message": "An error occurred when adding the role to the database.", "code":500})
     return {"role data": Add_Role.json(), "code": 201}
 
-
-
-
+@app.route("/roles/deletebyID/",methods=["GET"])
+def delete_role_by_ID():
+    '''
+        How to - URL - localhost:5000/roles/deletebyID/?roleID=3
+    '''
+    args = request.args
+    rid = args.get('roleID')
+    #Check if role is created in DB
+    role = Roles.query.filter_by(RoleID=rid).first()
+    if not role:
+        return jsonify({
+            "message": "RoleID is not valid."
+        }), 500
+    else:
+        try:
+            Roles.query.filter_by(RoleID = rid).delete()
+            db.session.commit()
+        except:
+            return jsonify({"message": "An error occurred when deleting the role from the database.", "code":500})
+        return {"RoleID": rid,"Success":True, "code": 201}
 
 
 if __name__ == '__main__':
