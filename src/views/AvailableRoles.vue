@@ -1,12 +1,14 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useMainStore } from "@/stores/main";
+import { useRouter } from "vue-router";
 import RoleCard from "@/components/RoleCard.vue";
 
-const searchQuery = ref("");
+const router = useRouter();
 const store = useMainStore();
-store.fetchRoles2(); // fetching roles, through roles.py
+store.fetchRoles(); // fetching roles from the roles.py microservice
 
+const searchQuery = ref("");
 // case sensitive role name filter
 const roleList = computed(() => {
   if (searchQuery.value === "") return store.roles;
@@ -16,9 +18,17 @@ const roleList = computed(() => {
 
 <template>
   <main>
-    <div class="input-group">
-      <span class="input-group-text">Search:</span>
-      <input type="text" class="form-control" placeholder="Search role..." v-model="searchQuery" />
+    <div class="row">
+      <div class="input-group col">
+        <span class="input-group-text">Search</span>
+        <input type="text" class="form-control" placeholder="Search role..." v-model="searchQuery" />
+      </div>
+      <div class="col-2">
+        <button class="btn btn-primary" @click="router.push({ name: 'CreateNewRole' })">
+          <i class="bi bi-plus-lg" />
+          Add new
+        </button>
+      </div>
     </div>
 
     <!-- section placeholder for if the roleList is empty -->

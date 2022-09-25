@@ -3,7 +3,7 @@
 <script setup>
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import { handleUseFetch } from "@/Reusables/common_read";
+import { handleUseFetchGet } from "@/Reusables/common_read";
 
 // props 
 defineProps({
@@ -22,12 +22,12 @@ const skills = ref([]); // list of skills for each card component (to list down)
  * Pushes objects of skill id and skill name into skills list for each card component
  */
 async function fetchRequiredSkills(roleID) {
-  const res = await handleUseFetch(`http://localhost:5001/getSRBRbyRoleID?RoleID=${roleID}`);
+  const res = await handleUseFetchGet(`http://localhost:5001/getSRBRbyRoleID?RoleID=${roleID}`);
   if (res == null) return;
 
   // for each of the linked Skills... (also using destructuring to get only the SkillsID)
   res.data.forEach(async ({ SkillsID }) => {
-    const res2 = await handleUseFetch(`http://localhost:5002/getSkillbyId?skillid=${SkillsID}`);
+    const res2 = await handleUseFetchGet(`http://localhost:5002/getSkillbyId?skillid=${SkillsID}`);
     if (res2 == null) return;
     skills.value.push({ SkillsID, Skillname: res2.data[0].Skillname }); // pushing data into the skills list
   });

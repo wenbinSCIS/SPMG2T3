@@ -1,8 +1,7 @@
 // global store, alternative to Vuex 4
 
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { useFetch } from "@vueuse/core"; // alternative to axios (vueuse.org)
-import { handleUseFetch } from "../Reusables/common_read";
+import { handleUseFetchGet } from "../Reusables/common_read"; // check this for the useFetch
 
 export const useMainStore = defineStore("main-store", {
   state: () => ({
@@ -25,23 +24,15 @@ export const useMainStore = defineStore("main-store", {
      */
     requiredSkills: [],
   }),
-  getters: {},
-  actions: {
-    // random redundancy (will remove later)
-    async fetchRoles() {
-      const { data, error, statusCode } = await useFetch("http://localhost:5000/roles");
-      if (error.value) {
-        console.log("err:", error.value);
-        console.log("statusCode:", statusCode.value);
-        return; // break out of function if error returned
-      }
-      // parsing stringified JSON to javascript object
-      this.roles = JSON.parse(data.value).data;
+  getters: {
+    getRoleNames({ roles }) {
+      return roles.map(({ RoleName }) => RoleName); // returning a new array of only the RoleName
     },
-
+  },
+  actions: {
     // attempt at abstracted option for the above
-    async fetchRoles2() {
-      const res = await handleUseFetch("http://localhost:5000/roles");
+    async fetchRoles() {
+      const res = await handleUseFetchGet("http://localhost:5000/roles");
       if (res == null) return;
       this.roles = res.data;
     },
