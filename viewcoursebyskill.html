@@ -18,19 +18,50 @@
     <title>View Courses</title>
 
     <style>
-
+            .card {
+        display:inline-block;
+        margin-left:20px;
+        margin-right:20px;
+        margin-top:20px;
+        margin-bottom:20px;
+    }
     </style>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const sid = urlParams.get('sid');
         
 
-        const getCourses = async (sid) => {
+        const getCID = async (sid) => {
     try {
         const resp = await axios.get('http://localhost:5003/getSABCbySkillID?sid=' + sid);
         roles = resp.data.data;
-        console.log(roles)
+        var courseTable = document.getElementById("courseList");
         
+        
+        var innerstring = '<div class="card-deck">'
+        for (role of roles){
+
+            var cid = role.CourseID;
+            var courses = await getCourse(cid)
+            innerstring += `
+            
+                <div class="card"  style="width: 20rem">
+                    <img class="card-img-top" src="..." alt="Card image cap">
+                    <div class="card-body">
+                    <h5 class="card-title">` + courses[0].CourseName + `</h5>
+                    <p class="card-text" id="text">` + courses[0].CourseDescription + `</p>
+                    </div>
+                    <div class="card-footer">
+                    <button onclick="sendSRBRRequest(this.value)" value=`+courses[0].CourseID+` class="btn btn-primary">Add to learning journey</a>
+                    </div>
+                </div>
+                `
+            
+
+        }
+        innerstring += "</div>"
+       
+        courseTable.innerHTML = innerstring
        
         
     } catch (err) {
@@ -39,7 +70,26 @@
     }
 };
 
-getCourses(sid)
+getCID(sid)
+
+
+
+
+var getCourse = async (cid) => {
+    try {
+        const resp3 = await axios.get('http://localhost:5004/getCoursebyId?cid=' + cid);
+        console.log(resp3)
+        return resp3.data.data
+        
+
+
+        
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+};
+
     </script>
 </head>
 
