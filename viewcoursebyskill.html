@@ -38,14 +38,14 @@
         var courseTable = document.getElementById("courseList");
         
         
-        var innerstring = '<div class="card-deck">'
+        var innerstring = '<div class="card-deck"> <div class="row">'
         for (role of roles){
 
             var cid = role.CourseID;
             var courses = await getCourse(cid)
             innerstring += `
-            
-                <div class="card"  style="width: 20rem">
+           
+                <div class="card h-100"  style="width: 20rem;">
                     <img class="card-img-top" src="..." alt="Card image cap">
                     <div class="card-body">
                     <h5 class="card-title">` + courses[0].CourseName + `</h5>
@@ -55,11 +55,12 @@
                     <button onclick="sendSRBRRequest(this.value)" value=`+courses[0].CourseID+` class="btn btn-primary">Add to learning journey</a>
                     </div>
                 </div>
+     
                 `
             
 
         }
-        innerstring += "</div>"
+        innerstring += "</div></div>"
        
         courseTable.innerHTML = innerstring
        
