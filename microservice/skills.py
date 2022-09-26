@@ -75,7 +75,7 @@ def get_all_skill():
     return jsonify(
         {
             "code": 404,
-            "message": "There are no skills."
+            "message": "There are no skill creation."
         }
     ), 404
 
