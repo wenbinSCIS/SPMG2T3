@@ -54,7 +54,7 @@ class courses(db.Model):
 def get_course_by_courseid():
     args = request.args
     cid = args.get('cid')
-    select = courses.query.filter_by(Course=cid)
+    select = courses.query.filter_by(CourseID=cid)
     return jsonify(
         {
             "data": [course.to_dict()
