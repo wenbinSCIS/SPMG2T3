@@ -67,9 +67,7 @@ def get_all_skill():
         return jsonify(
             {
                 "code": 200,
-                "data": {
-                    "skill": [skill.json() for skill in skill_list]
-                }
+                "data":  [skill.to_dict() for skill in skill_list] # edited to same format as /getSkillbyId
             }
         )
     return jsonify(
