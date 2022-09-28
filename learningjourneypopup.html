@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Learning Journey</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
+        rel='stylesheet'
+        integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
+        crossorigin='anonymous'>
+
+    <!-- Vue 3 -->
+    <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+    <!-- Vue 3: production version, optimized for size and speed -->
+    <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <script>
+        $(document).ready(function(){
+  $("#flip").click(function(){
+    if($('#flip').hasClass('slide-down')) {
+        $('#flip').addClass('slide-up');
+        $('#flip').removeClass('slide-down'); 
+        $('#flip').animate({'bottom' : "0px"});
+        $("#down").hide();
+        $("#up").show();
+ 
+      } else {
+        $('#flip').animate({'bottom' : "500px"});
+        $('#flip').removeClass('slide-up');
+        $('#flip').addClass('slide-down');
+        $("#up").hide();
+        $("#down").show();
+      }
+    $("#panel").slideToggle();
+  });
+});
+    </script>
+    <style>
+        .bottomright {
+  position: fixed;
+  right: 0px; bottom: 0px;
+    
+}
+
+.large {
+  width: 2000px; height: 500px;
+  background-color: lightgray;
+}
+#panel, #flip {
+  padding: 5px;
+  text-align: center;
+  background-color: #e5eecc;
+  border: solid 1px #c3c3c3;
+  width : 400px;
+}
+
+#panel {
+  padding: 50px;
+  display: none;
+  height:500px;
+  width:400px;
+  background-color: #FFFFFF;
+}      
+
+
+    </style>
+</head>
+<body>
+    <div class="bottomright" id="flip">
+        My Learning Journey
+        <i class="fa fa-angle-double-up" id="up" style=" position:absolute;margin-left:10px;margin-top:5px"></i>
+        <i class="fa fa-angle-double-down" id="down" style="position:absolute;margin-left:10px;margin-top:5px;display:none"></i>
+      </div>
+      <div class="bottomright" id="panel" style="overflow:auto;">Example</div>
+      
+</body>
+</html>
