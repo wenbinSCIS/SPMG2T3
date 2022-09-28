@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+    <!-- Vue 3 -->
+    <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+    <!-- Vue 3: production version, optimized for size and speed -->
+    <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
+
+    <title>navbar</title>
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <div class="col-2"></div>
+          <a class="navbar-brand" href="index.html">Learning Journey Planner</a>
+          <button class="navbar-toggler" type="text" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="availableroles.html">Roles</a>
+              </li>
+              <li class="nav-item">
+                <form class="d-inline-flex" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+              </li>
+            </ul>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Profile
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">My Learning Journey</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Logout</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-2"></div>
+        </div>
+      </nav>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      /*
+      const mode = sessionStorage.getItem('userid');
+
+      if(mode===null){
+        var path = window.location.pathname;
+        var page = path.split("/").pop();
+        if(page=="index.html" || page=="instructor-list.html" || page =="instructor-detail.html"){
+          
+        
+        }
+        else{
+        
+          alert("Please log in first!");
+          window.location.href = "login.html"; 
+        }
+      }
+      else{
+        const name = sessionStorage.getItem('username');
+        var loginned = document.getElementById("change");
+        var drop = document.getElementById("drop");
+
+        drop.innerHTML = `
+            <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Welcome,
+          ` +name + `
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="dashboard.html">My Profile</a>
+          <a class="dropdown-item" href="timetable.html">My Timetable</a>
+          <a class="dropdown-item" href="telegramhelp.html">Telegram FAQ</a>
+          <a class="dropdown-item" href="#" onclick=logout()>Log Out</a>
+        
+        </div>
+      </div>
+        `
+          loginned.innerText = "Welcome, " + name;
+
+      }
+
+      function logout(){
+        sessionStorage.clear()
+        window.location.href = "index.html";
+      }
+      */
+    </script>
+  </body>
+</html>

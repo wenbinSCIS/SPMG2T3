@@ -1,5 +1,6 @@
 // global store, alternative to Vuex 4
 
+import { ref } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { handleUseFetchGet } from "../Reusables/common_read"; // check this for the useFetch
 
@@ -18,23 +19,31 @@ export const useMainStore = defineStore("main-store", {
     /**
      * Array<skill>
      * skill:
-     *  RoleID: Number,
-     *  SRBR: Number,
      *  SkillsID: Number,
+     *  Skillname: String,
      */
-    requiredSkills: [],
+    skills: [],
   }),
   getters: {
     getRoleNames({ roles }) {
       return roles.map(({ RoleName }) => RoleName); // returning a new array of only the RoleName
     },
+    getSkillNames({ skills }) {
+      return skills.map(({ Skillname }) => Skillname); // return new array of only Skillname
+    },
   },
   actions: {
-    // attempt at abstracted option for the above
     async fetchRoles() {
       const res = await handleUseFetchGet("http://localhost:5000/roles");
-      if (res == null) return;
+      if (res == null) return ref(0);
       this.roles = res.data;
+      return ref(1);
+    },
+    async fetchSkills() {
+      const res = await handleUseFetchGet("http://localhost:5002/getAllSkill");
+      if (res == null) return ref(0);
+      this.skills = res.data;
+      return ref(1);
     },
   },
 });

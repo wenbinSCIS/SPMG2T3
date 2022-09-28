@@ -60,8 +60,22 @@ def get_skill_by_skillid():
         }
     ), 200
 
-
-
+@app.route("/getAllSkill")
+def get_all_skill():
+    skill_list = skills.query.all()
+    if len(skill_list):
+        return jsonify(
+            {
+                "code": 200,
+                "data":  [skill.to_dict() for skill in skill_list] # edited to same format as /getSkillbyId
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no skill creation."
+        }
+    ), 404
 
 
 
