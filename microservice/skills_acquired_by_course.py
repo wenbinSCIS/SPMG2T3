@@ -5,7 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 app = Flask(__name__)
 
