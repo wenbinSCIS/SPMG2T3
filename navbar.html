@@ -27,7 +27,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                <a class="nav-link active" aria-current="page" href="home.html">Home</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="availableroles.html">Roles</a>
@@ -39,15 +39,8 @@
                 </form>
               </li>
             </ul>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                Profile
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#">My Learning Journey</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
-              </ul>
+            <div id="drop" class="nav-link respon-sub-menu">
+              <a class="btn btn-secondary" type="button" id="change" href="login.html">Login</a>
             </div>
           </div>
           <div class="col-2"></div>
@@ -59,41 +52,49 @@
     
     <script type="module" src="/src/main.js"></script>
     <script>
-      /*
+      //temp staff login
+      //sessionStorage.setItem('userid', '1')
+      //sessionStorage.setItem('username', 'staff')
+      //sessionStorage.setItem('usertype', 'staff')
+
+      //temp hr login
+      //sessionStorage.setItem('userid', '2')
+      //sessionStorage.setItem('username', 'hr')
+      //sessionStorage.setItem('usertype', 'hr')
+
+      //temp manager login
+      sessionStorage.setItem('userid', '3')
+      sessionStorage.setItem('username', 'manager')
+      sessionStorage.setItem('usertype', 'manager')
+      
       const mode = sessionStorage.getItem('userid');
 
       if(mode===null){
+        
         var path = window.location.pathname;
         var page = path.split("/").pop();
-        if(page=="index.html" || page=="instructor-list.html" || page =="instructor-detail.html"){
-          
-        
-        }
-        else{
-        
+        if(page!=="login.html"){
           alert("Please log in first!");
           window.location.href = "login.html"; 
         }
       }
       else{
+        
         const name = sessionStorage.getItem('username');
         var loginned = document.getElementById("change");
         var drop = document.getElementById("drop");
-
+        console.log(sessionStorage)
         drop.innerHTML = `
-            <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Welcome,
-          ` +name + `
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="dashboard.html">My Profile</a>
-          <a class="dropdown-item" href="timetable.html">My Timetable</a>
-          <a class="dropdown-item" href="telegramhelp.html">Telegram FAQ</a>
-          <a class="dropdown-item" href="#" onclick=logout()>Log Out</a>
-        
-        </div>
-      </div>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Welcome,
+            ` +name + `
+            </button>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+              <a class="dropdown-item" href="#">My Learning Journey</a>
+              <a class="dropdown-item" href="#" onclick=logout()>Log Out</a>
+            </ul>
+          </div>
         `
           loginned.innerText = "Welcome, " + name;
 
@@ -103,7 +104,6 @@
         sessionStorage.clear()
         window.location.href = "index.html";
       }
-      */
     </script>
   </body>
 </html>
