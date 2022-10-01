@@ -47,42 +47,40 @@
 
     <script>
         Vue.createApp({
-        data() {
-            return {
-            role_list:[],
-            };
-        },
-        methods:
-        {
-            get_all_role(){
-                axios.get('http://localhost:5000/getAllRole')
-                .then(response => {
-                    // this gets the data, which is an array, and pass the data to Vue instance's posts property
-                    this.role_list = response.data
-                })
-                .catch(error => {
-                    this.role_list = [{ entry: 'There was an error: ' + error.message }]
-                })
+            data() {
+                return {
+                    role_list:[],
+                };
             },
+            methods:
+            {
+                get_all_role(){
+                    axios.get('http://localhost:5000/getAllRole')
+                    .then(response => {
+                        // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                        this.role_list = response.data
+                    })
+                    .catch(error => {
+                        this.role_list = [{ entry: 'There was an error: ' + error.message }]
+                    })
+                },
 
 
-        },
-        computed:
-        {
-            
-        },
-        created(){
-            this.get_all_role()
-            }
-    }).mount('#app')
+            },
+            computed:
+            {
+                
+            },
+            created(){
+                this.get_all_role()
+                }
+        }).mount('#app')
 
-    role_name=1
-
-    // function loadnavbar(){
-    //     fetch('navbar.html')
-    //     .then(response=> response.text())
-    //     .then(text=> document.getElementById('nav-placeholder').innerHTML = text);
-    //   }
+        role_name=1
+    </script>
+    <script type="module">
+        import navbar from "/navbar.js";
+        window.addEventListener('load', () => document.getElementById('nav-placeholder').innerHTML = navbar);
     </script>
 </body>
 </html>
