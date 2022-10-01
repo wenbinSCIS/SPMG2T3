@@ -18,6 +18,71 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    
+    <div id="app" class="container">
+        <h1 class="py-3">All Created Role</h1>
+        <div class="row">
+            <div id="main">
+                <table class="table" v-if="has_role">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Role ID</th>
+                            <th>Role Name</th>
+                            <th>Fulfilled Status</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="cur_role in role_list">
+                            <td>{{  }}</td>
+                            <td>{{ cur_role.RoleName}}</td>
+                            <td>{{ cur_role.Fulfilled  }}</td>
+                            <td>{{ cur_role.Description  }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-danger" v-if="!hasLessons">{{ message }}</div>
+            </div> <!-- main & col -->
+        </div> <!-- row -->
+    </div> <!-- app: container -->
+
+    <script>
+        Vue.createApp({
+        data() {
+            return {
+            role_list:[],
+            };
+        },
+        methods:
+        {
+            get_all_role(){
+                axios.get('http://localhost:5000/getAllRole')
+                .then(response => {
+                    // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                    this.role_list = response.data
+                })
+                .catch(error => {
+                    this.role_list = [{ entry: 'There was an error: ' + error.message }]
+                })
+            },
+
+
+        },
+        computed:
+        {
+            
+        },
+        created(){
+            this.get_all_role()
+            }
+    }).mount('#app')
+
+    role_name=1
+
+    // function loadnavbar(){
+    //     fetch('navbar.html')
+    //     .then(response=> response.text())
+    //     .then(text=> document.getElementById('nav-placeholder').innerHTML = text);
+    //   }
+    </script>
 </body>
 </html>
