@@ -70,7 +70,8 @@
                 let jsonData = JSON.stringify({
                         RoleName: this.role_name,
                         Description: this.description,
-                        SkillRequired: this.skill_selected,
+                        CreatedBy: "test",
+                        Fulfilled: "",
                     });
                     
                     fetch(`http://localhost:5000/roles/create`,
@@ -101,6 +102,8 @@
                                     throw `${data.code}: ${data.message}`;
                             }
                         })
+
+                        
             }
         },
         computed:
