@@ -29,7 +29,6 @@ class courses(db.Model):
     CourseID = db.Column(db.Integer, primary_key=True)
     CourseName = db.Column(db.String(255), nullable=False)
     CourseDescription = db.Column(db.String(255), nullable=False)
-   
 
 
     def to_dict(self):
@@ -48,24 +47,22 @@ class courses(db.Model):
             "CourseID": self.CourseID,
             "CourseName": self.CourseName, 
             "CourseDescription": self.CourseDescription, 
-     
-
-     }
+        }
 
 @app.route("/getCoursebyId")
 def get_course_by_courseid():
     args = request.args
     cid = args.get('cid')
     select = courses.query.filter_by(CourseID=cid)
-    return jsonify(
-        {
-            "data": [course.to_dict()
-                     for course in select]
-        }
-    ), 200
+    return jsonify({ "data": [course.to_dict() for course in select] }), 200
 
-
-
+@app.route("/courses/getAll")
+def get_all_courses():
+    course_list = courses.query.all()
+    if len(course_list):
+        return jsonify({ "data": [course.to_dict() for course in course_list] }, 200)
+    else:
+        return jsonify({ "code": 404, "message": "No Courses Found." }), 404
 
 
 

@@ -47,20 +47,14 @@ class SABC(db.Model):
             "SABC": self.SRBR, 
             "CourseID": self.CourseID, 
             "SkillsID": self.SkillsID,
-
-     }
+        }
 
 @app.route("/getSABCbySkillID")
 def get_all_by_skillid():
     args = request.args
     sid = args.get('sid')
     select = SABC.query.filter_by(SkillsID=sid)
-    return jsonify(
-        {
-            "data": [item.to_dict()
-                     for item in select]
-        }
-    ), 200
+    return jsonify({ "data": [item.to_dict() for item in select] }), 200
 
 
 

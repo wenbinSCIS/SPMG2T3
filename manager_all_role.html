@@ -55,7 +55,7 @@
             methods:
             {
                 get_all_role(){
-                    axios.get('http://localhost:5000/getAllRole')
+                    axios.get('http://localhost:5000/roles/getAll')
                     .then(response => {
                         // this gets the data, which is an array, and pass the data to Vue instance's posts property
                         this.role_list = response.data

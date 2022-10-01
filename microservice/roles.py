@@ -50,13 +50,16 @@ class Roles(db.Model):
             "CreatedBy": self.CreatedBy,
             "Fulfilled": self.Fulfilled, 
             'Description': self.Description
-    }
+        }
 
-@app.route("/roles")
+@app.route("/roles/getAll")
 def get_all():
     role_list = Roles.query.all()
-    print(role_list, flush=True)
-    return jsonify({ "data": [role.to_dict() for role in role_list] }), 200
+    # print(role_list, flush=True)
+    if len(role_list):
+        return jsonify({ "data": [role.to_dict() for role in role_list] }), 200
+    else:
+        return jsonify({ "code": 404, "message": "There are no role." }), 404
     
 @app.route("/roles/create",methods=["POST"])
 def create_role():
@@ -67,9 +70,9 @@ def create_role():
         "Created By": "Mr Dumb 2",
         "Description": "Testing 123 to see if adding roles work 2"
     }
-'''
+    '''
     data = request.get_json()
-    if not all(key in data.keys() for key in ( 'Role Name','Created By', 'Description')):
+    if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
     Add_Role = Roles(
@@ -96,56 +99,38 @@ def delete_role_by_ID():
     #Check if role is created in DB
     role = Roles.query.filter_by(RoleID=rid).first()
     if not role:
-        return jsonify({
-            "message": "RoleID is not valid."
-        }), 500
+        return jsonify({ "message": "RoleID is not valid." }), 500
     else:
         try:
             Roles.query.filter_by(RoleID = rid).delete()
             db.session.commit()
         except:
-            return jsonify({"message": "An error occurred when deleting the role from the database.", "code":500})
-        return {"RoleID": rid,"Success":True, "code": 201}
+            return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
+        return { "RoleID": rid,"Success":True, "code": 201 }
 
 @app.route("/roles/updateDescriptionbyID",methods=["POST"])
 def update_description_by_ID():
     '''
         How to - URL - localhost:5000/roles/updateDescriptionbyID
         json = {
-        "Role ID":0,
-        "Description": "Testing 123 to see if updating roles work 2"
-    }
+            "Role ID":0,
+            "Description": "Testing 123 to see if updating roles work 2"
+        }
     '''
     data = request.get_json()
-    if not all(key in data.keys() for key in ( 'Role ID','Description')):
-        return jsonify({
-            "message": "Incorrect JSON object provided."}), 500
+    if not all(key in data.keys() for key in ('Role ID', 'Description')):
+        return jsonify({ "message": "Incorrect JSON object provided."}), 500
     #Check if role is created in DB
     role = Roles.query.filter_by(RoleID=data["Role ID"]).first()
     if not role:
-        return jsonify({
-            "message": "RoleID is not valid."
-        }), 500
+        return jsonify({ "message": "RoleID is not valid." }), 500
     else:
         try:
-            db.session.query(Roles).filter(Roles.RoleID == data["Role ID"]).update({'Description': data["Description"]})
+            db.session.query(Roles).filter(Roles.RoleID == data["Role ID"]).update({ 'Description': data["Description"] })
             db.session.commit()
         except:
             return jsonify({"message": "An error occurred when updating the description.", "code":500})
-        return {"RoleID": data["Role ID"],"Success":True, "code": 201}
-
-@app.route("/getAllRole")
-def get_all_role():
-    role_list = Roles.query.all()
-    if len(role_list):
-        return jsonify({
-            "code": 200,
-            "data":  [role.to_dict() for role in role_list]
-        })
-    return jsonify({
-        "code": 404,
-        "message": "There are no role."
-    }), 404
+        return { "RoleID": data["Role ID"],"Success":True, "code": 201 }
 
 
 if __name__ == '__main__':
