@@ -1,5 +1,9 @@
 // using the extension es6-string-html by Tobermory (so /*html*/`` has html highlighting)
 
+// getting the user-category (manager/staff/hr) from sessionStorage
+const user_category = window.sessionStorage.getItem("user-category");
+
+// navbar as template-literal-string (i.e. using ${}, can work as if it was a python f-string (e.g. F"{var}"))
 export default /*html*/`
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
@@ -25,7 +29,8 @@ export default /*html*/`
         </ul>
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            Profile
+            <!-- ternary-conditional-operator, checking if not null, then welcome, otherwise a fallback -->
+            ${user_category ? 'Welcome, ' + user_category : 'Profile'}
           </button>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item" href="#">My Learning Journey</a></li>
