@@ -38,11 +38,12 @@
                     <option disabled>Select skill</option>
                     <option v-for="cur_skill in skill_list" value="{{cur_skill.SkillsID}}">{{cur_skill.Skillname}}</option>
                 </select>
+
             </div>
             <button type="button" v-on:click="create_role" class="btn btn-primary mt-4">Submit</button>
         </form>
     </div>
-    
+
     <script>
         Vue.createApp({
         data() {
@@ -56,10 +57,10 @@
         methods:
         {
             get_all_skill(){
-                axios.get('http://localhost:5002/getAllSkill')
+                axios.get('http://127.0.0.1:5002/getAllSkill')
                 .then(response => {
                     // this gets the data, which is an array, and pass the data to Vue instance's posts property
-                    this.skill_list = response.data
+                    this.skill_list = response.data.data
                 })
                 .catch(error => {
                     this.skill_list = [{ entry: 'There was an error: ' + error.message }]
@@ -74,7 +75,7 @@
                         Fulfilled: "",
                     });
                     
-                    fetch(`http://localhost:5000/roles/create`,
+                    fetch(`http://127.0.0.1:5000/roles/create`,
                         {
                             method: "POST",
                             headers: {
