@@ -30,13 +30,18 @@
         margin-bottom:20px;
     }
 </style>
+
+
+
+
+</body>
 <script>
     
     var roles = []
   
     const sendGetRequest = async () => {
     try {
-        const resp = await axios.get('http://localhost:5000/roles/getAll');
+        const resp = await axios.get('http://localhost:5000/roles/getUnfilled');
         roles = resp.data.data;
         var roleTable = document.getElementById("roleList");
         
@@ -50,8 +55,8 @@
                 <div class="card h-100"  style="width: 20rem">
                     <img class="card-img-top" src="https://picsum.photos/200/300" alt="Card image cap">
                     <div class="card-body">
-                    <h5 class="card-title">` + role.RoleName + `</h5>
-                    <p class="card-text" id="text`+role.RoleID+`">` + role.Description + `</p>
+                        <h5 class="card-title">` + role.RoleName + `</h5>
+                        <p class="card-text" id="text`+role.RoleID+`">` + role.Description + `</p>
                     </div>
                     <div class="card-footer">
                     <button onclick="sendSRBRRequest(this.value)" value=`+role.RoleID+` class="btn btn-primary">View Skills</a>
