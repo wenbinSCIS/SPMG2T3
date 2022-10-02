@@ -29,16 +29,19 @@
       <!-- Area for Learning journey -->
     </div>
   </main>
-  <script></script>
-  <script type="module">
-    import navbar from "/navbar.js";
-    window.addEventListener('load', () => document.getElementById('nav-placeholder').innerHTML = navbar);
-
+  <script>
     // temp stuff
     const res = await axios.get("url");
 
-    Vue.createApp().mount("#app");
-
+    Vue.createApp({
+      data: () => ({}),
+      methods: {},
+      computed: {},
+    }).mount("#app");
+  </script>
+  <script type="module">
+    import navbar from "/navbar.js";
+    window.addEventListener('load', () => document.getElementById('nav-placeholder').innerHTML = navbar);
   </script>
 </body>
 </html>
