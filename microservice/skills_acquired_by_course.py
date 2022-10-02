@@ -12,7 +12,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://flight_admin:6kKVm7C2PHtVtgGT@esd-g7t6-rds.cs2kfkrucphj.ap-southeast-1.rds.amazonaws.com:3306/flight_booking'
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://admin:password@database-spm99.cdwudzthowm4.ap-southeast-1.rds.amazonaws.com:3306/LearningApp'
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://admin:password@spmdb.cte5x3a9ynus.ap-southeast-1.rds.amazonaws.com:3306/LearningApp'
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
