@@ -22,6 +22,9 @@
     
     <div id="app" class="container">
         <h1 class="py-3">All Created Role</h1>
+
+        <button type="button" class="btn btn-success" v-on:click="nav_create_role()">Create Role</button>
+
         <div class="row">
             <div id="main">
                 <table class="table">
@@ -65,6 +68,10 @@
                     .catch(error => {
                         this.role_list = [{ entry: 'There was an error: ' + error.message }]
                     })
+                },
+
+                nav_create_role(){
+                    window.location.href = "../manager_create_role.html"
                 },
 
 
