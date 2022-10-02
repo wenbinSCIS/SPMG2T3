@@ -118,7 +118,7 @@ body {
 <body>
     
     <!-- <div class="container" id ="roleList"></div> -->
-    <div class="container ">
+    <div class="container">
         <div id="nav-placeholder"></div>
         <div class="px-4 py-5 my-5 text-center">
             <img class="d-block mx-auto mb-4" src="https://cdn-icons-png.flaticon.com/512/5146/5146077.png" alt="" width="72" height="72">
@@ -127,76 +127,99 @@ body {
                 <p class="lead mb-4">On this page you will find all the roles available in the company. Click on one to learn more !</p>
             </div>
         </div>
-        <div class="container">
-            <div class="card">
-              <div class="card-header">
-                <img src="https://c0.wallpaperflare.com/preview/483/210/436/car-green-4x4-jeep.jpg" alt="rover" />
-              </div>
-              <div class="card-body">
-                <span class="tag tag-teal">Technology</span>
-                <h4>
-                  Why is the Tesla Cybertruck designed the way it
-                  is?
-                </h4>
-                <p>
-                  An exploration into the truck's polarising design
-                </p>
-                <div class="user">
-                  <img src="https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo" alt="user" />
-                  <div class="user-info">
-                    <h5>July Dec</h5>
-                    <small>2h ago</small>
+        <div class="container" id="app">
+            <div v-for="cur_role in role_obj">
+                <div class="card">
+                    <div class="card-header">
+                      <img src="https://c0.wallpaperflare.com/preview/483/210/436/car-green-4x4-jeep.jpg" alt="rover" />
+                    </div>
+                    <div class="card-body">
+                      <span class="tag tag-teal">{{ cur_role.RoleName}}</span>
+                      <h4>
+                        Role Requirements
+                      </h4>
+                      <p>
+                        {{cur_role.Description}}
+                      </p>
+                      <div class="user">
+                        <img src="https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo" alt="user" />
+                        <div class="user-info">
+                          <h5>{{ cur_role.CreatedBy}}</h5>
+                          <small>Write created date here!</small>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header">
-                <img src="https://www.newsbtc.com/wp-content/uploads/2020/06/mesut-kaya-LcCdl__-kO0-unsplash-scaled.jpg" alt="ballons" />
-              </div>
-              <div class="card-body">
-                <span class="tag tag-purple">Popular</span>
-                <h4>
-                  How to Keep Going When You Don’t Know What’s Next
-                </h4>
-                <p>
-                  The future can be scary, but there are ways to
-                  deal with that fear.
-                </p>
-                <div class="user">
-                  <img src="https://lh3.googleusercontent.com/ogw/ADGmqu8sn9zF15pW59JIYiLgx3PQ3EyZLFp5Zqao906l=s32-c-mo" alt="user" />
-                  <div class="user-info">
-                    <h5>Eyup Ucmaz</h5>
-                    <small>Yesterday</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header">
-                <img src="https://images6.alphacoders.com/312/thumb-1920-312773.jpg" alt="city" />
-              </div>
-              <div class="card-body">
-                <span class="tag tag-pink">Design</span>
-                <h4>
-                  10 Rules of Dashboard Design
-                </h4>
-                <p>
-                  Dashboard Design Guidelines
-                </p>
-                <div class="user">
-                  <img src="https://studyinbaltics.ee/wp-content/uploads/2020/03/3799Ffxy.jpg" alt="user" />
-                  <div class="user-info">
-                    <h5>Carrie Brewer</h5>
-                    <small>1w ago</small>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
+            
+            
     </div>
     
+    <script>
+      Vue.createApp({
+          data() {
+              return {
+                  role_list:[],
+                  role_obj :[
+    {
+        "CreatedBy": "Mr Dumb",
+        "Description": "Testing 123 to see if updating roles work 2",
+        "Fulfilled": " ",
+        "RoleID": 0,
+        "RoleName": "Product Manager"
+    },
+    {
+        "CreatedBy": "John",
+        "Description": "This role will require you to form your own team and be responsible for the team.",
+        "Fulfilled": "",
+        "RoleID": 1,
+        "RoleName": "Manager"
+    },
+    {
+        "CreatedBy": "Lee",
+        "Description": "This role will require some intensive programming, and you must be willing to learn languages required",
+        "Fulfilled": "",
+        "RoleID": 2,
+        "RoleName": "Programmer"
+    },
+    {
+        "CreatedBy": "ui person",
+        "Description": "testing the vue ui validation (base level)",
+        "Fulfilled": " ",
+        "RoleID": 3,
+        "RoleName": "vue ui test"
+    }
+]
+              };
+          },
+          methods:
+          {
+              get_all_role(){
+                  axios.get('http://localhost:5000/roles/getAll')
+                  .then(response => {
+                      // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                      this.role_list = response.data
+                  })
+                  .catch(error => {
+                      this.role_list = [{ entry: 'There was an error: ' + error.message }]
+                  })
+              },
 
-    <div id="includedContent"></div>
+
+          },
+          computed:
+          {
+              
+          },
+          created(){
+            //   this.get_all_role()
+            console.log(this.role_obj)
+              }
+      }).mount('#app')
+
+      role_name=1
+  </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script type="module">
         import navbar from "/navbar.js";
