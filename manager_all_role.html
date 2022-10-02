@@ -18,11 +18,13 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
+    <div id="nav-placeholder"></div>
+    
     <div id="app" class="container">
         <h1 class="py-3">All Created Role</h1>
         <div class="row">
             <div id="main">
-                <table class="table" v-if="has_role">
+                <table class="table">
                     <thead class="thead-dark">
                         <tr>
                             <th>Role ID</th>
@@ -32,11 +34,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="cur_role in role_list">
-                            <td>{{  }}</td>
-                            <td>{{ cur_role.RoleName}}</td>
-                            <td>{{ cur_role.Fulfilled  }}</td>
-                            <td>{{ cur_role.Description  }}</td>
+                        <tr v-for="cur_role_id in role_list.length">
+                            <td>{{ cur_role_id }}</td>
+                            <td>{{ role_list[cur_role_id-1].RoleName}}</td>
+                            <td>{{ role_list[cur_role_id-1].Fulfilled  }}</td>
+                            <td>{{ role_list[cur_role_id-1].Description  }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -55,10 +57,10 @@
             methods:
             {
                 get_all_role(){
-                    axios.get('http://localhost:5000/roles/getAll')
+                    axios.get('http://127.0.0.1:5000/roles/getAll')
                     .then(response => {
                         // this gets the data, which is an array, and pass the data to Vue instance's posts property
-                        this.role_list = response.data
+                        this.role_list = response.data.data
                     })
                     .catch(error => {
                         this.role_list = [{ entry: 'There was an error: ' + error.message }]
