@@ -47,9 +47,13 @@ class LearningJourneyCourses(db.Model):
     }
 
 
-@app.route("/LJ/getAll")
+@app.route("/LJC/getAll")
 def get_all():
-  data = LearningJourneyCourses.query.all()
+  '''
+  How to: url - localhost:5011/LJC/getAll?LJID=1
+  '''
+  LJID = int(request.args.get('LJID'))
+  data = LearningJourneyCourses.query.filter_by(LJID=LJID)
   if len(data):
     return jsonify({ "data": [ljc.to_dict() for ljc in data] }), 200
   else:

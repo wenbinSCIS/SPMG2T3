@@ -48,7 +48,11 @@ class LearningJourney(db.Model):
 
 @app.route("/LJ/getAll")
 def get_all():
-  data = LearningJourney.query.all()
+  '''
+  How to: url - localhost:5011/LJ/getAll?UserID=2
+  '''
+  UserID = int(request.args.get('UserID'))
+  data = LearningJourney.query.filter_by(UserID=UserID)
   if len(data):
     return jsonify({ "data": [lj.to_dict() for lj in data] }), 200
   else:

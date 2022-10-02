@@ -24,19 +24,32 @@
 <body>
   <style></style>
   <div id="nav-placeholder"></div>
-  <main>
-    <div class="container">
-      <!-- Area for Learning journey -->
+  <main id="app">
+    <div class="container" v-for="{ LJID } in learningJourneys" :key="LJID">
+      {{ LJID }}
     </div>
   </main>
   <script>
-    // temp stuff
-    const res = await axios.get("url");
+    const { createApp, ref, computed, onMounted } = Vue;
+    const { useFetch, useSessionStorage } = window.VueUse;
+    createApp({
+      setup() {
+        const learningJourneys = ref([]);
+        const userId = useSessionStorage("user-id"); // probably need to do some testing with null values
 
-    Vue.createApp({
-      data: () => ({}),
-      methods: {},
-      computed: {},
+        onMounted(async () => {
+          const { data, error, statusCode } = await useFetch(`http://localhost:5010/LJ/getAll?UserID=${userId}`).json.get();
+          if (error.value) {
+            console.log({ err: error.value, code: statusCode.value });
+            return;
+          }
+          learningJourneys.value = data.value.data;
+        });
+
+        // something that has to do with the learning journey
+
+        return { learningJourneys };
+      }
     }).mount("#app");
   </script>
   <script type="module">
