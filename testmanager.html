@@ -27,7 +27,7 @@
   box-sizing: border-box;
 }
 body {
-    display: flex;
+   
     justify-content: center;
     align-items: center;
     margin: 0;
@@ -150,14 +150,16 @@ body {
 <body>
     
     <!-- <div class="container" id ="roleList"></div> -->
+    <div id="nav-placeholder"></div>
     <div class="container">
-        <div id="nav-placeholder"></div>
+        
         <div class="px-4 py-5 my-5 text-center">
             <img class="d-block mx-auto mb-4" src="https://cdn-icons-png.flaticon.com/512/5146/5146077.png" alt="" width="72" height="72">
             <h1 class="display-5 fw-bold">Welcome to LJPS</h1>
             <div class="col-lg mx-auto">
                 <p class="lead mb-4">On this page you will find all the roles available in the company. Click on one to learn more !</p>
             </div>
+        </div>
         </div>
         <div class="container" id="app">
             <div v-for="cur_role in role_obj">
@@ -188,7 +190,7 @@ body {
             
             
     </div>
-    
+  
     <script>
       Vue.createApp({
           data() {
