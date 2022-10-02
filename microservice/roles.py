@@ -61,6 +61,17 @@ def get_all():
     else:
         return jsonify({ "code": 404, "message": "There are no role." }), 404
     
+    
+@app.route("/roles/getUnfilled")
+def get_Unfilled():
+    role_list = Roles.query.filter(Roles.Fulfilled==" ").all()
+    role_list+= Roles.query.filter(Roles.Fulfilled=="").all()
+    # print(role_list, flush=True)
+    if len(role_list):
+        return jsonify({ "data": [role.to_dict() for role in role_list] }), 200
+    else:
+        return jsonify({ "code": 404, "message": "There are no role." }), 404
+    
 @app.route("/roles/create",methods=["POST"])
 def create_role():
     '''
