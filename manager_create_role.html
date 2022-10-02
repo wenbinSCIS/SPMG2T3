@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label for="skill_required">Skill Required</label>
-                <select class="form-select" v-model="skill_selected" aria-label="Default select example" id="skill_required" multiple>
+                <select class="form-select" v-model="skill_selected" id="skill_required">
                     <option disabled>Select skill</option>
                     <option v-for="cur_skill in skill_list" value="{{cur_skill.SkillsID}}">{{cur_skill.Skillname}}</option>
                 </select>
@@ -51,7 +51,7 @@
             skill_list:[],
             role_name:"",
             description:"",
-            skill_selected:""
+            skill_selected:[]
             };
         },
         methods:
