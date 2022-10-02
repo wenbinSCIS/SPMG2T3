@@ -41,110 +41,72 @@ class LearningJourney(db.Model):
 
   def json(self):
     return {
-      "RoleID": self.RoleID, 
-      "RoleName": self.RoleName, 
-      "CreatedBy": self.CreatedBy,
-      "Fulfilled": self.Fulfilled, 
-      'Description': self.Description
+      "LJID": self.LJID, 
+      "UserID": self.UserID
     }
 
-class LearningJourneyCourses(db.Model):
-  __tablename__ = 'LearningJourneyCourses'
-  LJCID = db.Column(db.Integer, primary_key=True)
-  LJID = db.Column(db.Integer, nullable=True)
-  UserID = db.Column(db.String(45), nullable=True)
 
-@app.route("/learningJourney/getAll")
+@app.route("/LJ/getAll")
 def get_all():
-    role_list = Roles.query.all()
-    # print(role_list, flush=True)
-    if len(role_list):
-        return jsonify({ "data": [role.to_dict() for role in role_list] }), 200
-    else:
-        return jsonify({ "code": 404, "message": "There are no role." }), 404
-    
-    
-@app.route("/roles/getUnfilled")
-def get_Unfilled():
-    role_list = Roles.query.filter(Roles.Fulfilled==" ").all()
-    role_list+= Roles.query.filter(Roles.Fulfilled=="").all()
-    # print(role_list, flush=True)
-    if len(role_list):
-        return jsonify({ "data": [role.to_dict() for role in role_list] }), 200
-    else:
-        return jsonify({ "code": 404, "message": "There are no role." }), 404
-    
-@app.route("/roles/create",methods=["POST"])
-def create_role():
-    '''
-    How to: url - localhost:5000/roles/create
-    json - {
-        "Role Name":"Product Manager 2",
-        "Created By": "Mr Dumb 2",
-        "Description": "Testing 123 to see if adding roles work 2"
-    }
-    '''
-    data = request.get_json()
-    if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description')):
-        return jsonify({ "message": "Incorrect JSON object provided." }), 500
-    
-    Add_Role = Roles(
-        # RoleID = 3,
-        RoleName = data["Role Name"],
-        CreatedBy = data["Created By"],
-        Fulfilled = " ",
-        Description = data["Description"]
-    )
+  data = LearningJourney.query.all()
+  if len(data):
+    return jsonify({ "data": [lj.to_dict() for lj in data] }), 200
+  else:
+    return jsonify({ "code": 404, "message": "There are no learning journeys." }), 404
+
+
+@app.route("/LJ/getById")
+def get_by_id():
+  LJID = request.args.get('LJID')
+  data = LearningJourney.query.filter_by(LJID=LJID)
+  if len(data):
+    return jsonify({ "data": [lj.to_dict() for lj in data] }), 200
+  else:
+    return jsonify({ "code": 404, "message": "There are no learning journeys." }), 404
+
+
+@app.route("/LJ/create",methods=["POST"])
+def create():
+  '''
+  How to: url - localhost:5010/LJ/create
+  json - {
+    "UserID": 2
+  }
+  '''
+  data = request.get_json()
+  if not all(key in data.keys() for key in ('UserID')):
+    return jsonify({ "message": "Incorrect JSON object provided." }), 500
+  else:
+    newLJ = LearningJourney(UserID=data["UserID"])
     try:
-        db.session.add(Add_Role)
-        db.session.commit()
+      db.session.add(newLJ)
+      db.session.commit()
     except:
-        return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
-    return { "role data": Add_Role.json(), "code": 201 }
+      return jsonify({ "message": "An error occurred when adding the learning journey to the database.", "code":500 })
+    return { "New LJ": newLJ.json(), "code": 201 }
 
-@app.route("/roles/deletebyID/",methods=["GET"])
-def delete_role_by_ID():
-    '''
-        How to - URL - localhost:5000/roles/deletebyID/?roleID=3
-    '''
-    args = request.args
-    rid = args.get('roleID')
-    #Check if role is created in DB
-    role = Roles.query.filter_by(RoleID=rid).first()
-    if not role:
-        return jsonify({ "message": "RoleID is not valid." }), 500
-    else:
-        try:
-            Roles.query.filter_by(RoleID = rid).delete()
-            db.session.commit()
-        except:
-            return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
-        return { "RoleID": rid,"Success":True, "code": 201 }
 
-@app.route("/roles/updateDescriptionbyID",methods=["POST"])
-def update_description_by_ID():
-    '''
-        How to - URL - localhost:5000/roles/updateDescriptionbyID
-        json = {
-            "Role ID":0,
-            "Description": "Testing 123 to see if updating roles work 2"
-        }
-    '''
-    data = request.get_json()
-    if not all(key in data.keys() for key in ('Role ID', 'Description')):
-        return jsonify({ "message": "Incorrect JSON object provided."}), 500
-    #Check if role is created in DB
-    role = Roles.query.filter_by(RoleID=data["Role ID"]).first()
-    if not role:
-        return jsonify({ "message": "RoleID is not valid." }), 500
-    else:
-        try:
-            db.session.query(Roles).filter(Roles.RoleID == data["Role ID"]).update({ 'Description': data["Description"] })
-            db.session.commit()
-        except:
-            return jsonify({"message": "An error occurred when updating the description.", "code":500})
-        return { "RoleID": data["Role ID"],"Success":True, "code": 201 }
+@app.route("/LJ/deleteById",methods=["DELETE"])
+def delete_by_ID():
+  '''
+  How to - URL - localhost:5010/LJ/deleteById
+  json - {
+    "LJID": 1
+  }
+  '''
+  LJID = request.args.get('LJID')
+  lj_toDelete = LearningJourney.query.filter_by(LJID=LJID).first();
+  if not lj_toDelete:
+    return jsonify({ "message": "LJID is not valid." }), 500
+  else:
+    try:
+      db.session.delete(lj_toDelete)
+      db.session.commit()
+    except:
+      return jsonify({ "message": "An error occurred when deleting the learning journey from the database.", "code":500 })
+    return { "Deleted LJ": lj_toDelete,"Success":True, "code": 201 }
+
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+  app.run(host='0.0.0.0', port=5010, debug=True)
