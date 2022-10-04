@@ -36,6 +36,7 @@
   
     const sendGetRequest = async () => {
     try {
+        
         const resp = await axios.get('http://localhost:5000/roles/getAll');
         roles = resp.data.data;
         var roleTable = document.getElementById("roleList");
