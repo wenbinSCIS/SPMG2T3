@@ -16,10 +16,48 @@
     <!-- Vue 3: production version, optimized for size and speed -->
     <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <style>
+/* Modal styles */
+.modal .modal-dialog {
+	max-width: 400px;
+}
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+	padding: 20px 30px;
+}
+.modal .modal-content {
+	border-radius: 3px;
+	font-size: 14px;
+}
+.modal .modal-footer {
+	background: #ecf0f1;
+	border-radius: 0 0 3px 3px;
+}
+.modal .modal-title {
+	display: inline-block;
+}
+.modal .form-control {
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
+}
+.modal textarea.form-control {
+	resize: vertical;
+}
+.modal .btn {
+	border-radius: 2px;
+	min-width: 100px;
+}	
+.modal form label {
+	font-weight: normal;
+}	
+    </style>
+
 </head>
 <body>
     <div id="nav-placeholder"></div>
-
+    <a href="#add_role_modal" class="btn btn-success" data-toggle="modal" id="add_role_button"> <span>Add New Role</span></a>
     <div class="container mt-5" id="app1">
         <form>
             <div class="form-group">
@@ -42,6 +80,43 @@
             </div>
             <button type="button" v-on:click="create_role" class="btn btn-primary mt-4">Submit</button>
         </form>
+    </div>
+
+<!-- Edit Modal HTML -->
+    <div id="add_role_modal" class="modal">
+	    <div class="modal-dialog">
+		    <div class="modal-content">
+			    <form>
+				    <div class="modal-header">						
+					    <h4 class="modal-title">Add Role</h4>
+    					<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close_add_role_button">&times;</button>
+	    			</div>
+		    		<div class="modal-body">				
+                        <div class="form-group">
+                            <label for="role_name">Role Name</label>
+                            <input type="text" v-model="role_name" class="form-control" id="skill_name"  placeholder="Enter role">
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="role_description">Description</label>
+                            <textarea class="form-control" v-model="description" id="skill_description" placeholder="Description"></textarea>
+                        </div>
+            
+                        <div class="form-group">
+                            <label for="skill_required">Skill Required</label>
+                            <select class="form-select" v-model="skill_selected" id="skill_required" multiple>
+                                <option disabled>Select skill</option>
+                                <option v-for="cur_skill in skill_list" value="{{cur_skill.SkillsID}}">{{cur_skill.Skillname}}</option>
+                            </select>
+                        </div>
+    				</div>
+	    			<div class="modal-footer">
+		    			<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+			    		<input type="submit" class="btn btn-success" value="Add">
+				    </div>
+    			</form>
+	    	</div>
+	    </div>
     </div>
 
     <script>
@@ -114,9 +189,34 @@
         created(){
             this.get_all_skill()
             }
-    }).mount('#app1')
+    }).mount('#add_role_modal')
 
     role_name=1
+
+var add_role_modal = document.getElementById("add_role_modal");
+
+// Get the button that opens the modal
+var add_role_button = document.getElementById("add_role_button");
+
+// Get the <span> element that closes the modal
+var close_add_role_button = document.getElementById("close_add_role_button");
+
+// When the user clicks on the button, open the modal
+add_role_button.onclick = function() {
+    add_role_modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+close_add_role_button.onclick = function() {
+    add_role_modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == add_role_modal) {
+    add_role_modal.style.display = "none";
+    }
+}
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script type="module">
