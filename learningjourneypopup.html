@@ -41,8 +41,28 @@
   });
 });
 
+var userid= 10
+const getLJCart = async () => {
+			try {
+				console.log(333)
+				const resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
+				res = resp.data.data;
+        console.log(res)
 
+				
+				var innerstring = ''
 
+				innerstring += ""
+
+			   
+				
+			} catch (err) {
+				// Handle Error Here
+				console.error(err);
+			}
+		};
+		
+		getLJCart();
 
 
 
