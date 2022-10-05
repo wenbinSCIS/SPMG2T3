@@ -31,14 +31,13 @@
   </main>
   <script>
     const { createApp, ref, computed, onMounted } = Vue;
-    const { useFetch, useSessionStorage } = window.VueUse;
     createApp({
       setup() {
         const learningJourneys = ref([]);
-        const userId = useSessionStorage("user-id"); // probably need to do some testing with null values
+        const userId = window.sessionStorage.getItem("user-id");
 
         onMounted(async () => {
-          const { data, error, statusCode } = await useFetch(`http://localhost:5010/LJ/getAll?UserID=${userId}`).json.get();
+          const { data, error, statusCode } = await fetch(`http://localhost:5010/LJ/getAll?UserID=${userId}`);
           if (error.value) {
             console.log({ err: error.value, code: statusCode.value });
             return;

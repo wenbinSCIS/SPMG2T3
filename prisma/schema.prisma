@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model CourseRegistered {
+  Course2ID          Int       @id
+  CourseDescription  String?   @db.VarChar(255)
+  UserID             Int?
+  CompletedTimeStamp DateTime? @db.DateTime(0)
+  StartTimeStamp     DateTime? @db.DateTime(0)
+}
+
+model LearningJourney {
+  LJID   Int  @id @default(autoincrement())
+  UserID Int?
+}
+
+model LearningJourneyCourses {
+  LJCID    Int     @id @default(autoincrement())
+  LJID     Int?
+  CourseID String? @db.VarChar(45)
+}
+
+model Skills_Acquired_By_Course {
+  SABC     Int  @id
+  CourseID Int?
+  SkillsID Int?
+}
+
+model Skills_Required_By_Role {
+  SkillsID Int?
+  RoleID   Int?
+  SRBR     Int  @id
+}
+
+model course {
+  CourseID          Int     @id
+  CourseName        String? @db.VarChar(255)
+  CourseDescription String? @db.VarChar(255)
+}
+
+model roles {
+  RoleID      Int     @id @default(autoincrement())
+  RoleName    String? @db.VarChar(255)
+  CreatedBy   String  @db.VarChar(255)
+  Fulfilled   String  @db.VarChar(255)
+  Description String? @db.VarChar(255)
+}
+
+model skills {
+  SkillsID  Int     @id @default(autoincrement())
+  Skillname String? @db.VarChar(255)
+}
