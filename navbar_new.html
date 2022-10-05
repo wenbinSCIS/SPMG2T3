@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+    <!-- Vue 3 -->
+    <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+    <!-- Vue 3: production version, optimized for size and speed -->
+    <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
+  
+    <!-- icon set -->
+    <link href="https://unicons.iconscout.com/release/v3.0.6/css/line.css" rel="stylesheet">
+
+    <title>navbar</title>
+
+    <style>
+    
+    @import 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet';
+
+  :root {
+    --dk-gray-100: #F3F4F6;
+    --dk-gray-200: #E5E7EB;
+    --dk-gray-300: #D1D5DB;
+    --dk-gray-400: #9CA3AF;
+    --dk-gray-500: #6B7280;
+    --dk-gray-600: #4B5563;
+    --dk-gray-700: #374151;
+    --dk-gray-800: #1F2937;
+    --dk-gray-900: #111827;
+    --dk-dark-bg: #313348;
+    --dk-darker-bg: #2a2b3d;
+    --navbar-bg-color: #6f6486;
+    --sidebar-bg-color: #ffffff;
+    --sidebar-width: 250px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: .925rem;
+  }
+
+  #wrapper {
+    margin-left: var(--sidebar-width);
+    transition: all .3s ease-in-out;
+  }
+
+  #wrapper.fullwidth {
+    margin-left: 0;
+  }
+
+
+
+  /** --------------------------------
+  -- Sidebar
+  -------------------------------- */
+
+  .sidebar {
+    background-color: var(--sidebar-bg-color);
+    width: var(--sidebar-width);
+    transition: all .3s ease-in-out;
+    transform: translateX(0);
+    z-index: 9999999;
+  }
+
+  .sidebar .close-aside {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    cursor: pointer;
+    color: #EEE;
+  }
+
+  /*
+  .sidebar .sidebar-header {
+    border-bottom: 1px solid #2a2b3c
+  }
+  */
+  .sidebar-header{
+    margin-left: 0.8rem;
+  }
+  .sidebar .sidebar-header h5 a {
+    color: #364a63;
+    font-family: "DM Sans",sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0.5rem;
+  }
+
+  .sidebar .sidebar-header p {
+    color: var(--dk-gray-400);
+    font-size: .825rem;
+  }
+
+  .sidebar .search .form-control ~ i {
+    color: #2b2f3a;
+    right: 40px;
+    top: 22px;
+  }
+
+  .sidebar > ul > li {
+    padding: 1rem 1.75rem;
+  }
+ 
+  .sidebar-item{
+    margin: 0.5rem;
+    color: #6e82a5;
+    font-family: "DM Sans",sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: .01em;
+    border-radius: 6px;
+    
+  }
+
+  .sidebar-item:hover{
+    background: #ebeef2;
+    transition: color .3s,background-color .3s;
+    color: #9769ff;
+  }
+  
+  .sidebar ul > li > a {
+    color: #6e82a5;
+    text-decoration: none;
+  }
+
+  .sidebar-item:hover a{
+    color: #9769ff;
+  }
+
+  li[selected="active"]{
+    color: #9769ff;
+    background: #ebeef2;
+  }
+
+  li[selected="active"] a {
+    color: #9769ff !important;
+  }
+
+  /* Start numbers */
+  .sidebar ul > li > a > .num {
+    line-height: 0;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 0px 5px
+  }
+
+  .sidebar ul > li > i {
+    font-size: 18px;
+    margin-right: .7rem;
+
+  }
+
+  .sidebar ul > li.has-dropdown > a:after {
+    content: '\eb3a';
+    font-family: unicons-line;
+    font-size: 1rem;
+    line-height: 1.8;
+    float: right;
+    color: var(--dk-gray-500);
+    transition: all .3s ease-in-out;
+  }
+
+  .sidebar ul .opened > a:after {
+    transform: rotate(-90deg);
+  }
+  
+
+  /* Start dropdown menu */
+  
+  .sidebar ul .sidebar-dropdown {
+    padding-top: 10px;
+    padding-left: 30px;
+    display: none;
+  }
+  .sidebar ul .sidebar-dropdown.active {
+    display: block;
+  }
+
+  .sidebar ul .sidebar-dropdown > li > a {
+    font-size: .85rem;
+    padding: .5rem 0;
+    display: block;
+  }
+  
+  /* End dropdown menu */
+
+  .show-sidebar {
+    transform: translateX(-270px);
+  }
+
+  @media (max-width: 767px) {
+    .sidebar ul > li {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    .sidebar .search {
+      padding: 10px 0 10px 30px
+    }
+  }
+
+  .main-color {
+    color: #ffc107
+  }
+
+  /** --------------------------------
+  -- Please don't do that in real-world projects!
+  -- overwrite Bootstrap variables instead.
+  -------------------------------- */
+
+  .navbar {
+    background-color: var(--navbar-bg-color) !important;
+    border: none !important;
+  }
+  .navbar .dropdown-menu {
+    right: auto !important;
+    left: 0 !important;
+  }
+  .navbar .navbar-nav>li>a {
+    color: #EEE !important;
+    line-height: 55px !important;
+    padding: 0 10px !important;
+  }
+  .navbar .navbar-brand {color:#FFF !important}
+  .navbar .navbar-nav>li>a:focus,
+  .navbar .navbar-nav>li>a:hover {color: #EEE !important}
+
+  .navbar .navbar-nav>.open>a,
+  .navbar .navbar-nav>.open>a:focus,
+  .navbar .navbar-nav>.open>a:hover {background-color: transparent !important; color: #FFF !important}
+
+  .navbar .navbar-brand {line-height: 55px !important; padding: 0 !important}
+  .navbar .navbar-brand:focus,
+  .navbar .navbar-brand:hover {color: #FFF !important}
+  .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {margin: 0 !important}
+  @media (max-width: 767px) {
+    .navbar>.container-fluid .navbar-brand {
+      margin-left: 15px !important;
+    }
+    .navbar .navbar-nav>li>a {
+      padding-left: 0 !important;
+    }
+    .navbar-nav {
+      margin: 0 !important;
+    }
+    .navbar .navbar-collapse,
+    .navbar .navbar-form {
+      border: none !important;
+    }
+  }
+
+  .navbar .navbar-nav>li>a {
+    float: left !important;
+  }
+  .navbar .navbar-nav>li>a>span:not(.caret) {
+    background-color: #e74c3c !important;
+    border-radius: 50% !important;
+    height: 25px !important;
+    width: 25px !important;
+    padding: 2px !important;
+    font-size: 11px !important;
+    position: relative !important;
+    top: -10px !important;
+    right: 5px !important
+  }
+  .dropdown-menu>li>a {
+    padding-top: 5px !important;
+    padding-right: 5px !important;
+  }
+  .navbar .navbar-nav>li>a>i {
+    font-size: 18px !important;
+  }
+
+
+  ::-webkit-scrollbar {
+    background: transparent;
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #3c3f58;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <aside class="sidebar position-fixed top-0 left-0 overflow-auto h-100 float-left" id="show-side-navigation1">
+        <i class="uil-bars close-aside d-md-none d-lg-none" data-close="show-side-navigation1"></i>
+        <div class="sidebar-header d-flex align-items-center px-3 py-4">
+          <img
+               class="rounded-pill img-fluid"
+               src="https://dashlite.net/demo2/images/logo-small.png"
+               alt="">
+          <div class="ms-2">
+            <h5 class="fs-6 mb-0">
+              <a class="text-decoration-none" href="#">LJPS</a>
+            </h5>
+            <!--<p class="mt-1 mb-0">Learning Journey Planner System</p>-->
+          </div>
+        </div>
+      
+        <ul class="categories list-unstyled">
+          <li class="sidebar-item" id="home">
+            <i class="uil-estate"></i><a href="home.html">Dashboard</a>
+          </li>
+          <li class="sidebar-item" id="availableroles" >
+            <i class="uil-user-check"></i><a href="availableroles.html">Roles</a>
+          </li>
+          <li class="sidebar-item" id="learningjourney">
+            <i class="uil-rocket"></i><a href="learningjourney.html">Learning Journey</a>
+          </li>
+          <li class="sidebar-item">
+            <i class="uil-power"></i><a href="#" onclick="logout()">Logout</a>
+          </li>
+          <li class="sidebar-item has-dropdown">
+            <i class="uil-envelope-download fa-fw"></i><a href="#">Temp Dropdown</a>
+            <ul class="sidebar-dropdown list-unstyled">
+              <li><a href="#">Lorem ipsum</a></li>
+              <li><a href="#">ipsum dolor</a></li>
+              <li><a href="#">dolor ipsum</a></li>
+              <li><a href="#">amet consectetur</a></li>
+              <li><a href="#">ipsum dolor sit</a></li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+      
+      <section id="wrapper">
+        <nav class="navbar navbar-expand-md">
+          <div class="container-fluid mx-2">
+            <div class="navbar-header">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggle-navbar" aria-controls="toggle-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="uil-bars text-white"></i>
+              </button>
+              <a class="navbar-brand" href="#">admin<span class="main-color">kit</span></a>
+            </div>
+            <div class="collapse navbar-collapse" id="toggle-navbar">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Settings
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                      <a class="dropdown-item" href="#">My account</a>
+                    </li>
+                    <li><a class="dropdown-item" href="#">My inbox</a>
+                    </li>
+                    <li><a class="dropdown-item" href="#">Help</a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Log out</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"><i class="uil-comments-alt"></i><span>23</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"><i class="uil-bell"></i><span>98</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <i data-show="show-side-navigation1" class="uil-bars show-side-btn"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+      </section>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    
+    <script type="module" src="/src/main.js"></script>
+
+    <script>
+      // Other important pens.
+      // Map: https://codepen.io/themustafaomar/pen/ZEGJeZq
+      // Navbar: https://codepen.io/themustafaomar/pen/VKbQyZ
+
+      'use strict'
+
+      function $(selector) {
+        return document.querySelector(selector)
+      }
+
+      function find(el, selector) {
+        let finded
+        return (finded = el.querySelector(selector)) ? finded : null
+      }
+
+      function siblings(el) {
+        const siblings = []
+        for (let sibling of el.parentNode.children) {
+          if (sibling !== el) {
+            siblings.push(sibling)
+          }
+        }
+        return siblings
+      }
+
+      const showAsideBtn = $('.show-side-btn')
+      const sidebar = $('.sidebar')
+      const wrapper = $('#wrapper')
+
+      showAsideBtn.addEventListener('click', function () {
+        $(`#${this.dataset.show}`).classList.toggle('show-sidebar')
+        wrapper.classList.toggle('fullwidth')
+      })
+
+      if (window.innerWidth < 767) {
+        sidebar.classList.add('show-sidebar');
+      }
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 767) {
+          sidebar.classList.remove('show-sidebar')
+        }
+      })
+
+      // dropdown menu in the side nav
+      var slideNavDropdown = $('.sidebar-dropdown');
+      /*
+      $('.sidebar .categories').addEventListener('click', function (event) {
+        event.preventDefault()
+
+        const item = event.target.closest('.has-dropdown')
+
+        if (! item) {
+          return
+        }
+
+        item.classList.toggle('opened')
+
+        siblings(item).forEach(sibling => {
+          sibling.classList.remove('opened')
+        })
+
+        if (item.classList.contains('opened')) {
+          const toOpen = find(item, '.sidebar-dropdown')
+
+          if (toOpen) {
+            toOpen.classList.add('active')
+          }
+
+          siblings(item).forEach(sibling => {
+            const toClose = find(sibling, '.sidebar-dropdown')
+
+            if (toClose) {
+              toClose.classList.remove('active')
+            }
+          })
+        } else {
+          find(item, '.sidebar-dropdown').classList.toggle('active')
+        }
+      })
+      */
+      $('.sidebar .close-aside').addEventListener('click', function () {
+        $(`#${this.dataset.close}`).classList.add('show-sidebar')
+        wrapper.classList.remove('margin')
+      })
+
+      /*
+      const mode = sessionStorage.getItem('userid');
+
+      if(mode===null){
+        var path = window.location.pathname;
+        var page = path.split("/").pop();
+        if(page=="index.html" || page=="instructor-list.html" || page =="instructor-detail.html"){
+          
+        
+        }
+        else{
+        
+          alert("Please log in first!");
+          window.location.href = "login.html"; 
+        }
+      }
+      else{
+        const name = sessionStorage.getItem('username');
+        var loginned = document.getElementById("change");
+        var drop = document.getElementById("drop");
+
+        drop.innerHTML = `
+            <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Welcome,
+          ` +name + `
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="dashboard.html">My Profile</a>
+          <a class="dropdown-item" href="timetable.html">My Timetable</a>
+          <a class="dropdown-item" href="telegramhelp.html">Telegram FAQ</a>
+          <a class="dropdown-item" href="#" onclick=logout()>Log Out</a>
+        
+        </div>
+      </div>
+        `
+          loginned.innerText = "Welcome, " + name;
+
+      }
+      */
+      var path = window.location.pathname;
+      var page = path.split("/").pop();
+      var selectedPage=page.split(".")[0];
+      console.log(selectedPage);
+      document.getElementById(selectedPage).setAttribute("selected", "active")
+
+      function logout(){
+        sessionStorage.clear()
+        window.location.href = "login.html";
+      }
+      
+    </script>
+  </body>
+</html>
