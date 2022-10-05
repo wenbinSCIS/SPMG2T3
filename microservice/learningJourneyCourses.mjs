@@ -4,9 +4,10 @@
 
 import "dotenv/config";
 import Fastify from "fastify";
+import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
 
-const port = 5104;
+const port = 5105;
 const host = process.env.Host || "127.0.0.1";
 const prisma = new PrismaClient();
 const fastify = Fastify({ logger: true });
@@ -20,41 +21,42 @@ async function learningJourneyCourses(app, opts) {
   app.get("/getAll", async function(request, reply) {
     const { LJID } = request.query;
     try {
-      if (!LJID) throw { statusCode: 400, message: "LJID cannot be null" };
+      if (!LJID) throw { status: 400, message: "LJID cannot be null" };
       const data = await prisma.learningJourney.findMany({
         where: { LJID: parseInt(LJID) },
         select: { LJCID: true }
       });
-      return { statusCode: 200, data };
+      return { status: 200, data };
     } catch (err) {
-      return { statusCode: err.status, message: err.message }
+      return { status: err.status, message: err.message }
     }
   });
   app.get("/getById", async function(request, reply) {
     const { LJCID } = request.query;
     try {
-      if (!LJCID) throw { statusCode: 400, message: "LJCID cannot be null" };
+      if (!LJCID) throw { status: 400, message: "LJCID cannot be null" };
       const data = await prisma.learningJourney.findUniqueOrThrow({
         where: { LJCID: parseInt(LJCID) },
         select: { LJCID: true }
       });
-      return { statusCode: 200, data };
+      return { status: 200, data };
     } catch (err) {
-      return { statusCode: err.status, message: err.message }
+      return { status: err.status, message: err.message }
     }
   });
   app.post("/create", async function(request, reply) {
     const { LJID, CourseID } = request.body;
     try {
-      if (!LJID || !CourseID) throw { statusCode: 400, message: "LJID & CourseID cannot be null" };
+      if (!LJID || !CourseID) throw { status: 400, message: "LJID & CourseID cannot be null" };
       const data = await prisma.learningJourney.create({ data: { LJID, CourseID } });
-      return { statusCode: 200, data };
+      return { status: 200, data };
     } catch (err) {
-      return { statusCode: err.status, message: err.message }
+      return { status: err.status, message: err.message }
     }
   });
 }
 
+fastify.register(cors, {});
 fastify.register(learningJourneyCourses, { prefix: "/LJC" });
 
 (async function() {

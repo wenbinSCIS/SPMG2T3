@@ -24,44 +24,41 @@
   <div id="nav-placeholder"></div>
   <main id="app">
     <div class="p-3 m-4">
-      <button id="addNewLJ" class="btn btn-primary" @click="createNewLJ">Create LJ</button>
+      <button id="addNewLJC" class="btn btn-primary" @click="addNewLJC">Add LJC</button>
     </div>
-    <div class="container bg-light m-3" v-for="{ LJID } in learningJourneys" :key="LJID">
-      <button class="btn bg-success text-white" @click="handleClickLJ(LJID)">{{ LJID }}</button>
+    <div class="container bg-light m-3" v-for="{ LJCID } in learningJourneyCourses" :key="LJCID">
+      <button class="btn bg-success text-white" @click="handleClickLJC(LJCID)">{{ LJCID }}</button>
     </div>
   </main>
   <script>
     const { createApp, ref, computed, onMounted } = Vue;
     createApp({
       setup() {
-        const learningJourneys = ref([]);
+        const learningJourneyCourses = ref([]);
         const userId = window.sessionStorage.getItem("user-id");
         if (!userId) window.location.replace(`${window.location.origin}/home.html`); // if user not logged in, redirect to home.html
-        const baseURL = "http://127.0.0.1:5104/LJ";
+        const baseURL = "http://127.0.0.1:5105/LJC";
         const options = {
           headers: { "Content-Type": "application/json" },
           mode: "cors",
         };
 
-        async function createNewLJ() {
-          try {
-            const reply = await fetch(`${baseURL}/create`, {
-              method: "POST",
-              ...options,
-              body: JSON.stringify({ UserID: parseInt(userId), Saved: 1 }),
-            });
-            // console.log(await reply.json());
-            window.location.reload(); // reload after successful creation
-          } catch (err) {
-            console.log(err);
-            alert("Failed to create new Learning Journey");
-          }
+        async function addNewLJC() {
+          // try {
+          //   const reply = await fetch(`${baseURL}/create`, {
+          //     method: "POST",
+          //     ...options,
+          //     body: JSON.stringify({ LJID: parseInt(LJID), Saved: 1 }),
+          //   });
+          //   // console.log(await reply.json());
+          //   window.location.reload(); // reload after successful creation
+          // } catch (err) {
+          //   console.log(err);
+          //   alert("Failed to create new Learning Journey");
+          // }
         }
 
-        function handleClickLJ(id) {
-          // redirect user to the next relevant page
-          window.location.assign(`${window.location.origin}/learningJourneyCourses.html?LJID=${id}`);
-        }
+        function handleClickLJC() {}
 
         onMounted(async () => {
           const reply = await fetch(`${baseURL}/getAll?UserID=${userId}&Saved=1`, {
@@ -72,7 +69,7 @@
           learningJourneys.value = data;
         });
 
-        return { learningJourneys, createNewLJ, handleClickLJ };
+        return { learningJourneyCourses };
       }
     }).mount("#app");
   </script>

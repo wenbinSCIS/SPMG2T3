@@ -4,6 +4,7 @@
 
 import "dotenv/config";
 import Fastify from "fastify";
+import cors from "@fastify/cors";
 import { PrismaClient } from "@prisma/client";
 
 const port = 5104;
@@ -18,43 +19,47 @@ const fastify = Fastify({ logger: true });
  */
 async function learningJourney(app, opts) {
   app.get("/getAll", async function(request, reply) {
-    const { UserID } = request.query;
+    const { UserID, Saved } = request.query;
+    const savedInt = parseInt(Saved);
     try {
-      if (!UserID) throw { statusCode: 400, message: "UserID cannot be null" };
+      if (!UserID) throw { status: 400, message: "UserID cannot be null." };
+      if (Saved !== 0 && Saved !== 1) throw { status: 400, message: "Saved must be 0 or 1." };
       const data = await prisma.learningJourney.findMany({
-        where: { UserID: parseInt(UserID) },
+        where: { UserID: parseInt(UserID), Saved: savedInt },
         select: { LJID: true }
       });
-      return { statusCode: 200, data };
+      return { data };
     } catch (err) {
-      return { statusCode: err.status, message: err.message }
+      return { err }
     }
   });
   app.get("/getById", async function(request, reply) {
     const { LJID } = request.query;
     try {
-      if (!LJID) throw { statusCode: 400, message: "LJID cannot be null" };
+      if (!LJID) throw { status: 400, message: "LJID cannot be null" };
       const data = await prisma.learningJourney.findUniqueOrThrow({
         where: { LJID: parseInt(LJID) },
         select: { LJID: true }
       });
-      return { statusCode: 200, data };
+      return { data };
     } catch (err) {
-      return { statusCode: err.status, message: err.message }
+      return { err }
     }
   });
   app.post("/create", async function(request, reply) {
-    const { UserID } = request.body;
+    const { UserID, Saved } = request.body;
     try {
-      if (!UserID) throw { statusCode: 400, message: "UserID cannot be null" };
-      const data = await prisma.learningJourney.create({ data: { UserID } });
-      return { statusCode: 200, data };
+      if (!UserID) throw { status: 400, message: "UserID cannot be null." };
+      if (Saved !== 0 && Saved !== 1) throw { status: 400, message: "Saved must be 0 or 1." };
+      const data = await prisma.learningJourney.create({ data: { UserID, Saved } });
+      return { data };
     } catch (err) {
-      return { statusCode: err.status, message: err.message }
+      return { err }
     }
   });
 }
 
+fastify.register(cors, {});
 fastify.register(learningJourney, { prefix: "/LJ" });
 
 (async function() {
