@@ -1,41 +1,33 @@
 // using the extension es6-string-html by Tobermory (so /*html*/`` has html highlighting)
 
 export default /*html*/`
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <div class="col-2"></div>
-      <a class="navbar-brand" href="home.html">Learning Journey Planner</a>
-      <button class="navbar-toggler" type="text" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="home.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="availableroles.html">Roles</a>
-          </li>
-          <li class="nav-item">
-            <form class="d-inline-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </li>
-        </ul>
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            Profile
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="#">My Learning Journey</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Logout</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="col-2"></div>
+<header id="header" id="home">
+<div class="container">
+  <div class="row align-items-center justify-content-between d-flex">
+    <div id="logo">
+      <a href="index.html"><img src="img/logo.png" alt="" title="" /></a>
     </div>
-  </nav>
+    <nav id="nav-menu-container">
+      <ul class="nav-menu">
+        <li class="menu-active"><a href="index.html">Home</a></li>
+        <li><a href="about-us.html">About Us</a></li>
+        <li><a href="category.html">Category</a></li>
+        <li><a href="price.html">Price</a></li>
+        <li><a href="blog-home.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="menu-has-children"><a href="">Pages</a>
+          <ul>
+      <li><a href="elements.html">elements</a></li>
+      <li><a href="search.html">search</a></li>
+      <li><a href="single.html">single</a></li>
+          </ul>
+        </li>
+        <li><a class="ticker-btn" href="#">Signup</a></li>
+        <li><a class="ticker-btn" href="#">Login</a></li>				          				          
+      </ul>
+    </nav><!-- #nav-menu-container -->		    		
+  </div>
+</div>
+</header><!-- #header -->
 `;
 
