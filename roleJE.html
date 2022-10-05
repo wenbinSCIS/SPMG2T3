@@ -461,23 +461,23 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					<div class="thumb">
 						<img src="img/post.png" alt="">
 						<ul class="tags">
-							`+skills+`
+							${skills}
 						</ul>
 					</div>
 					<div class="details" >
 						<div class="title d-flex flex-row justify-content-between">
 							<div class="titles">
-								<a href="single.html"><h4>` + role.RoleName + `</h4></a>
-								
+								<a href="single.html"><h4>${role.RoleName}</h4></a>
 							</div>
 							<ul class="btns">
-								<li><button class="btn btn-primary" role="button" data-toggle="modal"  @click="openmodal(role)">test</button></li>
-								<button onclick="sendSRBRRequest(this.value)" value=`+role.RoleID+` class="btn btn-primary">View Skills</a>
+								<li><button class="btn btn-primary" role="button" data-toggle="modal"  @click="openmodal(${role})">test</button></li>
+								<button onclick="sendSRBRRequest(this.value)" value=${role.RoleID} class="btn btn-primary">View Skills</a>
 							</ul>
 						</div>
 				
-						<h5 id="text`+role.RoleID+`">`
-							+ role.Description + `</h5>
+						<h5 id="text${role.RoleID}">
+							${role.Description}
+						</h5>
 						<p class="address"><span class="lnr lnr-map"></span> 56/8, Panthapath Dhanmondi Dhaka</p>
 						<p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
 					</div>
