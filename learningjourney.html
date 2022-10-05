@@ -16,7 +16,7 @@
   <!-- Vue 3: production version, optimized for size and speed -->
   <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
   <title>Learning Journey</title>
 </head>
 <body>
@@ -31,13 +31,15 @@
     </div>
   </main>
   <script>
+    // using vue3 composition-api approach
     const { createApp, ref, computed, onMounted } = Vue;
     createApp({
       setup() {
         const learningJourneys = ref([]);
-        const userId = window.sessionStorage.getItem("user-id");
+        const userId = window.sessionStorage.getItem("user-id"); // retrieving user-id from sessionStorage, checking if user is logged in
         if (!userId) window.location.replace(`${window.location.origin}/home.html`); // if user not logged in, redirect to home.html
-        const baseURL = "http://127.0.0.1:5104/LJ";
+        const baseURL = "http://127.0.0.1:5104/LJ"; // base URL so no need to retype it
+        // options that are universal to post and get requests
         const options = {
           headers: { "Content-Type": "application/json" },
           mode: "cors",
