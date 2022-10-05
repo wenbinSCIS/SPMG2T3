@@ -24,12 +24,12 @@ db = SQLAlchemy(app)
 CORS(app)
 
 
-class learningjourney(db.Model):
-    __tablename__ = 'LearningJourney'
+class learningjourneycourses(db.Model):
+    __tablename__ = 'LearningJourneyCourses'
 
-    LJID = db.Column(db.Integer, primary_key=True)
-    UserID = db.Column(db.Integer, nullable=False)
-    Saved = db.Column(db.Integer, nullable=False)
+    LJCID = db.Column(db.Integer, primary_key=True)
+    LJID = db.Column(db.Integer, nullable=False)
+    CourseID = db.Column(db.Integer, nullable=False)
 
 
     def to_dict(self):
@@ -45,18 +45,18 @@ class learningjourney(db.Model):
 
     def json(self):
         return {
+            "LJCID": self.LJCID, 
             "LJID": self.LJID, 
-            "UserID": self.UserID, 
-            "Saved": self.Saved,
+            "CourseID": self.CourseID,
 
         }
 
 
-@app.route("/LJ/getUnsavedLJById")
-def get_UnsavedLJByID():
+@app.route("/LJC/getLJCoursesById")
+def get_LJCoursesById():
     args = request.args
-    userid = args.get('userid')
-    lj_list = learningjourney.query.filter(learningjourney.Saved=="0", learningjourney.UserID==userid).all()
+    ljids = args.get('ljid')
+    lj_list = learningjourneycourses.query.filter(learningjourneycourses.LJID==ljids).all()
 
     # print(role_list, flush=True)
     if len(lj_list):
@@ -65,4 +65,4 @@ def get_UnsavedLJByID():
         return jsonify({ "code": 404, "message": 0 }), 404
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5010, debug=True)
+    app.run(host='0.0.0.0', port=5011, debug=True)

@@ -187,13 +187,13 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		  
 			const sendGetRequest = async () => {
 			try {
-				console.log(333)
+			
 				const resp = await axios.get('http://127.0.0.1:5000/roles/getAll');
 				roles = resp.data.data;
 
 	
 				
-				console.log(roles.RoleID)
+			
 				var roleTable = document.getElementById("roleList");
 				
 				
@@ -211,7 +211,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						for(sr of SRBR){
 							var skillname = await getSkill(roles.RoleID,sr.SkillsID)
 							name = skillname[0].Skillname
-							console.log(name)
+					
 	
 							skillsID=Number(sr.SkillsID)
 				
@@ -230,7 +230,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			
 					} 
 
-					console.log(skills)
+			
 
 					innerstring += `
 					<div class="single-post d-flex flex-row">
@@ -262,7 +262,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						`
 				}
 				innerstring += ""
-				console.log(innerstring)
+		
 			   
 				roleTable.innerHTML = innerstring
 				
@@ -294,7 +294,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						skillstext += skillname[0].Skillname
 					 
 						skillstext += "</a></li>" 
-						console.log(skillstext)    
+					   
 					}
 					skillstext += "</ul>"
 					elem.innerHTML += skillstext
