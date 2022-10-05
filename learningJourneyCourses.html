@@ -43,6 +43,9 @@
           mode: "cors",
         };
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const LJID = parseInt(urlParams.get("LJID"));
+
         async function addNewLJC() {
           // try {
           //   const reply = await fetch(`${baseURL}/create`, {
@@ -66,7 +69,7 @@
             ...options,
           });
           const { data } = await reply.json();
-          learningJourneys.value = data;
+          learningJourneyCourses.value = data;
         });
 
         return { learningJourneyCourses };

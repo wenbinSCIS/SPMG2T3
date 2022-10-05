@@ -25,7 +25,14 @@ async function learningJourneyCourses(app, opts) {
       if (!LJID || typeof LJID_int !== "number") throw new Error("LJID must be a number and not null");
       const data = await prisma.learningJourneyCourses.findMany({
         where: { LJID: LJID_int },
-        select: { LJCID: true }
+        select: { LJCID: true, CourseID: true },
+      });
+      // data returns as [{LJCID}]
+      // fetch api in node only supported fully in Node version 18, otherwise need to use "--experimental-fetch" runtime
+      const courseData = await fetch(`http://localhost:5004/getCourseById?cid=${CourseID}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        mode: "cors",
       });
       return { data };
     } catch (err) {
@@ -39,7 +46,7 @@ async function learningJourneyCourses(app, opts) {
       if (!LJCID || typeof LJCID_int !== "number") throw new Error("LJCID must be a number and not null");
       const data = await prisma.learningJourneyCourses.findUniqueOrThrow({
         where: { LJCID: LJCID_int },
-        select: { LJCID: true }
+        select: { LJCID: true, CourseID: true }
       });
       return { data };
     } catch (err) {
