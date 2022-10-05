@@ -18,43 +18,45 @@ const fastify = Fastify({ logger: true });
  * @param {Fastify.FastifyPluginOptions} opts 
  */
 async function learningJourney(app, opts) {
-  app.get("/getAll", async function(request, reply) {
+  app.get("/getAll", async (request, reply) => {
     const { UserID, Saved } = request.query;
+    const UserID_int = parseInt(UserID);
     const savedInt = parseInt(Saved);
     try {
-      if (!UserID) throw { status: 400, message: "UserID cannot be null." };
-      if (Saved !== 0 && Saved !== 1) throw { status: 400, message: "Saved must be 0 or 1." };
+      if (!UserID || typeof UserID_int !== "number") throw new Error("UserID must be a number and not null");
+      if (savedInt !== 0 && savedInt !== 1) throw new Error("Saved must be 0 or 1.");
       const data = await prisma.learningJourney.findMany({
-        where: { UserID: parseInt(UserID), Saved: savedInt },
+        where: { UserID: UserID_int, Saved: savedInt },
         select: { LJID: true }
       });
       return { data };
     } catch (err) {
-      return { err }
+      return { err };
     }
   });
-  app.get("/getById", async function(request, reply) {
+  app.get("/getById", async (request, reply) => {
     const { LJID } = request.query;
+    const LJID_int = parseInt(LJID);
     try {
-      if (!LJID) throw { status: 400, message: "LJID cannot be null" };
+      if (!LJID || typeof LJID_int !== "number") throw new Error("LJID must be a number and not null");
       const data = await prisma.learningJourney.findUniqueOrThrow({
-        where: { LJID: parseInt(LJID) },
+        where: { LJID: LJID_int },
         select: { LJID: true }
       });
       return { data };
     } catch (err) {
-      return { err }
+      return { err };
     }
   });
-  app.post("/create", async function(request, reply) {
+  app.post("/create", async (request, reply) => {
     const { UserID, Saved } = request.body;
     try {
-      if (!UserID) throw { status: 400, message: "UserID cannot be null." };
-      if (Saved !== 0 && Saved !== 1) throw { status: 400, message: "Saved must be 0 or 1." };
+      if (!UserID || typeof UserID !== "number") throw new Error("UserID must be a number and not null");
+      if (Saved !== 0 && Saved !== 1) throw new Error("Saved must be 0 or 1.");
       const data = await prisma.learningJourney.create({ data: { UserID, Saved } });
       return { data };
     } catch (err) {
-      return { err }
+      return { err };
     }
   });
 }

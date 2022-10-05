@@ -18,40 +18,43 @@ const fastify = Fastify({ logger: true });
  * @param {Fastify.FastifyPluginOptions} opts 
  */
 async function learningJourneyCourses(app, opts) {
-  app.get("/getAll", async function(request, reply) {
+  app.get("/getAll", async (request, reply) => {
     const { LJID } = request.query;
+    const LJID_int = parseInt(LJID)
     try {
-      if (!LJID) throw { status: 400, message: "LJID cannot be null" };
-      const data = await prisma.learningJourney.findMany({
-        where: { LJID: parseInt(LJID) },
+      if (!LJID || typeof LJID_int !== "number") throw new Error("LJID must be a number and not null");
+      const data = await prisma.learningJourneyCourses.findMany({
+        where: { LJID: LJID_int },
         select: { LJCID: true }
       });
-      return { status: 200, data };
+      return { data };
     } catch (err) {
-      return { status: err.status, message: err.message }
+      return { err }
     }
   });
-  app.get("/getById", async function(request, reply) {
+  app.get("/getById", async (request, reply) => {
     const { LJCID } = request.query;
+    const LJCID_int = parseInt(LJCID);
     try {
-      if (!LJCID) throw { status: 400, message: "LJCID cannot be null" };
-      const data = await prisma.learningJourney.findUniqueOrThrow({
-        where: { LJCID: parseInt(LJCID) },
+      if (!LJCID || typeof LJCID_int !== "number") throw new Error("LJCID must be a number and not null");
+      const data = await prisma.learningJourneyCourses.findUniqueOrThrow({
+        where: { LJCID: LJCID_int },
         select: { LJCID: true }
       });
-      return { status: 200, data };
+      return { data };
     } catch (err) {
-      return { status: err.status, message: err.message }
+      return { err }
     }
   });
-  app.post("/create", async function(request, reply) {
+  app.post("/create", async (request, reply) => {
     const { LJID, CourseID } = request.body;
     try {
-      if (!LJID || !CourseID) throw { status: 400, message: "LJID & CourseID cannot be null" };
-      const data = await prisma.learningJourney.create({ data: { LJID, CourseID } });
-      return { status: 200, data };
+      if (!LJID || typeof LJID !== "number") throw new Error("LJID must be a number and not null.");
+      if (!CourseID || typeof CourseID !== "string") throw new Error("CourseID must not be an empty string and not null.");
+      const data = await prisma.learningJourneyCourses.create({ data: { LJID, CourseID } });
+      return { data };
     } catch (err) {
-      return { status: err.status, message: err.message }
+      return { err }
     }
   });
 }
