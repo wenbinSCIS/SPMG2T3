@@ -151,7 +151,105 @@
 						</div>
 	
 					</div>
-				</div>	
+				</div>
+				<div id="editrole" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">						
+                                    <h4 class="modal-title">Edit Role</h4>
+                                    <button type="button" class="close" onclick="$('#editrole').modal('hide');" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">					
+                                    <div class="form-group">
+                                        <h5>Current role title:</h5> <h3>{{current_role.RoleName}}</h3> <a href="#editEmployeeModal" class="edit" @click="editrolename()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
+                                    </div>
+                                    <div class="form-group">
+                                        <h5>Description</h5> <p>{{current_role.Description}}</p> <a href="#editEmployeeModal" class="edit" @click="editdescription()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> </p>
+                                    </div>		
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <span class="custom-checkbox">
+                                                        <input type="checkbox" id="selectAll">
+                                                        <label for="selectAll"></label>
+                                                    </span>
+                                                </th>
+                                                <th>Skill Required</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span class="custom-checkbox">
+                                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                                        <label for="checkbox1"></label>
+                                                    </span>
+                                                </td>
+                                                <td>Bullshitting</td>
+                                                <td>
+                                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit role Modal HTML -->
+                <div id="editrolename" class="modal fade">
+                    <div class="modal-dialog" id="edit">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">						
+                                    <h4 class="modal-title">Edit Role name</h4>
+                                    <button type="button" class="close" onclick="$('#editrolename').modal('hide');" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">					
+                                    <div class="form-group">
+                                        <label>Ente new role name</label>
+                                        <input id="newrolename" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editrolename').modal('hide');">
+                                    <input type="submit" class="btn btn-info" value="Save" @click="saverolename()">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit Description Modal HTML -->
+                <div id="editdescription" class="modal fade">
+                    <div class="modal-dialog" id="edit">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">						
+                                    <h4 class="modal-title">Change Description</h4>
+                                    <button type="button" class="close" onclick="$('#editdescription').modal('hide');" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">					
+                                    <div class="form-group">
+                                        <label>New Description</label>
+                                        <textarea id="newdescription" class="form-control" required> {{current_role.Description}}</textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editdescription').modal('hide');">
+                                    <input type="submit" class="btn btn-info" value="Save" @click="savedescription()">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>	
 			</section>
 			<!-- End post Area -->
 
@@ -334,7 +432,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 							</div>
 							<ul class="btns">
 								<li><a href="#"><span class="lnr lnr-heart"></span></a></li>
-								<li><a href="#">Apply</a></li>
+								<li><a href="#" onclick = "openmodal(${role})">Apply</a></li>
 								<button onclick="sendSRBRRequest(this.value)" value=`+role.RoleID+` class="btn btn-primary">View Skills</a>
 							</ul>
 						</div>
@@ -511,6 +609,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         add_role_modal.style.display = "none";
     }
 
+
+	function openmodal(obj) {
+  		document.getElementById("editrole").show()
+	}
 		</script>
 
 
