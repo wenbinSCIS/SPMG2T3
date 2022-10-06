@@ -16,29 +16,71 @@
   <!-- Vue 3: production version, optimized for size and speed -->
   <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://unpkg.com/@vueuse/shared"></script>
-  <script src="https://unpkg.com/@vueuse/core"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
   <title>Learning Journey</title>
 </head>
 <body>
   <style></style>
   <div id="nav-placeholder"></div>
-  <main>
-    <div class="container">
-      <!-- Area for Learning journey -->
+  <main id="app">
+    <div class="p-3 m-4">
+      <button id="addNewLJ" class="btn btn-primary" @click="createNewLJ">Create LJ</button>
+    </div>
+    <div class="container bg-light m-3" v-for="{ LJID } in learningJourneys" :key="LJID">
+      <button class="btn bg-success text-white" @click="handleClickLJ(LJID)">{{ LJID }}</button>
     </div>
   </main>
-  <script></script>
+  <script>
+    // using vue3 composition-api approach
+    const { createApp, ref, computed, onMounted } = Vue;
+    createApp({
+      setup() {
+        const learningJourneys = ref([]);
+        const userId = window.sessionStorage.getItem("user-id"); // retrieving user-id from sessionStorage, checking if user is logged in
+        if (!userId) window.location.replace(`${window.location.origin}/home.html`); // if user not logged in, redirect to home.html
+        const baseURL = "http://127.0.0.1:5104/LJ"; // base URL so no need to retype it
+        // options that are universal to post and get requests
+        const options = {
+          headers: { "Content-Type": "application/json" },
+          mode: "cors",
+        };
+
+        async function createNewLJ() {
+          try {
+            const reply = await fetch(`${baseURL}/create`, {
+              method: "POST",
+              ...options,
+              body: JSON.stringify({ UserID: parseInt(userId), Saved: 1 }),
+            });
+            // console.log(await reply.json());
+            window.location.reload(); // reload after successful creation
+          } catch (err) {
+            console.log(err);
+            alert("Failed to create new Learning Journey");
+          }
+        }
+
+        function handleClickLJ(id) {
+          // redirect user to the next relevant page
+          window.location.assign(`${window.location.origin}/learningJourneyCourses.html?LJID=${id}`);
+        }
+
+        onMounted(async () => {
+          const reply = await fetch(`${baseURL}/getAll?UserID=${userId}&Saved=1`, {
+            method: "GET",
+            ...options,
+          });
+          const { data } = await reply.json();
+          learningJourneys.value = data;
+        });
+
+        return { learningJourneys, createNewLJ, handleClickLJ };
+      }
+    }).mount("#app");
+  </script>
   <script type="module">
     import navbar from "/navbar.js";
     window.addEventListener('load', () => document.getElementById('nav-placeholder').innerHTML = navbar);
-
-    // temp stuff
-    const res = await axios.get("url");
-
-    Vue.createApp().mount("#app");
-
   </script>
 </body>
 </html>
