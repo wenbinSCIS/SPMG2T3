@@ -162,7 +162,7 @@
                                 </div>
                                 <div class="modal-body">					
                                     <div class="form-group">
-                                        <h5>Current role title:</h5> <h3>{{current_role.RoleName}}</h3> <a href="#editEmployeeModal" class="edit" @click="editrolename()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
+                                        <h5>Current role title:</h5> <h3 id="displayrolename"></h3> <a href="#editEmployeeModal" class="edit" @click="editrolename()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
                                     </div>
                                     <div class="form-group">
                                         <h5>Description</h5> <p>{{current_role.Description}}</p> <a href="#editEmployeeModal" class="edit" @click="editdescription()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> </p>
@@ -367,7 +367,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 																
 			var roles = []
 			var skills=[]
-
+			var all = []
 		  
 			const sendGetRequest = async () => {
 			try {
@@ -390,15 +390,17 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					var skills="";
 					var skillsID;
 
-
 					if(SRBR.length>0){
+						var skill_list = []
 						for(sr of SRBR){
 							var skillname = await getSkill(roles.RoleID,sr.SkillsID)
 							name = skillname[0].Skillname
 					
 	
 							skillsID=Number(sr.SkillsID)
-				
+							
+							skill_list.push([name,skillsID])
+
 							skills+=`
 							<li>
 								<a href="course.html?sid=`+skillsID+`">`+name+`   
@@ -408,14 +410,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						
 							
 				
-			
+							
 						}
+						role["skills"] = skill_list
 				
-			
+						
 					} 
-
-			
-
+					console.log("here")
+					console.log(JSON.stringify(role))
+					object = JSON.stringify(role)
 					innerstring += `
 					<div class="single-post d-flex flex-row">
 					<div class="thumb">
@@ -432,7 +435,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 							</div>
 							<ul class="btns">
 								<li><a href="#"><span class="lnr lnr-heart"></span></a></li>
-								<li><a href="#" onclick = "openmodal(${role})">Apply</a></li>
+								<li><a href="#"  data-toggle="modal" data-target="#editrole" onclick="test(${object})">Apply</a></li>
 								<button onclick="sendSRBRRequest(this.value)" value=`+role.RoleID+` class="btn btn-primary">View Skills</a>
 							</ul>
 						</div>
@@ -455,6 +458,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				console.error(err);
 			}
 		};
+		function test(obj){
+		console.log(obj);
+		//document.getElementById("displayrolename").value = role;
+		}
+
 		
 		sendGetRequest();
 		
@@ -609,11 +617,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         add_role_modal.style.display = "none";
     }
 
-
-	function openmodal(obj) {
-  		document.getElementById("editrole").show()
-	}
-		</script>
+	
+	
+	</script>
 
 
 
