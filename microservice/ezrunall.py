@@ -3,7 +3,7 @@ import _thread
 from threading import Thread
 
 def run_app1():
-    print("ok")
+  
     os.system('python C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\courses.py') 
 
 def run_app2():
