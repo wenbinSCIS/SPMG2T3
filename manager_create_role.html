@@ -102,6 +102,7 @@
 				    </div>
     			</form>
 	    	</div>
+            {{role_list}}
 	    </div>
     </div>
 
@@ -112,7 +113,9 @@
             skill_list:[],
             role_name:"",
             description:"",
-            skill_selected:null
+            skill_selected:[],
+            role_list:[],
+            new_role_id:""
             };
         },
         methods:
@@ -129,37 +132,41 @@
             },
 
             create_role(){
-                let jsonData = JSON.stringify({
+                    axios.post('http://127.0.0.1:5000/roles/create', {
                         "Role Name": this.role_name,
-                        "Created By": "test",
+                        "Created By": "function test",
                         "Description": this.description,
-
-                    });
-                    
-                    fetch(`http://127.0.0.1:5000/roles/create`,
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-type": "application/json"
-                            },
-                            body: jsonData
+                        "role_id": this.new_role_id
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            result = data.data;
-                            console.log(result);
-                            // 3 cases
-                            switch (data.code) {
-                                case 201:
-                                    break;
-                                case 400:
-                                default:
-                                    throw `${data.code}: ${data.message}`;
-                            }
+                        .then(function (response) {
+                            console.log(response);
                         })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
 
-                        
+                            axios.post('http://127.0.0.1:5001/addskillrole', {
+                                "RoleID": this.new_role_id,
+                                "Skills": this.skill_selected
+                                })
+                                .then(function (response) {
+                                console.log(response);
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+            },
+            calculate_role_id(){
+                axios.get('http://127.0.0.1:5000/roles/getAll')
+                            .then(response => {
+                                // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                                this.role_list = response.data.data
+                                this.new_role_id=response.data.data.length+1
+                            })
+                            .catch(error => {
+                                this.role_list = [{ entry: 'There was an error: ' + error.message }]
+                            })
+
             }
         },
         computed:
@@ -168,6 +175,7 @@
         },
         created(){
             this.get_all_skill()
+            this.calculate_role_id()
         },
         components: { vuemultiselect: window.Vue3Multiselect.default },
     }).mount('#add_role_modal')
