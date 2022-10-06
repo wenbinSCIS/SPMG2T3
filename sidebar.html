@@ -71,6 +71,8 @@
     transition: all .3s ease-in-out;
     transform: translateX(0);
     z-index: 9999999;
+    border-right: 1px solid #e5e9f2;
+    box-shadow: 0px 1px 3px 0pxrgba(54,74,99,.05);
   }
 
   .sidebar .close-aside {
@@ -211,7 +213,7 @@
   }
 
   .main-color {
-    color: #ffc107
+    color: #9769ff;
   }
 
   /** --------------------------------
@@ -220,21 +222,25 @@
   -------------------------------- */
 
   .navbar {
-    background-color: var(--navbar-bg-color) !important;
-    border: none !important;
+    background-color: #FFF !important;
+    border-bottom: 1px solid #e5e9f2;
+    box-shadow: 0px 1px 3px 0pxrgba(54,74,99,.05);
+    
   }
   .navbar .dropdown-menu {
     right: auto !important;
     left: 0 !important;
   }
   .navbar .navbar-nav>li>a {
-    color: #EEE !important;
+    color: #526484 !important;
     line-height: 55px !important;
     padding: 0 10px !important;
   }
-  .navbar .navbar-brand {color:#FFF !important}
+  .navbar .navbar-brand {color:#364a63 !important;font-family: "DM Sans",sans-serif;
+    font-size: 20px;
+    font-weight: 700;}
   .navbar .navbar-nav>li>a:focus,
-  .navbar .navbar-nav>li>a:hover {color: #EEE !important}
+  .navbar .navbar-nav>li>a:hover {color: #9769ff !important;}
 
   .navbar .navbar-nav>.open>a,
   .navbar .navbar-nav>.open>a:focus,
@@ -242,7 +248,7 @@
 
   .navbar .navbar-brand {line-height: 55px !important; padding: 0 !important}
   .navbar .navbar-brand:focus,
-  .navbar .navbar-brand:hover {color: #FFF !important}
+  .navbar .navbar-brand:hover {color: #9769ff !important;}
   .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {margin: 0 !important}
   @media (max-width: 767px) {
     .navbar>.container-fluid .navbar-brand {
@@ -264,7 +270,7 @@
     float: left !important;
   }
   .navbar .navbar-nav>li>a>span:not(.caret) {
-    background-color: #e74c3c !important;
+    background-color: #44e6ff !important;
     border-radius: 50% !important;
     height: 25px !important;
     width: 25px !important;
@@ -349,7 +355,7 @@
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggle-navbar" aria-controls="toggle-navbar" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="uil-bars text-white"></i>
               </button>
-              <a class="navbar-brand" href="#">admin<span class="main-color">kit</span></a>
+              <a class="navbar-brand" href="#">LearningJourney<span class="main-color">PS</span></a>
             </div>
             <div class="collapse navbar-collapse" id="toggle-navbar">
               <ul class="navbar-nav ms-auto">
@@ -439,9 +445,9 @@
 
       // dropdown menu in the side nav
       var slideNavDropdown = $('.sidebar-dropdown');
-      /*
+      
       $('.sidebar .categories').addEventListener('click', function (event) {
-        event.preventDefault()
+        /*event.preventDefault()*/
 
         const item = event.target.closest('.has-dropdown')
 
@@ -473,7 +479,7 @@
           find(item, '.sidebar-dropdown').classList.toggle('active')
         }
       })
-      */
+      
       $('.sidebar .close-aside').addEventListener('click', function () {
         $(`#${this.dataset.close}`).classList.add('show-sidebar')
         wrapper.classList.remove('margin')
@@ -522,7 +528,6 @@
       var path = window.location.pathname;
       var page = path.split("/").pop();
       var selectedPage=page.split(".")[0];
-      console.log(selectedPage);
       document.getElementById(selectedPage).setAttribute("selected", "active")
 
       function logout(){
