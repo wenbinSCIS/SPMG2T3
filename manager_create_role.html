@@ -101,6 +101,8 @@
 			    		<input type="submit" class="btn btn-success" value="Add" v-on:click="create_role">
 				    </div>
     			</form>
+                <p>{{this.skill_list}}</p>
+                <p>{{this.role_list}}</p>
 	    	</div>
 	    </div>
     </div>
@@ -113,7 +115,8 @@
             role_name:"",
             description:"",
             skill_selected:null,
-            role_list:[]
+            role_list:[],
+            new_role_id:""
             };
         },
         methods:
@@ -130,22 +133,11 @@
             },
 
             create_role(){
-                axios.get('http://127.0.0.1:5000/roles/getAll')
-                            .then(response => {
-                                // this gets the data, which is an array, and pass the data to Vue instance's posts property
-                                this.role_list = response.data.data
-                            })
-                            .catch(error => {
-                                this.role_list = [{ entry: 'There was an error: ' + error.message }]
-                            })
-
-                    cur_role_id = 1+this.role_list.length
-
                     axios.post('http://127.0.0.1:5000/roles/create', {
                         "Role Name": this.role_name,
                         "Created By": "function test",
                         "Description": this.description,
-                        "role_id": cur_role_id
+                        "role_id": this.new_role_id
                         })
                         .then(function (response) {
                             console.log(response);
@@ -156,7 +148,7 @@
 
                         for (let i=0;i<this.skill_selected;i++){
                             axios.post('http://127.0.0.1:5001/addskillrole', {
-                                "RoleID": cur_role_id,
+                                "RoleID": this.new_role_id,
                                 "SkillsID": i
                                 })
                                 .then(function (response) {
@@ -165,10 +157,21 @@
                                 .catch(function (error) {
                                     console.log(error);
                                 });
-
                             }
+            },
+            calculate_role_id(){
+                axios.get('http://127.0.0.1:5000/roles/getAll')
+                            .then(response => {
+                                // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                                this.role_list = response.data.data
+                            })
+                            .catch(error => {
+                                this.role_list = [{ entry: 'There was an error: ' + error.message }]
+                            })
 
-                        
+                console.log(this.role_list)
+                this.new_role_id=1+this.role_list.length
+                console.log(this.new_role_id)
             }
         },
         computed:
@@ -177,6 +180,7 @@
         },
         created(){
             this.get_all_skill()
+            this.calculate_role_id()
         },
         components: { vuemultiselect: window.Vue3Multiselect.default },
     }).mount('#add_role_modal')
