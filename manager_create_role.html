@@ -112,7 +112,8 @@
             skill_list:[],
             role_name:"",
             description:"",
-            skill_selected:null
+            skill_selected:null,
+            role_list:[]
             };
         },
         methods:
@@ -129,35 +130,44 @@
             },
 
             create_role(){
-                let jsonData = JSON.stringify({
+                console.log("start role addition")
+
+                    axios.post('http://127.0.0.1:5000/roles/create', {
                         "Role Name": this.role_name,
                         "Created By": "test",
-                        "Description": this.description,
+                        "Description": this.description
+                        })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
 
-                    });
-                    
-                    fetch(`http://127.0.0.1:5000/roles/create`,
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-type": "application/json"
-                            },
-                            body: jsonData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            result = data.data;
-                            console.log(result);
-                            // 3 cases
-                            switch (data.code) {
-                                case 201:
-                                    break;
-                                case 400:
-                                default:
-                                    throw `${data.code}: ${data.message}`;
+                        axios.get('http://127.0.0.1:5000/roles/getAll')
+                            .then(response => {
+                                // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                                this.role_list = response.data.data
+                            })
+                            .catch(error => {
+                                this.role_list = [{ entry: 'There was an error: ' + error.message }]
+                            })
+
+                            cur_role_id = 1+this.role_list.length
+
+                        for (let i=0;i<this.skill_selected;i++){
+                            axios.post('http://127.0.0.1:5001/addskillrole', {
+                                "RoleID": cur_role_id,
+                                "SkillsID": i
+                                })
+                                .then(function (response) {
+                                console.log(response);
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+
                             }
-                        })
 
                         
             }
