@@ -201,6 +201,7 @@ const getLJCart = async () => {
     padding-right: 30px;
     padding-left: 30px;
     -webkit-transition: all 0.5s ease-in-out;
+    z-index:999999999999;
 }
 
 .open {
@@ -241,7 +242,7 @@ const getLJCart = async () => {
     display: flex;
     flex-direction: row;
     margin-top: 20px;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     color:#000;
 }
@@ -308,6 +309,7 @@ const getLJCart = async () => {
 </head>
 <body>
     <div class="bottomright" id="flip">
+
         My Learning Journey
         <span id="numitems"></span>
         <i class="fa fa-angle-double-up" id="up" style=" position:absolute;margin-left:10px;margin-top:5px"></i>
@@ -317,7 +319,7 @@ const getLJCart = async () => {
 
     <div class="cart-panel" id="cartpan">
         <div class="cart-header">
-
+            <i class="fa fa-tasks" style="color:black" aria-hidden="true"></i>
             <h4>Your Current Learning Journey</h4>
         </div>
 
