@@ -130,21 +130,7 @@
             },
 
             create_role(){
-                console.log("start role addition")
-
-                    axios.post('http://127.0.0.1:5000/roles/create', {
-                        "Role Name": this.role_name,
-                        "Created By": "test",
-                        "Description": this.description
-                        })
-                        .then(function (response) {
-                            console.log(response);
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-
-                        axios.get('http://127.0.0.1:5000/roles/getAll')
+                axios.get('http://127.0.0.1:5000/roles/getAll')
                             .then(response => {
                                 // this gets the data, which is an array, and pass the data to Vue instance's posts property
                                 this.role_list = response.data.data
@@ -153,7 +139,20 @@
                                 this.role_list = [{ entry: 'There was an error: ' + error.message }]
                             })
 
-                            cur_role_id = 1+this.role_list.length
+                    cur_role_id = 1+this.role_list.length
+
+                    axios.post('http://127.0.0.1:5000/roles/create', {
+                        "Role Name": this.role_name,
+                        "Created By": "function test",
+                        "Description": this.description,
+                        "role_id": cur_role_id
+                        })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
 
                         for (let i=0;i<this.skill_selected;i++){
                             axios.post('http://127.0.0.1:5001/addskillrole', {

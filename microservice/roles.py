@@ -83,7 +83,7 @@ def create_role():
     }
     '''
     data = request.get_json()
-    if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description')):
+    if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description',"role_id")):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
     Add_Role = Roles(
@@ -91,7 +91,8 @@ def create_role():
         RoleName = data["Role Name"],
         CreatedBy = data["Created By"],
         Fulfilled = " ",
-        Description = data["Description"]
+        Description = data["Description"],
+        RoleID = data["role_id"]
     )
     try:
         db.session.add(Add_Role)
