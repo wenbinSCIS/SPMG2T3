@@ -58,11 +58,37 @@ def get_all_by_roleid():
     return jsonify(
         {
             "data": [role.to_dict()
-                     for role in select]
+                    for role in select]
         }
     ), 200
 
+@app.route("/addskillrole",methods=["POST"])
+def add_skill_role():
+    data = request.get_json()
+    if not all(key in data.keys() for key in ('Skills', 'RoleID')):
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+    
+    srbr_list = SRBR.query.all()
+    # print(role_list, flush=True)
+    skill_list=data["Skills"]
+    if len(srbr_list):
+        cur_srbr=len(srbr_list)
 
+    else:
+        cur_srbr=0
+    for cur_skill in skill_list:
+        cur_srbr+=1
+        add_skill_role = SRBR(
+                RoleID = data["RoleID"],
+            SkillsID = cur_skill["SkillsID"],
+            SRBR = cur_srbr
+        )
+        try:
+            db.session.add(add_skill_role)
+            db.session.commit()
+        except:
+            return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
+    return { "role data": add_skill_role.json(), "code": 201 }
 
 
 
