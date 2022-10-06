@@ -102,8 +102,7 @@
 				    </div>
     			</form>
 	    	</div>
-            {{role_list.length}}
-            {{new_role_id}}
+            {{skill_selected}}
 	    </div>
     </div>
 
@@ -114,7 +113,7 @@
             skill_list:[],
             role_name:"",
             description:"",
-            skill_selected:null,
+            skill_selected:[],
             role_list:[],
             new_role_id:""
             };
@@ -146,10 +145,10 @@
                             console.log(error);
                         });
 
-                        for (let i=0;i<this.skill_selected;i++){
+                        for (let i=0;i<this.skill_selected.length+1;i++){
                             axios.post('http://127.0.0.1:5001/addskillrole', {
                                 "RoleID": this.new_role_id,
-                                "SkillsID": i
+                                "SkillsID": this.skill_selected[i].SkillsID
                                 })
                                 .then(function (response) {
                                 console.log(response);
