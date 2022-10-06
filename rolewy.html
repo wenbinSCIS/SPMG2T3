@@ -130,10 +130,10 @@
                                 </div>
                                 <div class="modal-body">					
                                     <div class="form-group">
-                                        <h5>Current role title:</h5> <h3 id="displayrolename"></h3> <a href="#editEmployeeModal" class="edit" @click="editrolename()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
+                                        <h5>Current role title:</h5> <h3 id="displayrolename"></h3> <a href="#editEmployeeModal" class="edit" onclick="editrolename()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
                                     </div>
                                     <div class="form-group">
-                                        <h5>Description</h5> <p id="displaydescription"></p> <a href="#editEmployeeModal" class="edit" @click="editdescription()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> </p>
+                                        <h5>Description</h5> <p id="displaydescription"></p> <a href="#editEmployeeModal" class="edit" onclick="editdescription()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> </p>
                                     </div>		
                                     <table class="table table-striped table-hover">
                                         <thead>
@@ -606,6 +606,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		
 		table = document.getElementById("skilldisplay").innerHTML = htmls
 		}
+
+	
 	
 	
 	</script>
