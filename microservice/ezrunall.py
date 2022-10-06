@@ -1,23 +1,32 @@
 import os
 import _thread
 from threading import Thread
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# change the path in env based on your local path, e.g.:
+# MICROSERVICE_PATH="C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\"
+MICROSERVICE_PATH = os.environ.get('MICROSERVICE_PATH')
 
 def run_app1():
-  
-    os.system('python F:\\Code\\SPMG2T3\\microservice\\courses.py') 
-
+    os.system(f'python {MICROSERVICE_PATH}courses.py') 
 def run_app2():
-    os.system('python F:\\Code\\SPMG2T3\\microservice\\learningjourney.py') 
+    os.system(f'python {MICROSERVICE_PATH}learningjourney.py') 
 def run_app3():
-    os.system('python F:\\Code\\SPMG2T3\\microservice\\learningjourneycourses.py')
+    os.system(f'python {MICROSERVICE_PATH}learningjourneycourses.py')
 def run_app4():
-    os.system('python F:\\Code\\SPMG2T3\\microservice\\roles.py') 
+    os.system(f'python {MICROSERVICE_PATH}roles.py') 
 def run_app5():
-    os.system('python F:\\Code\\SPMG2T3\\microservice\\skills_acquired_by_course.py') 
+    os.system(f'python {MICROSERVICE_PATH}skills_acquired_by_course.py') 
 def run_app6():
-    os.system('python F:\\Code\\SPMG2T3\\microservice\\skills_required_by_role.py')
+    os.system(f'python {MICROSERVICE_PATH}skills_required_by_role.py')
 def run_app7():
-    os.system('python F:\\Code\\SPMG2T3\\microservice\\skills.py')  
+    os.system(f'python {MICROSERVICE_PATH}skills.py')  
+def run_app8():
+    os.system(f'node {MICROSERVICE_PATH}learningjourney.mjs')
+def run_app9():
+    os.system(f'node {MICROSERVICE_PATH}learningjourneyCourses.mjs')
 
 if __name__=='__main__':
     t1 = Thread(target=run_app1)
@@ -34,3 +43,7 @@ if __name__=='__main__':
     t6.start()
     t7 = Thread(target=run_app7)
     t7.start()
+    t8 = Thread(target=run_app8)
+    t8.start()
+    t9 = Thread(target=run_app9)
+    t9.start()

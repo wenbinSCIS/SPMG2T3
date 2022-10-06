@@ -101,7 +101,6 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 								<input type="submit" class="btn btn-success" value="Add" v-on:click="create_role">
 							</div>
 						</form>
@@ -111,7 +110,7 @@
 			
 			<!-- Start post Area -->
 			<section class="post-area section-gap">
-				<div class="container">
+				<div class="container" id="testapp1">
 					<div class="row justify-content-center d-flex">
 						<div class="col-lg-8 post-list">
 
@@ -347,6 +346,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					var skills="";
 					var skillsID;
 
+					var skill_list = []
 					if(SRBR.length>0){
 						var skill_list = []
 						for(sr of SRBR){
@@ -370,12 +370,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 							
 						}
 						role["skills"] = skill_list
-				
-						
 					} 
-					console.log("here")
-					console.log(JSON.stringify(role))
-					object = JSON.stringify(role)
+
+
 					innerstring += `
 					<div class="single-post d-flex flex-row">
 					<div class="thumb">
