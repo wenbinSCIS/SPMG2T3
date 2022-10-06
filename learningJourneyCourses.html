@@ -26,8 +26,11 @@
     <div class="p-3 m-4">
       <button id="addNewLJC" class="btn btn-primary" @click="addNewLJC">Add LJC</button>
     </div>
-    <div class="container bg-light m-3" v-for="{ LJCID } in learningJourneyCourses" :key="LJCID">
-      <button class="btn bg-success text-white" @click="handleClickLJC(LJCID)">{{ LJCID }}</button>
+    <div class="container bg-light m-3" v-for="{ LJCID, CourseID, CourseName, CourseDescription } in learningJourneyCourses" :key="LJCID">
+      <!-- <button class="btn bg-success text-white" @click="handleClickLJC(LJCID)">{{ LJCID }}</button> -->
+      <div>ID: {{ CourseID }}</div>
+      <div>Name: {{ CourseName }}</div>
+      <div>Description: {{ CourseDescription }}</div>
     </div>
   </main>
   <script>
@@ -64,7 +67,7 @@
         function handleClickLJC() {}
 
         onMounted(async () => {
-          const reply = await fetch(`${baseURL}/getAll?UserID=${userId}&Saved=1`, {
+          const reply = await fetch(`${baseURL}/getAll?LJID=${LJID}`, {
             method: "GET",
             ...options,
           });

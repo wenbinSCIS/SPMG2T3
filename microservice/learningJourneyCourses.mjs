@@ -5,6 +5,7 @@
 import "dotenv/config";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import fetch from "node-fetch"; // standby import, in case someone not using Node.js 18
 import { PrismaClient } from "@prisma/client";
 
 const port = 5105;
@@ -27,14 +28,19 @@ async function learningJourneyCourses(app, opts) {
         where: { LJID: LJID_int },
         select: { LJCID: true, CourseID: true },
       });
-      // data returns as [{LJCID}]
-      // fetch api in node only supported fully in Node version 18, otherwise need to use "--experimental-fetch" runtime
-      const courseData = await fetch(`http://localhost:5004/getCourseById?cid=${CourseID}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        mode: "cors",
-      });
-      return { data };
+
+      const courses = [];
+      for (let { LJCID, CourseID } of data) {
+        // fetch built into Nodejs 18 fully, but not for others. Just in case, will use node-fetch instead
+        const res = await fetch(`http://127.0.0.1:5004/getCoursebyId?cid=${CourseID}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const { data } = await res.json();
+        courses.push({ LJCID, ...data[0] }); // will push in { LJID, CourseID, CourseName, CourseDescription }
+      }
+
+      return { data: courses };
     } catch (err) {
       return { err }
     }
