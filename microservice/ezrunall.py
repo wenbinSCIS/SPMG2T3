@@ -4,20 +4,20 @@ from threading import Thread
 
 def run_app1():
   
-    os.system('python C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\courses.py') 
+    os.system('python F:\\Code\\SPMG2T3\\microservice\\courses.py') 
 
 def run_app2():
-    os.system('python C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\learningjourney.py') 
+    os.system('python F:\\Code\\SPMG2T3\\microservice\\learningjourney.py') 
 def run_app3():
-    os.system('python C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\learningjourneycourses.py')
+    os.system('python F:\\Code\\SPMG2T3\\microservice\\learningjourneycourses.py')
 def run_app4():
-    os.system('python C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\roles.py') 
+    os.system('python F:\\Code\\SPMG2T3\\microservice\\roles.py') 
 def run_app5():
-    os.system('python C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\skills_acquired_by_course.py') 
+    os.system('python F:\\Code\\SPMG2T3\\microservice\\skills_acquired_by_course.py') 
 def run_app6():
-    os.system('python C:\\Users\\wenbi\Desktop\\SPMG2T3\microservice\\skills_required_by_role.py')
+    os.system('python F:\\Code\\SPMG2T3\\microservice\\skills_required_by_role.py')
 def run_app7():
-    os.system('python C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\skills.py')  
+    os.system('python F:\\Code\\SPMG2T3\\microservice\\skills.py')  
 
 if __name__=='__main__':
     t1 = Thread(target=run_app1)
