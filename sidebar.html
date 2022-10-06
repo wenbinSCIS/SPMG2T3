@@ -252,13 +252,13 @@
         <!--find icons from here: https://icon-sets.iconify.design/uil/apple-alt/-->
 
         <ul class="categories list-unstyled">
-          <li class="sidebar-item" id="home">
+          <li class="sidebar-item" id="home1">
             <i class="uil-estate"></i><a href="home.html">Dashboard</a>
           </li>
-          <li class="sidebar-item" id="availableroles" >
-            <i class="uil-user-check"></i><a href="role.html">Roles</a>
+          <li class="sidebar-item" id="rolewy1" >
+            <i class="uil-user-check"></i><a href="rolewy.html">roles</a>
           </li>
-          <li class="sidebar-item" id="learningjourney">
+          <li class="sidebar-item" id="learningjourney1">
             <i class="uil-rocket"></i><a href="learningjourney.html">Learning Journey</a>
           </li>
           <li class="sidebar-item">
@@ -298,20 +298,36 @@
     <script>
       var mini = true;
 
+      var path = window.location.pathname;
+      var page = path.split("/").pop();
+      var selectedPage=page.split(".")[0];
+      document.getElementById(selectedPage+"1").setAttribute("selected", "active")
+
       function toggleSidebar() {
         if (mini) {
 
           document.getElementById("mySidebar").style.width = "250px";
           document.getElementById("main").style.marginLeft = "250px";
+          document.getElementById(selectedPage).style.marginLeft = "250px";
+          document.getElementById(selectedPage).style.transition = "0.5s";
           document.getElementsByTagName("BODY")[0].setAttribute("style","background: rgba(16,25,36,.4); transition: background-color .5s;")
+
           this.mini = false;
         } else {
 
           document.getElementById("mySidebar").style.width = "85px";
           document.getElementById("main").style.marginLeft = "85px";
+          document.getElementById(selectedPage).style.marginLeft = "85px";
+          document.getElementById(selectedPage).style.transition = "0.5s";
           document.getElementsByTagName("BODY")[0].setAttribute("style","transition: background-color .5s;")
           this.mini = true;
         }
+      }
+
+      window.onload=shiftPage()
+
+      function shiftPage(){
+        document.getElementById(selectedPage).style.marginLeft = "85px";
       }
       
       /*
@@ -354,10 +370,6 @@
 
       }
       */
-      var path = window.location.pathname;
-      var page = path.split("/").pop();
-      var selectedPage=page.split(".")[0];
-      document.getElementById(selectedPage).setAttribute("selected", "active")
 
       function logout(){
         sessionStorage.clear()
