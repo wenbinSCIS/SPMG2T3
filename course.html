@@ -39,28 +39,28 @@
 
         <!-- start banner Area -->
 
-        <section class="banner-area relative" id="home">	
-            <div class="overlay overlay-bg"></div>
-            <div class="container">
+        <section class="banner-area relative" id="home" style="height:350px !important">	
+            <div class="overlay overlay-bg" style="height: 250px !important"></div>
+            <div>
                 <div class="row d-flex align-items-center justify-content-center">
                     <div class="about-content col-lg-12">
                         <h1 class="text-white">
                             Courses				
-                        </h1>	
-                        <p class="text-white link-nav"><a href="index.html">Home </a>  <span class="lnr lnr-arrow-right"></span>  <a href="category.html"> Courses</a></p>
-                    </div>											
-                </div>
+                        </h1>
+                    </div>	
+                    
+
             </div>
         </section>
         <!-- End banner Area -->	
         
         <!-- Start post Area -->
-        <section class="post-area section-gap">
+        <section class="post-area">
             <div class="container">
                 <div class="row justify-content-center d-flex">
                     <div class="col-lg-8 post-list">
 
-                        <div class="container" id ="courseList"></div>
+                        <div class="container" id ="roleList"></div>
                         
                     </div>
 
@@ -69,22 +69,7 @@
         </section>
         <!-- End post Area -->
 
-        <!-- Start callto-action Area -->
-        <section class="callto-action-area section-gap">
-            <div class="container">
-                <div class="row d-flex justify-content-center">
-                    <div class="menu-content col-lg-9">
-                        <div class="title text-center">
-                            <h1 class="mb-10 text-white">Join us today without any hesitation</h1>
-                            <p class="text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-                            <a class="primary-btn" href="#">I am a Candidate</a>
-                            <a class="primary-btn" href="#">Request Free Demo</a>
-                        </div>
-                    </div>
-                </div>	
-            </div>	
-        </section>
-        <!-- End calto-action Area -->			
+    
     
         <!-- start footer Area -->		
         <footer class="footer-area section-gap">
@@ -119,6 +104,7 @@
                                         <div class="col-lg-4 col-md-12">
                                             <button class="nw-btn primary-btn">Subscribe<span class="lnr lnr-arrow-right"></span></button>
                                         </div> 
+                        
                                     </div>		
                                     <div class="info"></div>
                                 </form>
@@ -150,6 +136,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 </div>
             </div>
         </footer>
+        <div id="includedContent"></div>
     </body>
 
                 <!-- End footer Area -->		
@@ -175,82 +162,208 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                     import navbar from "/navbar.js";
                     window.addEventListener('load', () => document.getElementById('nav-placeholder').innerHTML = navbar);
                 </script>
-
-
+    
+    
+    
                 <script>
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const sid = urlParams.get('sid');
-                    
+                                                            
+        var roles = []
+        var skills=[]
+
+      
+        const sendGetRequest = async () => {
+        try {
+        
+            const urlParams = new URLSearchParams(window.location.search);
+            const sid = urlParams.get('sid');
+
+            const resp = await axios.get('http://127.0.0.1:5003/getSABCbySkillID?sid=' + sid);
+            roles = resp.data.data;
             
-                    const getCID = async (sid) => {
-                try {
-                    const resp = await axios.get('http://127.0.0.1:5003/getSABCbySkillID?sid=' + sid);
-                    roles = resp.data.data;
-                    var courseTable = document.getElementById("courseList");
-                    
-                    
-                    var innerstring = '<div class="card-deck"> <div class="row">'
-                    for (role of roles){
+        
+            var roleTable = document.getElementById("roleList");
             
-                        var cid = role.CourseID;
-                        var courses = await getCourse(cid)
-                        innerstring += `
-                       
-                            <div class="card h-100"  style="width: 20rem;">
-                                <img class="card-img-top" src="..." alt="Card image cap">
-                                <div class="card-body">
-                                <h5 class="card-title">` + courses[0].CourseName + `</h5>
-                                <p class="card-text" id="text">` + courses[0].CourseDescription + `</p>
-                                </div>
-                                <div class="card-footer">
-                                <button onclick="sendSRBRRequest(this.value)" value=`+courses[0].CourseID+` class="btn btn-primary">Add to learning journey</a>
-                                </div>
-                            </div>
+            
+            var innerstring = ''
+
+            
+          
+            for (role of roles){
+
+                var cid = role.CourseID;
+                var courses = await getCourse(cid)
+                var skills="";
+                var skillsID;
+
+        
+
+                innerstring += `
+                <div class="single-post d-flex flex-row">
+        
+                <div class="details">
+                    <div style="width:450px !important">
+                        <div class="titles" >
+                            <a href="single.html"><h4>` + courses[0].CourseName + `</h4></a>
+                            
+                        </div>
+                    </div>
+            
+                    <h5 id="text`+courses[0].CourseName+`">`+ courses[0].CourseDescription  + `</h5>
+
+                    <p class="address"><span class="lnr lnr-map"></span> 56/8, Panthapath Dhanmondi Dhaka</p>
+                    <p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
+                </div>
+                <div class="thumb">
+                    <ul class="btns">
+                        <button onclick="sendSRBRRequest(this.value)" value=${courses[0].CourseName} class="btn btn-primary">Enroll</a>
+                    </ul>
+              
+                </div>
+                </div>
+                    `
+            }
+            innerstring += ""
+    
+           
+            roleTable.innerHTML = innerstring
+            
+        } catch (err) {
+            // Handle Error Here
+            console.error(err);
+        }
+    };
+    
+    sendGetRequest();
+    
+    var skillstext = "";
+    
+    const sendSRBRRequest = async (roleid) => {
+        try {
+            const resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + roleid);
+            SRBR = resp2.data.data
+            var elem = document.getElementById("text" + roleid);
+            elem.innerHTML += "</br>";
+            elem.innerHTML += "<strong> Skills Required </strong>";
+            skillstext = "";
+            if(SRBR.length>0){
+                skillstext += "<ul>";
+                for(sr of SRBR){
+
+                    skillstext += "<li>"
+                    skillstext += '<a href="course.html?sid=' + sr.SkillsID +'">'   
+                    var skillname = await getSkill(roleid,sr.SkillsID)
+                    skillstext += skillname[0].Skillname
                  
-                            `
-                        
-            
-                    }
-                    innerstring += "</div></div>"
+                    skillstext += "</a></li>" 
                    
-                    courseTable.innerHTML = innerstring
-                   
-                    
-                } catch (err) {
-                    // Handle Error Here
-                    console.error(err);
                 }
-            };
+                skillstext += "</ul>"
+                elem.innerHTML += skillstext
+    
+            } else {
+                elem.innerHTML += "None";
+            }
             
-            getCID(sid)
-            
-            
-            
-            
-            var getCourse = async (cid) => {
-                try {
-                    const resp3 = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
-                    console.log(resp3)
-                    return resp3.data.data
-                    
-            
-            
-                    
-                } catch (err) {
-                    // Handle Error Here
-                    console.error(err);
-                }
-            };
-            
-            // function loadnavbar(){
-            //         fetch('navbar.html')
-            //         .then(response=> response.text())
-            //         .then(text=> document.getElementById('nav-placeholder').innerHTML = text);
-            //       }
-            
-                </script>
     
     
+            
+        } catch (err) {
+            // Handle Error Here
+            console.error(err);
+        }
+    };
+    
+    
+    const getSkill = async (roleid,skillid) => {
+        try {
+            const resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
+            
+            return resp3.data.data
+            
+    
+    
+            
+        } catch (err) {
+            // Handle Error Here
+            console.error(err);
+        }
+    };
+    
+    $(function(){
+          $("#includedContent").load("sidecart.html"); 
+        });
+    
+    </script>
+
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const sid = urlParams.get('sid');
+        
+
+        const getCID = async (sid) => {
+    try {
+        const resp = await axios.get('http://127.0.0.1:5003/getSABCbySkillID?sid=' + sid);
+        roles = resp.data.data;
+        var courseTable = document.getElementById("courseList");
+        
+        
+        var innerstring = '<div class="card-deck"> <div class="row">'
+        for (role of roles){
+
+            var cid = role.CourseID;
+            var courses = await getCourse(cid)
+            innerstring += `
+           
+                <div class="card h-100"  style="width: 20rem;">
+                    <img class="card-img-top" src="..." alt="Card image cap">
+                    <div class="card-body">
+                    <h5 class="card-title">` + courses[0].CourseName + `</h5>
+                    <p class="card-text" id="text">` + courses[0].CourseDescription + `</p>
+                    </div>
+                    <div class="card-footer">
+                    <button onclick="sendSRBRRequest(this.value)" value=`+courses[0].CourseID+` class="btn btn-primary">Add to learning journey</a>
+                    </div>
+                </div>
+     
+                `
+            
+
+        }
+        innerstring += "</div></div>"
+       
+        courseTable.innerHTML = innerstring
+       
+        
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+};
+
+getCID(sid)
+
+
+
+
+var getCourse = async (cid) => {
+    try {
+        const resp3 = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
+        console.log(resp3)
+        return resp3.data.data
+        
+
+
+        
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+};
+
+
+
+    </script>
 
 
 
