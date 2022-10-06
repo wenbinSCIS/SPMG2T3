@@ -23,7 +23,7 @@
     <script>
       var userid= 5
       var numitems = 0
-      var courselist = {}
+      var cartrole = document.getElementById("roles")
 
       let openPanelButton = document.getElementById("flip");
 
@@ -48,24 +48,41 @@ const getLJCart = async () => {
 			
 				const resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
 				res = resp.data.data;
-        console.log(res)
+    
 
 				
-				var innerstring = ''
         const getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
         courses = getCartCourses.data.data;
         if(courses.length>0){
           
-          console.log(courses)
+       
           var itemelem = document.getElementById("numitems");
           itemelem.innerText = "(" +courses.length + ")"
           for (course of courses){
             var coursename = await getCourseName(course.CourseID)
+            console.log(cartrole.innerHTML)
+            cartrole.innerHTML += `
+                <div class="role" id ="role` + course.CourseID + `">
+                    <div>
+                        <span>
+                            ` + coursename[0].CourseName +`
+                        </span>
+                        <button onclick="deleteRole(this.value)" value=`+course.CourseID+` ">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+            `
 
           }
+  
 
         }
-				innerstring += ""
+		
 
 			   
 				
@@ -82,7 +99,7 @@ const getLJCart = async () => {
     var getCourseName = async (cid) => {
                 try {
                     const courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
-                    console.log(courses.data.data)
+              
                     return courses.data.data
                     
             
@@ -94,6 +111,20 @@ const getLJCart = async () => {
                 }
             };
 
+
+
+            const deleteRole = async (courseid) => {
+			try {
+
+				
+		
+		
+				
+			} catch (err) {
+				// Handle Error Here
+				console.error(err);
+			}
+		};
     </script>
     <style>
         .bottomright {
@@ -193,7 +224,7 @@ const getLJCart = async () => {
     font-weight: normal;
 }
 
-.products {
+.roles {
     display: flex;
     flex-direction: column;
     margin-top: 60px;
@@ -201,7 +232,7 @@ const getLJCart = async () => {
     align-items: center;
     padding: 20px;
 }
-.product {
+.role {
     width: 100%;
     height: 100px;
     box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
@@ -214,7 +245,8 @@ const getLJCart = async () => {
     align-items: center;
     color:#000;
 }
-.product > button {
+.role > button {
+    position:fixed;
     border:none;
     outline:none;
     box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
@@ -226,8 +258,9 @@ const getLJCart = async () => {
     -webkit-transition: all 1s linear;
     font-size:1em;
     color: #fafafa;
+    right:0px;
 }
-.product > button:hover {
+.role > button:hover {
     background-color: #333;
 }
 .cart-content {
@@ -236,6 +269,7 @@ const getLJCart = async () => {
     justify-content: space-between;
     height: 85vh;
 }
+
 .checkout-button > button {
     width: 100%;
     height: 70px;
@@ -246,16 +280,19 @@ const getLJCart = async () => {
     border-radius: 20px;
     padding: 20px;
     margin-top:20px;
-    color:#ccc;
+    color:#fff;
     font-size:1em;
     font-weight: bolder;
     cursor:pointer;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
+
+
 }
 
-
+.checkout-button > button > fa {
+    margin-top : 50px !important;
+}
 
 @media only screen and (max-width: 600px) {
     .cart-panel {
@@ -285,24 +322,14 @@ const getLJCart = async () => {
         </div>
 
         <div class="cart-content">
-            <div class="products">
-                <div class="product">
+            <div class="roles" id="roles">
 
-                    <div>
-                        <span>
-                            iPhone 12 Pro Max
-                        </span>
-                    </div>
-                    <button>
-
-                    </button>
-                </div>
 
             </div>
             <div class="checkout-button">
                 <button>
-                    Save
-                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    Save my learning journey! 	&nbsp;	&nbsp;          
+                    <i class="fa fa-floppy-o" aria-hidden="true" style="margin-top:5px;"></i>
                 </button>
             </div>
         </div>
