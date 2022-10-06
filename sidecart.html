@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Learning Journey</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
+        rel='stylesheet'
+        integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
+        crossorigin='anonymous'>
+
+    <!-- Vue 3 -->
+    <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+    <!-- Vue 3: production version, optimized for size and speed -->
+    <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <script>
+      var userid= 5
+      var numitems = 0
+      var courselist = {}
+
+      let openPanelButton = document.getElementById("flip");
+
+let cartPanel = document.querySelector(".cart-panel");
+
+openPanelButton.onclick = () => {
+    cartPanel.classList.add("open");
+    openPanelButton.classList.add("hide")
+}
+
+
+document.addEventListener('mouseup', function(e) {
+    var container = document.getElementById('cartpan');
+    if (!container.contains(e.target)) {
+        cartPanel.classList.remove("open");
+        openPanelButton.classList.remove("hide");
+    }
+});
+
+const getLJCart = async () => {
+			try {
+			
+				const resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
+				res = resp.data.data;
+        console.log(res)
+
+				
+				var innerstring = ''
+        const getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
+        courses = getCartCourses.data.data;
+        if(courses.length>0){
+          
+          console.log(courses)
+          var itemelem = document.getElementById("numitems");
+          itemelem.innerText = "(" +courses.length + ")"
+          for (course of courses){
+            var coursename = await getCourseName(course.CourseID)
+
+          }
+
+        }
+				innerstring += ""
+
+			   
+				
+			} catch (err) {
+				// Handle Error Here
+        var itemelem = document.getElementById("numitems");
+        itemelem.innerText = "(0)"
+				console.error(err);
+			}
+		};
+		
+		getLJCart();
+
+    var getCourseName = async (cid) => {
+                try {
+                    const courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
+                    console.log(courses.data.data)
+                    return courses.data.data
+                    
+            
+            
+                    
+                } catch (err) {
+                    // Handle Error Here
+                    console.error(err);
+                }
+            };
+
+    </script>
+    <style>
+        .bottomright {
+  position: fixed;
+  right: 0px; bottom: 0px;
+    
+}
+
+
+ #flip {
+  padding: 5px;
+  text-align: center;
+  background-color: #e5eecc;
+  border: solid 1px #c3c3c3;
+  width : 400px;
+}
+
+.cartcontainer {
+    width: 100%;
+}
+.header {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+    border-radius:40px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
+    align-items: center;
+    color:#ccc;
+    backdrop-filter: blur(5px);
+    background: rgba(255,255,255,0.1);
+}
+.header fa {
+    font-size: 3em;
+}
+
+.cart-button > button > i {
+    font-size: 2em;
+    color:#fafafa;
+}
+
+.cart-button > button {
+    border:none;
+    outline:none;
+    box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
+    background: linear-gradient(#C7D3DC, #5B798E);
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    border-radius: 99px;
+    -webkit-transition: all 0.3s linear;
+    background-size: 1px 200px;
+}
+
+.cart-button > button:hover {
+    background-position: 100px;
+}
+.cart-panel {
+    position: fixed;
+    height: 100vh;
+    width:500px;
+    right: -560px;
+    top:0;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    backdrop-filter: blur(5px);
+    background: rgba(255,255,255,0.5);
+    box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
+    padding-right: 30px;
+    padding-left: 30px;
+    -webkit-transition: all 0.5s ease-in-out;
+}
+
+.open {
+    right: 0  !important;
+}
+.hide {
+    visibility: hidden  !important;
+}
+
+.cart-header {
+    width: 100%;
+    height:50px;
+    color: #ccc;
+    font-size:3em;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.cart-header > h4 {
+    font-weight: normal;
+}
+
+.products {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.product {
+    width: 100%;
+    height: 100px;
+    box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    color:#000;
+}
+.product > button {
+    border:none;
+    outline:none;
+    box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
+    background-color:darkgray;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 99px;
+    -webkit-transition: all 1s linear;
+    font-size:1em;
+    color: #fafafa;
+}
+.product > button:hover {
+    background-color: #333;
+}
+.cart-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 85vh;
+}
+.checkout-button > button {
+    width: 100%;
+    height: 70px;
+    border:none;
+    outline: none;
+    box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
+    background: #333;
+    border-radius: 20px;
+    padding: 20px;
+    margin-top:20px;
+    color:#ccc;
+    font-size:1em;
+    font-weight: bolder;
+    cursor:pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+@media only screen and (max-width: 600px) {
+    .cart-panel {
+        width: 80%;
+    }
+    .header {
+        width: 75%;
+    }
+}  
+
+
+    </style>
+</head>
+<body>
+    <div class="bottomright" id="flip">
+        My Learning Journey
+        <span id="numitems"></span>
+        <i class="fa fa-angle-double-up" id="up" style=" position:absolute;margin-left:10px;margin-top:5px"></i>
+        <i class="fa fa-angle-double-down" id="down" style="position:absolute;margin-left:10px;margin-top:5px;display:none"></i>
+      </div>
+
+
+    <div class="cart-panel" id="cartpan">
+        <div class="cart-header">
+
+            <h4>Your Current Learning Journey</h4>
+        </div>
+
+        <div class="cart-content">
+            <div class="products">
+                <div class="product">
+
+                    <div>
+                        <span>
+                            iPhone 12 Pro Max
+                        </span>
+                    </div>
+                    <button>
+
+                    </button>
+                </div>
+
+            </div>
+            <div class="checkout-button">
+                <button>
+                    Save
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+      
+</body>
+</html>

@@ -21,6 +21,10 @@
 
 
     <script>
+      var userid= 5
+      var numitems = 0
+
+
         $(document).ready(function(){
   $("#flip").click(function(){
     if($('#flip').hasClass('slide-down')) {
@@ -40,6 +44,59 @@
     $("#panel").slideToggle();
   });
 });
+
+
+
+const getLJCart = async () => {
+			try {
+			
+				const resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
+				res = resp.data.data;
+        console.log(res)
+
+				
+				var innerstring = ''
+        const getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
+        courses = getCartCourses.data.data;
+        if(courses.length>0){
+          
+          console.log(courses)
+          var itemelem = document.getElementById("numitems");
+          itemelem.innerText = "(" +courses.length + ")"
+          for (course of courses){
+            var coursename = await getCourseName(course.CourseID)
+          }
+
+        }
+				innerstring += ""
+
+			   
+				
+			} catch (err) {
+				// Handle Error Here
+        var itemelem = document.getElementById("numitems");
+        itemelem.innerText = "(0)"
+				console.error(err);
+			}
+		};
+		
+		getLJCart();
+
+    var getCourseName = async (cid) => {
+                try {
+                    const courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
+                    console.log(courses.data.data)
+                    return courses.data.data
+                    
+            
+            
+                    
+                } catch (err) {
+                    // Handle Error Here
+                    console.error(err);
+                }
+            };
+
     </script>
     <style>
         .bottomright {
@@ -74,6 +131,7 @@
 <body>
     <div class="bottomright" id="flip">
         My Learning Journey
+        <span id="numitems"></span>
         <i class="fa fa-angle-double-up" id="up" style=" position:absolute;margin-left:10px;margin-top:5px"></i>
         <i class="fa fa-angle-double-down" id="down" style="position:absolute;margin-left:10px;margin-top:5px;display:none"></i>
       </div>
