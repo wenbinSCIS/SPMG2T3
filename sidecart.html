@@ -18,114 +18,6 @@
     <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-    <script>
-      var userid= 5
-      var numitems = 0
-      var cartrole = document.getElementById("roles")
-
-      let openPanelButton = document.getElementById("flip");
-
-let cartPanel = document.querySelector(".cart-panel");
-
-openPanelButton.onclick = () => {
-    cartPanel.classList.add("open");
-    openPanelButton.classList.add("hide")
-}
-
-
-document.addEventListener('mouseup', function(e) {
-    var container = document.getElementById('cartpan');
-    if (!container.contains(e.target)) {
-        cartPanel.classList.remove("open");
-        openPanelButton.classList.remove("hide");
-    }
-});
-
-const getLJCart = async () => {
-			try {
-			
-				const resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
-				res = resp.data.data;
-    
-
-				
-        const getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
-        courses = getCartCourses.data.data;
-        if(courses.length>0){
-          
-       
-          var itemelem = document.getElementById("numitems");
-          itemelem.innerText = "(" +courses.length + ")"
-          for (course of courses){
-            var coursename = await getCourseName(course.CourseID)
-            console.log(cartrole.innerHTML)
-            cartrole.innerHTML += `
-                <div class="role" id ="role` + course.CourseID + `">
-                    <div>
-                        <span>
-                            ` + coursename[0].CourseName +`
-                        </span>
-                        <button onclick="deleteRole(this.value)" value=`+course.CourseID+` ">
-                            <i class="fa fa-minus" aria-hidden="true"></i>
-                        </button>
-
-
-                    </div>
-
-
-                </div>
-            `
-
-          }
-  
-
-        }
-		
-
-			   
-				
-			} catch (err) {
-				// Handle Error Here
-        var itemelem = document.getElementById("numitems");
-        itemelem.innerText = "(0)"
-				console.error(err);
-			}
-		};
-		
-		getLJCart();
-
-    var getCourseName = async (cid) => {
-                try {
-                    const courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
-              
-                    return courses.data.data
-                    
-            
-            
-                    
-                } catch (err) {
-                    // Handle Error Here
-                    console.error(err);
-                }
-            };
-
-
-
-            const deleteRole = async (courseid) => {
-			try {
-
-				
-		
-		
-				
-			} catch (err) {
-				// Handle Error Here
-				console.error(err);
-			}
-		};
-    </script>
     <style>
         .bottomright {
   position: fixed;
@@ -225,7 +117,7 @@ const getLJCart = async () => {
     font-weight: normal;
 }
 
-.roles {
+.courses {
     display: flex;
     flex-direction: column;
     margin-top: 60px;
@@ -233,7 +125,7 @@ const getLJCart = async () => {
     align-items: center;
     padding: 20px;
 }
-.role {
+.course {
     width: 100%;
     height: 100px;
     box-shadow: rgba(149,157,165,0.2) 0px 8px 24px;
@@ -246,7 +138,7 @@ const getLJCart = async () => {
     align-items: center;
     color:#000;
 }
-.role > button {
+.course > button {
     position:fixed;
     border:none;
     outline:none;
@@ -261,7 +153,7 @@ const getLJCart = async () => {
     color: #fafafa;
     right:0px;
 }
-.role > button:hover {
+.course > button:hover {
     background-color: #333;
 }
 .cart-content {
@@ -306,11 +198,145 @@ const getLJCart = async () => {
 
 
     </style>
+
+    <script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      var userid= 5
+      var numitems = 0
+      var cartrole = document.getElementById("courses")
+      var ljidhidden = document.getElementById("ljId")
+
+      let openPanelButton = document.getElementById("flip");
+
+let cartPanel = document.querySelector(".cart-panel");
+
+openPanelButton.onclick = () => {
+    cartPanel.classList.add("open");
+    openPanelButton.classList.add("hide")
+}
+
+
+document.addEventListener('mouseup', function(e) {
+    var container = document.getElementById('cartpan');
+    if (!container.contains(e.target)) {
+        cartPanel.classList.remove("open");
+        openPanelButton.classList.remove("hide");
+    }
+});
+
+const getLJCart = async () => {
+			try {
+			
+				const resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
+				res = resp.data.data;
+                ljidhidden.value = res[0].LJID
+    
+
+				
+        const getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
+        courses = getCartCourses.data.data;
+        if(courses.length>0){
+          
+       
+          var itemelem = document.getElementById("numitems");
+          itemelem.innerText = "(" +courses.length + ")"
+          for (course of courses){
+            var coursename = await getCourseName(course.CourseID)
+      
+            cartrole.innerHTML += `
+                <div class="course" id ="course` + course.CourseID + `">
+                    <div>
+                        <span>
+                            ` + coursename[0].CourseName +`
+                        </span>
+                        <button onclick="deleteCourse(this.value)" value=`+course.CourseID+` ">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+            `
+
+          }
+  
+
+        }
+		
+
+			   
+				
+			} catch (err) {
+				// Handle Error Here
+        var itemelem = document.getElementById("numitems");
+        itemelem.innerText = "(0)"
+				console.error(err);
+			}
+		};
+		
+		getLJCart();
+
+    var getCourseName = async (cid) => {
+                try {
+                    const courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
+              
+                    return courses.data.data
+                    
+            
+            
+                    
+                } catch (err) {
+                    // Handle Error Here
+                    console.error(err);
+                }
+            };
+
+
+
+            var deleteCourse = async (courseid) => {
+			try {
+                console.log(courseid)
+                
+                var ljid = document.getElementById("ljId").value;
+                const res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljid);
+                console.log(res)
+                var course = "course" + courseid
+                var element = document.getElementById(course);
+
+                element.remove();
+				
+			} catch (err) {
+				// Handle Error Here
+				console.error(err);
+			}
+		};
+    </script>
+    
 </head>
 <body>
     <div class="bottomright" id="flip">
 
         My Learning Journey
+        <input type="hidden" id="ljId">
         <span id="numitems"></span>
         <i class="fa fa-angle-double-up" id="up" style=" position:absolute;margin-left:10px;margin-top:5px"></i>
         <i class="fa fa-angle-double-down" id="down" style="position:absolute;margin-left:10px;margin-top:5px;display:none"></i>
@@ -324,7 +350,7 @@ const getLJCart = async () => {
         </div>
 
         <div class="cart-content">
-            <div class="roles" id="roles">
+            <div class="courses" id="courses">
 
 
             </div>

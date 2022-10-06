@@ -64,5 +64,28 @@ def get_LJCoursesById():
     else:
         return jsonify({ "code": 404, "message": 0 }), 404
 
+@app.route("/LJC/deleteLJCbyLJIDCID/")
+def delete_LJC_by_ID():
+    '''
+
+    '''
+    args = request.args
+    cid = args.get('cid')
+    ljid = args.get('ljid')
+
+
+
+    try:
+        learningjourneycourses.query.filter_by(CourseID=cid,LJID=ljid).delete()
+        db.session.commit()
+    except:
+        return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
+    return { "Success":True, "code": 201 }
+
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5011, debug=True)
+
+
