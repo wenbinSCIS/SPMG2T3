@@ -58,7 +58,7 @@ def get_all_by_roleid():
     return jsonify(
         {
             "data": [role.to_dict()
-                     for role in select]
+                    for role in select]
         }
     ), 200
 
@@ -68,16 +68,34 @@ def add_skill_role():
     if not all(key in data.keys() for key in ('SkillsID', 'RoleID')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
-    add_skill_role = SRBR(
-        RoleID = data["RoleID"],
-        SkillsID = data["SkillsID"],
-    )
-    try:
-        db.session.add(add_skill_role)
-        db.session.commit()
-    except:
-        return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
-    return { "role data": add_skill_role.json(), "code": 201 }
+    srbr_list = SRBR.query.all()
+    # print(role_list, flush=True)
+    if len(srbr_list):
+        new_srbr=len(srbr_list)+1
+        add_skill_role = SRBR(
+            RoleID = data["RoleID"],
+            SkillsID = data["SkillsID"],
+            SRBR = new_srbr
+        )
+        try:
+            db.session.add(add_skill_role)
+            db.session.commit()
+        except:
+            return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
+        return { "role data": add_skill_role.json(), "code": 201 }
+    else:
+        add_skill_role = SRBR(
+            RoleID = data["RoleID"],
+            SkillsID = data["SkillsID"],
+            SRBR = 1
+        )
+        try:
+            db.session.add(add_skill_role)
+            db.session.commit()
+        except:
+            return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
+        return { "role data": add_skill_role.json(), "code": 201 }
+        
 
 
 
