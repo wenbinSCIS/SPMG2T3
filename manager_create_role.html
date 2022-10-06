@@ -102,7 +102,7 @@
 				    </div>
     			</form>
 	    	</div>
-            {{skill_selected}}
+            {{role_list}}
 	    </div>
     </div>
 
@@ -145,10 +145,9 @@
                             console.log(error);
                         });
 
-                        for (let i=0;i<this.skill_selected.length+1;i++){
                             axios.post('http://127.0.0.1:5001/addskillrole', {
                                 "RoleID": this.new_role_id,
-                                "SkillsID": this.skill_selected[i].SkillsID
+                                "Skills": this.skill_selected
                                 })
                                 .then(function (response) {
                                 console.log(response);
@@ -156,7 +155,6 @@
                                 .catch(function (error) {
                                     console.log(error);
                                 });
-                            }
             },
             calculate_role_id(){
                 axios.get('http://127.0.0.1:5000/roles/getAll')
