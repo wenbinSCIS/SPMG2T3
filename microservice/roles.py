@@ -57,7 +57,7 @@ def get_all():
     role_list = Roles.query.all()
     # print(role_list, flush=True)
     if len(role_list):
-        return jsonify({ "data": [role.to_dict() for role in role_list] }), 200
+        return jsonify({ "code": 200,"data": [role.to_dict() for role in role_list] }), 200
     else:
         return jsonify({ "code": 404, "message": "There are no role." }), 404
     
@@ -83,7 +83,7 @@ def create_role():
     }
     '''
     data = request.get_json()
-    if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description')):
+    if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description',"role_id")):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
     Add_Role = Roles(
@@ -91,7 +91,8 @@ def create_role():
         RoleName = data["Role Name"],
         CreatedBy = data["Created By"],
         Fulfilled = " ",
-        Description = data["Description"]
+        Description = data["Description"],
+        RoleID = data["role_id"]
     )
     try:
         db.session.add(Add_Role)
