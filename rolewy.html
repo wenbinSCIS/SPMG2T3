@@ -18,6 +18,7 @@
 		<title>Job Listing</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 		<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
 			<!--
@@ -31,6 +32,8 @@
 			<link rel="stylesheet" href="css/animate.min.css">
 			<link rel="stylesheet" href="css/owl.carousel.css">
 			<link rel="stylesheet" href="css/main.css">
+			<link rel="stylesheet" href="css/modal.css">
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 			<!-- Vue 3 -->
 			<script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
@@ -38,42 +41,8 @@
 			<!--vue-multiselect-->
 			<script src="https://unpkg.com/@suadelabs/vue3-multiselect@1.0.1/dist/vue3-multiselect.js"></script>
 			<link rel="stylesheet" href="https://unpkg.com/@suadelabs/vue3-multiselect@1.0.1/dist/vue3-multiselect.css">
-
-			<style>
-				/* Modal styles */
-					.modal .modal-dialog {
-						max-width: 400px;
-					}
-					.modal .modal-header, .modal .modal-body, .modal .modal-footer {
-						padding: 20px 30px;
-					}
-					.modal .modal-content {
-						border-radius: 3px;
-						font-size: 14px;
-					}
-					.modal .modal-footer {
-						background: #ecf0f1;
-						border-radius: 0 0 3px 3px;
-					}
-					.modal .modal-title {
-						display: inline-block;
-					}
-					.modal .form-control {
-						border-radius: 2px;
-						box-shadow: none;
-						border-color: #dddddd;
-					}
-					.modal textarea.form-control {
-						resize: vertical;
-					}
-					.modal .btn {
-						border-radius: 2px;
-						min-width: 100px;
-					}	
-					.modal form label {
-						font-weight: normal;
-					}	
-				</style>
+		
+			
 		</head>
 		<body>
 
@@ -150,105 +119,92 @@
 						</div>
 	
 					</div>
-					<div id="editrole" class="modal fade">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<form>
-									<div class="modal-header">						
-										<h4 class="modal-title">Edit Role</h4>
-										<button type="button" class="close" onclick="$('#editrole').modal('hide');" aria-hidden="true">&times;</button>
-									</div>
-									<div class="modal-body">					
-										<div class="form-group">
-											<h5>Current role title:</h5> <h3>{{current_role.RoleName}}</h3> <a href="#editEmployeeModal" class="edit" @click="editrolename()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
-										</div>
-										<div class="form-group">
-											<h5>Description</h5> <p>{{current_role.Description}}</p> <a href="#editEmployeeModal" class="edit" @click="editdescription()"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> </p>
-										</div>		
-										<table class="table table-striped table-hover">
-											<thead>
-												<tr>
-													<th>
-														<span class="custom-checkbox">
-															<input type="checkbox" id="selectAll">
-															<label for="selectAll"></label>
-														</span>
-													</th>
-													<th>Skill Required</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>
-														<span class="custom-checkbox">
-															<input type="checkbox" id="checkbox1" name="options[]" value="1">
-															<label for="checkbox1"></label>
-														</span>
-													</td>
-													<td>Bullshitting</td>
-													<td>
-														<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-														<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-									<div class="modal-footer">
-										<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-										<input type="submit" class="btn btn-success" value="Add">
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-					<!-- Edit role Modal HTML -->
-					<div id="editrolename" class="modal fade">
-						<div class="modal-dialog" id="edit">
-							<div class="modal-content">
-								<form>
-									<div class="modal-header">						
-										<h4 class="modal-title">Edit Role name</h4>
-										<button type="button" class="close" onclick="$('#editrolename').modal('hide');" aria-hidden="true">&times;</button>
-									</div>
-									<div class="modal-body">					
-										<div class="form-group">
-											<label>Ente new role name</label>
-											<input id="newrolename" type="text" class="form-control" required>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<input type="button" class="btn btn-default" value="Cancel" onclick="$('#editrolename').modal('hide');">
-										<input type="submit" class="btn btn-info" value="Save" @click="saverolename()">
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-					<!-- Edit Description Modal HTML -->
-					<div id="editdescription" class="modal fade">
-						<div class="modal-dialog" id="edit">
-							<div class="modal-content">
-								<form>
-									<div class="modal-header">						
-										<h4 class="modal-title">Change Description</h4>
-										<button type="button" class="close" onclick="$('#editdescription').modal('hide');" aria-hidden="true">&times;</button>
-									</div>
-									<div class="modal-body">					
-										<div class="form-group">
-											<label>New Description</label>
-											<textarea id="newdescription" class="form-control" required> {{current_role.Description}}</textarea>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<input type="button" class="btn btn-default" value="Cancel" onclick="$('#editdescription').modal('hide');">
-										<input type="submit" class="btn btn-info" value="Save" @click="savedescription()">
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>	
+				</div>
+				<div id="editrole" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">						
+                                    <h4 class="modal-title">Edit Role</h4>
+                                    <button type="button" class="close" onclick="$('#editrole').modal('hide');" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">					
+                                    <div class="form-group">
+                                        <h5>Current role title:</h5> <h3 id="displayrolename"></h3> <a class="edit" data-toggle="modal" data-target="#editrolename"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
+                                    </div>
+                                    <div class="form-group">
+                                        <h5>Description</h5> <p id="displaydescription"></p> <a class="edit" data-toggle="modal" data-target="#editdescription" ><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> </p>
+                                    </div>		
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <span class="custom-checkbox">
+                                                        <input type="checkbox" id="selectAll">
+                                                        <label for="selectAll"></label>
+                                                    </span>
+                                                </th>
+                                                <th>Skill Required</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="skilldisplay">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                    <input type="button" class="btn btn-success" value="Save changes" id="submitedit"  >
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit role Modal HTML -->
+                <div id="editrolename" class="modal fade">
+                    <div class="modal-dialog" id="edit">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">						
+                                    <h4 class="modal-title">Edit Role name</h4>
+                                    <button type="button" class="close" onclick="$('#editrolename').modal('hide');" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">					
+                                    <div class="form-group">
+                                        <label>Ente new role name</label>
+                                        <input id="newrolename" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editrolename').modal('hide');">
+                                    <input type="button" class="btn btn-info" value="Save" onclick="saverolename()">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit Description Modal HTML -->
+                <div id="editdescription" class="modal fade">
+                    <div class="modal-dialog" id="edit">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">						
+                                    <h4 class="modal-title">Change Description</h4>
+                                    <button type="button" class="close" onclick="$('#editdescription').modal('hide');" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">					
+                                    <div class="form-group">
+                                        <label>New Description</label>
+                                        <textarea id="newdescription" class="form-control" required> </textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editdescription').modal('hide');">
+                                    <input type="submit" class="btn btn-info" value="Save" onclick="savedescription()">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>	
 			</section>
 			<!-- End post Area -->
 
@@ -363,10 +319,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		
 		
 					<script>
+						
 																
 			var roles = []
 			var skills=[]
-
+			var all = []
 		  
 			const sendGetRequest = async () => {
 			try {
@@ -391,15 +348,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 					var skill_list = []
 					if(SRBR.length>0){
+						var skill_list = []
 						for(sr of SRBR){
 							var skillname = await getSkill(roles.RoleID,sr.SkillsID)
 							name = skillname[0].Skillname
 					
 	
 							skillsID=Number(sr.SkillsID)
-							skill_tuple = [name,skillsID]
-							skill_list.push(skill_tuple)
-				
+							
+							skill_list.push([name,skillsID])
+
 							skills+=`
 							<li>
 								<a href="course.html?sid=`+skillsID+`">`+name+`   
@@ -409,10 +367,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						
 							
 				
-			
+							
 						}
-				
-						role['skills'] = skill_list
+						role["skills"] = skill_list
 					} 
 
 
@@ -432,7 +389,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 							</div>
 							<ul class="btns">
 								<li><a href="#"><span class="lnr lnr-heart"></span></a></li>
-								<button class="btn btn-primary" role="button"  @click="openmodal(${role})">test</button>
+								<li><a href="#"  data-toggle="modal" data-target="#editrole" onclick='test(${object})'>Apply</a></li>
 								<button onclick="sendSRBRRequest(this.value)" value=`+role.RoleID+` class="btn btn-primary">View Skills</a>
 							</ul>
 						</div>
@@ -455,6 +412,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				console.error(err);
 			}
 		};
+		
+
 		
 		sendGetRequest();
 		
@@ -609,105 +568,60 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         add_role_modal.style.display = "none";
     }
 
+	function test(obj){
+		
+		document.getElementById("displayrolename").innerText = obj.RoleName;
+		document.getElementById("displaydescription").innerText = obj.Description;
 
-	Vue.createApp({
-						data() {
-							return {
-							  current_role:[],
-							  edit_parameters:[],
-								role_list:[],
-								role_obj :[
-				  {
-					  "CreatedBy": "Mr Dumb",
-					  "Description": "Testing 123 to see if updating roles work 2",
-					  "Fulfilled": " ",
-					  "RoleID": 0,
-					  "RoleName": "Product Manager"
-				  },
-				  {
-					  "CreatedBy": "John",
-					  "Description": "This role will require you to form your own team and be responsible for the team.",
-					  "Fulfilled": "",
-					  "RoleID": 1,
-					  "RoleName": "Manager"
-				  },
-				  {
-					  "CreatedBy": "Lee",
-					  "Description": "This role will require some intensive programming, and you must be willing to learn languages required",
-					  "Fulfilled": "",
-					  "RoleID": 2,
-					  "RoleName": "Programmer"
-				  },
-				  {
-					  "CreatedBy": "ui person",
-					  "Description": "testing the vue ui validation (base level)",
-					  "Fulfilled": " ",
-					  "RoleID": 3,
-					  "RoleName": "vue ui test"
-				  }
-			  ],
-							};
-						},
-						methods:
-						{
-						  get_all_role(){
-							  axios.get('http://localhost:5000/roles/getUnfilled')
-							  .then(response => {
-									// this gets the data, which is an array, and pass the data to Vue instance's posts property
-								  this.role_list = response.data
-							  })
-							  .catch(error => {
-								  this.role_list = [{ entry: 'There was an error: ' + error.message }]
-							  })
-						  },
-						  get_skills_by_role(roleID){
-							  axios.get('http://localhost:5001/getSRBRbyRoleID?RoleID='+ roleID)
-							  .then(response => {
-									// this gets the data, which is an array, and pass the data to Vue instance's posts property
-								  this.skill_list = response.data
-							  })
-							  .catch(error => {
-								  this.skill_list = [{ entry: 'There was an error: ' + error.message }]
-							  })
-						  },
-						  openmodal(obj){
-							  this.current_role = obj
-							  console.log(this.current_role)
-							  let element = $("#editrole").modal()
-							  $(element).modal('show')
-							  console.log("this works")
-						  },
-						  editrolename(){
-							  let element = $("#editrolename").modal()
-							  $(element).modal('show')
-						  },
-						  saverolename(){
-							  newname = document.getElementById("newrolename").value;
-							  this.current_role.RoleName = newname
-							  $('#editrolename').modal('hide');
-						  },
-						  editdescription(){
-							  let element = $("#editdescription").modal()
-							  $(element).modal('show')
-						  },
-						  savedescription(){
-							  newdes = document.getElementById("newdescription").value;
-							  this.current_role.Description = newdes
-							  $('#editdescription').modal('hide');
-						  },
-			  
-			  
-						},
-						computed:
-						{
-							
-						},
-						created(){
-						  //this.get_all_role()
-							}
-					}).mount('#testapp1')
+		htmls = ``
+		for(skill of obj.skills){
+			htmls+= `<tr>
+			<td>      <span class="custom-checkbox">
+                                                        <input type="checkbox" id="${skill[1]}" name="options[]" value="${skill[1]}" class="checks">
+                                                        <label for="${skill[1]}"></label>
+                                                    </span>
+                                                </td>
+			<td>${skill[0]}</td><td>
+			<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+			<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+        	</td> </tr>`
+		}
+		
 
-		</script>
+		
+		table = document.getElementById("skilldisplay").innerHTML = htmls
+		document.getElementById("submitedit").setAttribute('onclick',`saveedits(${obj.RoleID})`)
+		}
+
+		
+	function saverolename(){
+			newname = document.getElementById("newrolename").value;
+			document.getElementById("displayrolename").innerText = newname;
+			$('#editrolename').modal('hide');
+		}
+	function savedescription(){
+					  
+		newdes = document.getElementById("newdescription").value;
+		document.getElementById("displaydescription").innerText = newdes;
+		$('#editdescription').modal('hide');
+	}
+	function saveedits(roleID){
+		axios.post('http://127.0.0.1:5000/roles/updateAllbyID', {
+                        "Rolename": document.getElementById("displayrolename").innerText,
+                        "Description": document.getElementById("displaydescription").innerText,
+                        "Role ID": roleID
+                        })
+                        .then(function (response) {
+                            console.log(response);
+							window.location.reload()
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+		
+            }	
+	
+	</script>
 
 
 
