@@ -47,7 +47,7 @@ async function learningJourney(app, opts) {
       if (!LJID || typeof LJID_int !== "number") throw new Error("LJID must be a number and not null");
       const data = await prisma.learningJourney.findUniqueOrThrow({
         where: { LJID: LJID_int },
-        select: { LJID: true }
+        select: { LJID: true, RoleID: true }
       });
       return { data };
     } catch (err) {
