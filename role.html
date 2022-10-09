@@ -168,7 +168,7 @@
 					</div>
 					<div class="thumb">
 						<ul class="btns">
-							<button onclick="sendSRBRRequest(this.value)" value=${role.RoleID} class="btn btn-primary">Apply</a>
+							<button onclick="addRoleLJ(this.value)" value=${role.RoleID} class="btn btn-primary">Create a Learning Journey</a>
 						</ul>
 						<ul class="tags">
 							`+skills+`
@@ -192,24 +192,19 @@
 		
 		var skillstext = "";
 		
-		const sendSRBRRequest = async (roleid) => {
+		const addRoleLJ = async (roleid) => {
 			try {
-				const resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + roleid);
-				SRBR = resp2.data.data
+				const resp2 = await axios.get('http://127.0.0.1:5010//LJ/getUnsavedLJById?userid=' + userid);
+				getRole = resp2.data.data
+				console.log(getRole)
 				var elem = document.getElementById("text" + roleid);
-				elem.innerHTML += "</br>";
-				elem.innerHTML += "<strong> Skills Required </strong>";
+
 				skillstext = "";
 				if(SRBR.length>0){
 					skillstext += "<ul>";
-					for(sr of SRBR){
+					for(role of getRole){
 
-						skillstext += "<li>"
-						skillstext += '<a href="coursetest.html?sid=' + sr.SkillsID +'">'   
-						var skillname = await getSkill(roleid,sr.SkillsID)
-						skillstext += skillname[0].Skillname
-					 
-						skillstext += "</a></li>" 
+						
 					   
 					}
 					skillstext += "</ul>"
