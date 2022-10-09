@@ -242,12 +242,12 @@ document.addEventListener('mouseup', function(e) {
 const getLJCart = async () => {
 			try {
 			
-				const resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
+				var resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
 				res = resp.data.data;
                 ljidhidden.value = res[0].LJID
         var activeroleid = res[0].RoleID;
         console.log(activeroleid)        
-        const getRoleName = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ activeroleid);
+        var getRoleName = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ activeroleid);
         activeRole =getRoleName.data.data;
         activeRoleName = activeRole[0].RoleName;
         console.log(activeRoleName)
@@ -258,7 +258,7 @@ const getLJCart = async () => {
 
         </h5>
         `		
-        const getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
+        var getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
         courses = getCartCourses.data.data;
         if(courses.length>0){
           
