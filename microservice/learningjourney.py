@@ -30,6 +30,7 @@ class learningjourney(db.Model):
     LJID = db.Column(db.Integer, primary_key=True)
     UserID = db.Column(db.Integer, nullable=False)
     Saved = db.Column(db.Integer, nullable=False)
+    RoleID = db.Column(db.Integer, nullable=False)
 
 
     def to_dict(self):
@@ -48,6 +49,7 @@ class learningjourney(db.Model):
             "LJID": self.LJID, 
             "UserID": self.UserID, 
             "Saved": self.Saved,
+            "RoleID" : self.RoleID,
 
         }
 

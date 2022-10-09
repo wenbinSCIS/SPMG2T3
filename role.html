@@ -200,21 +200,14 @@
 				const resp2 = await axios.get('http://127.0.0.1:5010//LJ/getUnsavedLJById?userid=' + userid);
 				getRole = resp2.data.data
 				console.log(getRole)
-				var elem = document.getElementById("text" + roleid);
+			
 
 				skillstext = "";
-				if(SRBR.length>0){
-					skillstext += "<ul>";
-					for(role of getRole){
+				if(getRole.length>0){
 
-						
-					   
-					}
-					skillstext += "</ul>"
-					elem.innerHTML += skillstext
 		
 				} else {
-					elem.innerHTML += "None";
+					//successful
 				}
 				
 		
