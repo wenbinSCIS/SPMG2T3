@@ -120,10 +120,11 @@
 .courses {
     display: flex;
     flex-direction: column;
-    margin-top: 60px;
+    margin-top: 30px;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    overflow:auto;
 }
 .course {
     width: 100%;
@@ -133,7 +134,7 @@
     padding: 20px;
     display: flex;
     flex-direction: row;
-    margin-top: 20px;
+    
     justify-content: space-evenly;
     align-items: center;
     color:#000;
@@ -172,7 +173,7 @@
     background: #333;
     border-radius: 20px;
     padding: 20px;
-    margin-top:20px;
+    margin-bottom:80px;
     color:#fff;
     font-size:1em;
     font-weight: bolder;
@@ -183,9 +184,6 @@
 
 }
 
-.checkout-button > button > fa {
-    margin-top : 50px !important;
-}
 
 @media only screen and (max-width: 600px) {
     .cart-panel {
@@ -247,9 +245,19 @@ const getLJCart = async () => {
 				const resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
 				res = resp.data.data;
                 ljidhidden.value = res[0].LJID
-    
+        var activeroleid = res[0].RoleID;
+        console.log(activeroleid)        
+        const getRoleName = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ activeroleid);
+        activeRole =getRoleName.data.data;
+        activeRoleName = activeRole[0].RoleName;
+        console.log(activeRoleName)
+        var activeroleelem = document.getElementById("activerole");       
+		activeroleelem.innerHTML = `
+        <br>
+        <h5> &nbsp;	&nbsp;  &nbsp;	&nbsp; Active Role : ` + activeRoleName +`
 
-				
+        </h5>
+        `		
         const getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
         courses = getCartCourses.data.data;
         if(courses.length>0){
@@ -289,6 +297,7 @@ const getLJCart = async () => {
 				// Handle Error Here
         var itemelem = document.getElementById("numitems");
         itemelem.innerText = "(0)"
+        
 				console.error(err);
 			}
 		};
@@ -347,8 +356,12 @@ const getLJCart = async () => {
         <div class="cart-header">
             <i class="fa fa-tasks" style="color:black" aria-hidden="true"></i>
             <h4>Your Current Learning Journey</h4>
-        </div>
 
+
+        </div>
+        <br>
+        <h5 id="activerole"></h5>
+ 
         <div class="cart-content">
             <div class="courses" id="courses">
 

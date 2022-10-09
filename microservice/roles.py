@@ -144,6 +144,18 @@ def update_description_by_ID():
             return jsonify({"message": "An error occurred when updating the description.", "code":500})
         return { "RoleID": data["Role ID"],"Success":True, "code": 201 }
 
+@app.route("/roles/getById")
+def get_roleById():
+  
+    args = request.args
+    roleid = args.get('roleid')
+
+    role_list = Roles.query.filter(Roles.RoleID==roleid).all()
+    # print(role_list, flush=True)
+    if len(role_list):
+        return jsonify({ "code": 200,"data": [role.to_dict() for role in role_list] }), 200
+    else:
+        return jsonify({ "code": 404, "message": "There are no role." }), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
