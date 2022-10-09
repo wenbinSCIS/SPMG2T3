@@ -12,7 +12,6 @@ MICROSERVICE_PATH=os.environ.get("MICROSERVICE_PATH")
 
 def run_app1():
     os.system(f'python {MICROSERVICE_PATH}courses.py') 
-
 def run_app2():
     os.system(f'python {MICROSERVICE_PATH}learningjourney.py') 
 def run_app3():

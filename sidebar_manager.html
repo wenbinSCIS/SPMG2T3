@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+    <!-- Vue 3 -->
+    <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+    <!-- Vue 3: production version, optimized for size and speed -->
+    <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
+  
+    <!-- icon set -->
+    <link href="https://unicons.iconscout.com/release/v3.0.6/css/line.css" rel="stylesheet">
+
+    <title>sidebar</title>
+
+    <style>
+    
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 85px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: rgb(255, 255, 255);
+      transition: 0.5s;
+      overflow-x: hidden;
+      padding-top: 60px;
+      white-space: nowrap;
+      border-right: 1px solid #e5e9f2;
+      font-family: "DM Sans",sans-serif;
+    }
+    
+    .sidebar > ul > li {
+    padding: 0.5rem 1.75rem;
+    }
+  
+    .sidebar-item{
+      margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+      padding: .625rem 1.3333333333px .625rem 12px;
+      color: #6e82a5;
+      font-family: "DM Sans",sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: .01em;
+      border-radius: 6px;
+      
+    }
+
+    .sidebar-item:hover{
+      background: #ebeef2;
+      transition: color .3s,background-color .3s;
+      color: #9769ff;
+    }
+    
+    .sidebar ul > li > a {
+      position: relative;
+      color: #6e82a5;
+      text-decoration: none;
+      margin-left: 20px;
+      bottom: 2px;
+    }
+
+    .sidebar-item:hover a{
+      color: #9769ff;
+    }
+
+    li[selected="active"]{
+      color: #9769ff;
+      background: #ebeef2;
+    }
+
+    li[selected="active"] a {
+      color: #9769ff !important;
+    }
+
+    /* Start numbers */
+    .sidebar ul > li > a > .num {
+      line-height: 0;
+      border-radius: 3px;
+      font-size: 14px;
+      padding: 0px 5px
+    }
+
+    .sidebar ul > li > i {
+      font-size: 24px;
+      margin-right: .7rem;
+      margin-left: -5px;
+    }
+
+    .sidebar ul > li.has-dropdown > a:after {
+      content: '\eb3a';
+      font-family: unicons-line;
+      font-size: 1rem;
+      line-height: 1.8;
+      float: right;
+      color: var(--dk-gray-500);
+      transition: all .3s ease-in-out;
+    }
+
+    .sidebar ul .opened > a:after {
+      transform: rotate(-90deg);
+    }
+    
+
+    /* Start dropdown menu */
+    
+    .sidebar ul .sidebar-dropdown {
+      padding-top: 10px;
+      padding-left: 30px;
+      display: none;
+    }
+    .sidebar ul .sidebar-dropdown.active {
+      display: block;
+    }
+
+    .sidebar ul .sidebar-dropdown > li > a {
+      font-size: .85rem;
+      padding: .5rem 0;
+      display: block;
+    }
+    
+    /* End dropdown menu */
+
+    #main {
+      margin-left: 85px;
+      transition: margin-left 0.5s;
+    }
+
+    @media screen and (max-height: 450px) {
+      .sidebar {
+        padding-top: 15px;
+      }
+      .sidebar a {
+        font-size: 18px;
+      }
+    }
+    #mySidebar a{
+      text-decoration: none;
+    }
+    #mySidebar a .icon-text{
+      position: relative;
+      bottom: 25px;
+      margin-top: -60px;
+      font-family: "DM Sans",sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #364a63;
+    }
+    .rounded-pill.img-fluid{
+      padding-bottom: 3px;
+      margin-right: 25px;
+      vertical-align: middle;
+      margin-left: 30px;
+      margin-top: -60px;
+    }
+
+    .navbar {
+    background-color: #FFF !important;
+    border-bottom: 1px solid #e5e9f2;
+    box-shadow: 0px 1px 3px 0pxrgba(54,74,99,.05);
+    
+  }
+  .navbar .dropdown-menu {
+    right: auto !important;
+    left: 0 !important;
+  }
+  .navbar .navbar-nav>li>a {
+    color: #526484 !important;
+    line-height: 55px !important;
+    padding: 0 10px !important;
+  }
+  .navbar .navbar-brand {color:#364a63 !important;font-family: "DM Sans",sans-serif;
+    font-size: 20px;
+    font-weight: 700;}
+  .navbar .navbar-nav>li>a:focus,
+  .navbar .navbar-nav>li>a:hover {color: #9769ff !important;}
+
+  .navbar .navbar-nav>.open>a,
+  .navbar .navbar-nav>.open>a:focus,
+  .navbar .navbar-nav>.open>a:hover {background-color: transparent !important; color: #FFF !important}
+
+  .navbar .navbar-brand {line-height: 55px !important; padding: 0 !important}
+  .navbar .navbar-brand:focus,
+  .navbar .navbar-brand:hover {color: #9769ff !important;}
+  .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {margin: 0 !important}
+  @media (max-width: 767px) {
+    .navbar>.container-fluid .navbar-brand {
+      margin-left: 15px !important;
+    }
+    .navbar .navbar-nav>li>a {
+      padding-left: 0 !important;
+    }
+    .navbar-nav {
+      margin: 0 !important;
+    }
+    .navbar .navbar-collapse,
+    .navbar .navbar-form {
+      border: none !important;
+    }
+  }
+
+  .navbar .navbar-nav>li>a {
+    float: left !important;
+  }
+  .navbar .navbar-nav>li>a>span:not(.caret) {
+    background-color: #44e6ff !important;
+    border-radius: 50% !important;
+    height: 25px !important;
+    width: 25px !important;
+    padding: 2px !important;
+    font-size: 11px !important;
+    position: relative !important;
+    top: -10px !important;
+    right: 5px !important
+  }
+  .dropdown-menu>li>a {
+    padding-top: 5px !important;
+    padding-right: 5px !important;
+  }
+  .navbar .navbar-nav>li>a>i {
+    font-size: 18px !important;
+  }
+
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+      <div id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
+        <a href="#">
+          <span>
+            <img
+               class="rounded-pill img-fluid"
+               width="24"
+               src="https://dashlite.net/demo2/images/logo-small.png"
+               alt="">
+          <span class="icon-text">LJPS</span>
+        </a>
+
+        <!--Add pages below here inside the ul tag-->
+        <!--find icons from here: https://icon-sets.iconify.design/uil/apple-alt/-->
+
+        <ul class="categories list-unstyled">
+          <li class="sidebar-item" id="home1">
+            <i class="uil-estate"></i><a href="home.html">Dashboard</a>
+          </li>
+          <li class="sidebar-item" id="rolewy1" >
+            <i class="uil-user-check"></i><a href="rolewy.html">roles</a>
+          </li>
+          <li class="sidebar-item" id="learningjourney1">
+            <i class="uil-rocket"></i><a href="learningjourney.html">Learning Journey</a>
+          </li>
+          <li class="sidebar-item">
+            <i class="uil-power"></i><a href="#" onclick="logout()">Logout</a>
+          </li>
+        </ul>
+      </div>
+      
+      <div id="main">
+        <nav class="navbar navbar-expand-md">
+          <div class="container-fluid mx-2">
+            <div class="navbar-header">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggle-navbar" aria-controls="toggle-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="uil-bars text-white"></i>
+              </button>
+              <a class="navbar-brand" href="home.html">Learning Journey Planning System</a>
+            </div>
+            <div class="collapse navbar-collapse" id="toggle-navbar">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="#"><i class="uil-comments-alt"></i><span>23</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"><i class="uil-bell"></i><span>98</span></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    
+    <script type="module" src="/src/main.js"></script>
+
+    <script>
+      var mini = true;
+
+      var path = window.location.pathname;
+      var page = path.split("/").pop();
+      var selectedPage=page.split(".")[0];
+      document.getElementById(selectedPage+"1").setAttribute("selected", "active")
+
+      function toggleSidebar() {
+        if (mini) {
+
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+          document.getElementById(selectedPage).style.marginLeft = "250px";
+          document.getElementById(selectedPage).style.transition = "0.5s";
+          document.getElementsByTagName("BODY")[0].setAttribute("style","background: rgba(16,25,36,.4); transition: background-color .5s;")
+
+          this.mini = false;
+        } else {
+
+          document.getElementById("mySidebar").style.width = "85px";
+          document.getElementById("main").style.marginLeft = "85px";
+          document.getElementById(selectedPage).style.marginLeft = "85px";
+          document.getElementById(selectedPage).style.transition = "0.5s";
+          document.getElementsByTagName("BODY")[0].setAttribute("style","transition: background-color .5s;")
+          this.mini = true;
+        }
+      }
+
+      window.onload=shiftPage()
+
+      function shiftPage(){
+        document.getElementById(selectedPage).style.marginLeft = "85px";
+      }
+      
+      /*
+      const mode = sessionStorage.getItem('userid');
+
+      if(mode===null){
+        var path = window.location.pathname;
+        var page = path.split("/").pop();
+        if(page=="index.html" || page=="instructor-list.html" || page =="instructor-detail.html"){
+          
+        
+        }
+        else{
+        
+          alert("Please log in first!");
+          window.location.href = "login.html"; 
+        }
+      }
+      else{
+        const name = sessionStorage.getItem('username');
+        var loginned = document.getElementById("change");
+        var drop = document.getElementById("drop");
+
+        drop.innerHTML = `
+            <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Welcome,
+          ` +name + `
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="dashboard.html">My Profile</a>
+          <a class="dropdown-item" href="timetable.html">My Timetable</a>
+          <a class="dropdown-item" href="telegramhelp.html">Telegram FAQ</a>
+          <a class="dropdown-item" href="#" onclick=logout()>Log Out</a>
+        
+        </div>
+      </div>
+        `
+          loginned.innerText = "Welcome, " + name;
+
+      }
+      */
+
+      function logout(){
+        sessionStorage.clear()
+        window.location.href = "login.html";
+      }
+      
+    </script>
+  </body>
+</html>
