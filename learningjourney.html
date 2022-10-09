@@ -26,8 +26,12 @@
     <div class="p-3 m-4">
       <button id="addNewLJ" class="btn btn-primary" @click="createNewLJ">Create LJ</button>
     </div>
-    <div class="container bg-light m-3" v-for="{ LJID } in learningJourneys" :key="LJID">
-      <button class="btn bg-success text-white" @click="handleClickLJ(LJID)">{{ LJID }}</button>
+    <div class="container bg-light m-3" v-for="{ LJID, RoleID } in learningJourneys" :key="LJID">
+      <button class="btn bg-success text-white" @click="handleNavigateLJ(LJID)">
+        {{ LJID }}
+        <br>
+        {{ RoleID }}
+      </button>
     </div>
   </main>
   <script>
@@ -45,12 +49,16 @@
           mode: "cors",
         };
 
+        function handleCreateLJ() {
+          // should start up a modal, a form or something like that
+        }
+
         async function createNewLJ() {
           try {
             const reply = await fetch(`${baseURL}/create`, {
               method: "POST",
               ...options,
-              body: JSON.stringify({ UserID: parseInt(userId), Saved: 1 }),
+              body: JSON.stringify({ UserID: parseInt(userId), Saved: 0 }),
             });
             // console.log(await reply.json());
             window.location.reload(); // reload after successful creation
@@ -60,13 +68,14 @@
           }
         }
 
-        function handleClickLJ(id) {
+        function handleNavigateLJ(id) {
           // redirect user to the next relevant page
           window.location.assign(`${window.location.origin}/learningJourneyCourses.html?LJID=${id}`);
         }
 
         onMounted(async () => {
-          const reply = await fetch(`${baseURL}/getAll?UserID=${userId}&Saved=1`, {
+          // anything but 0/1 returns all the data (so 2 should return everything)
+          const reply = await fetch(`${baseURL}/getAll?UserID=${userId}&Saved=2`, {
             method: "GET",
             ...options,
           });
@@ -74,7 +83,7 @@
           learningJourneys.value = data;
         });
 
-        return { learningJourneys, createNewLJ, handleClickLJ };
+        return { learningJourneys, createNewLJ, handleNavigateLJ };
       }
     }).mount("#app");
   </script>

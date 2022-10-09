@@ -7,7 +7,8 @@ load_dotenv()
 
 # change the path in env based on your local path, e.g.:
 # MICROSERVICE_PATH="C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\"
-MICROSERVICE_PATH = "F:\\Code\\SPMG2T3\\microservice\\"
+MICROSERVICE_PATH=os.environ.get("MICROSERVICE_PATH")
+# MICROSERVICE_PATH = "F:\\Code\\SPMG2T3\\microservice\\"
 
 def run_app1():
     os.system(f'python {MICROSERVICE_PATH}courses.py') 
@@ -22,11 +23,11 @@ def run_app5():
 def run_app6():
     os.system(f'python {MICROSERVICE_PATH}skills_required_by_role.py')
 def run_app7():
-    os.system(f'python {MICROSERVICE_PATH}skills.py')  
+    os.system(f'python {MICROSERVICE_PATH}skills.py')
 def run_app8():
-    os.system(f'node {MICROSERVICE_PATH}learningjourney.mjs')
+    os.system(f'node {MICROSERVICE_PATH}learningJourney.mjs') 
 def run_app9():
-    os.system(f'node {MICROSERVICE_PATH}learningjourneyCourses.mjs')
+    os.system(f'node {MICROSERVICE_PATH}learningJourneyCourses.mjs')
 
 if __name__=='__main__':
     t1 = Thread(target=run_app1)
