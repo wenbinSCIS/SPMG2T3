@@ -127,7 +127,7 @@
                             <form>
                                 <div class="modal-header">						
                                     <h4 class="modal-title">Edit Role</h4>
-                                    <button type="button" class="close" onclick="$('#editrole').modal('hide');" aria-hidden="true">&times;</button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">					
                                     <div class="form-group">
@@ -168,7 +168,7 @@
                             <form>
                                 <div class="modal-header">						
                                     <h4 class="modal-title">Edit Role name</h4>
-                                    <button type="button" class="close" onclick="$('#editrolename').modal('hide');" aria-hidden="true">&times;</button>
+                                    <button type="button" class="close" data-dismiss="modal aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">					
                                     <div class="form-group">
@@ -178,7 +178,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editrolename').modal('hide');">
-                                    <input type="button" class="btn btn-info" value="Save" onclick="saverolename()">
+                                    <input type="button" class="btn btn-info" value="Save" onclick="saverolename() ">
                                 </div>
                             </form>
                         </div>
@@ -200,8 +200,8 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editdescription').modal('hide');">
-                                    <input type="submit" class="btn btn-info" value="Save" onclick="savedescription()">
+                                    <input type="button" class="btn btn-default" value="Cancel" data-dismiss="modal">
+                                    <input type="button" class="btn btn-info" value="Save" onclick="savedescription()">
                                 </div>
                             </form>
                         </div>
