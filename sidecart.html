@@ -306,7 +306,7 @@ const getLJCart = async () => {
 
     var getCourseName = async (cid) => {
                 try {
-                    const courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
+                    var courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
               
                     return courses.data.data
                     
@@ -318,11 +318,12 @@ const getLJCart = async () => {
                     console.error(err);
                 }
             };
-            var updateLJ = async () => {
+            var saveLJ = async () => {
                 try {
-                    console.log("test")
                     
-            
+                    var ljid = document.getElementById("ljId").value;
+                    var update = await axios.get('http://127.0.0.1:5010/LJ/saveLJById' + ljid);
+                    
             
                     
                 } catch (err) {
@@ -337,7 +338,7 @@ const getLJCart = async () => {
                 console.log(courseid)
                 
                 var ljid = document.getElementById("ljId").value;
-                const res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljid);
+                var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljid);
                 console.log(res)
                 var course = "course" + courseid
                 var element = document.getElementById(course);
@@ -379,9 +380,9 @@ const getLJCart = async () => {
 
             </div>
             <div class="checkout-button">
-                <button>
+                <button onclick="saveLJ()">
                     Save my learning journey! 	&nbsp;	&nbsp;          
-                    <i class="fa fa-floppy-o" aria-hidden="true" onclick="saveLJ()" style="margin-top:5px;"></i>
+                    <i class="fa fa-floppy-o" aria-hidden="true" style="margin-top:5px;"></i>
                 </button>
             </div>
         </div>

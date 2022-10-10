@@ -65,5 +65,16 @@ def get_UnsavedLJByID():
     else:
         return jsonify({ "code": 404, "message": 0 }), 404
 
+@app.route("/LJ/saveLJById")
+def saveLJById():
+    args = request.args
+    ljid = args.get('ljid')
+    try:
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'Saved': 1, })
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"Success":True, "code": 201 }
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5010, debug=True)
