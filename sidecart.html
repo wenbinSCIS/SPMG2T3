@@ -318,7 +318,18 @@ const getLJCart = async () => {
                     console.error(err);
                 }
             };
-
+            var updateLJ = async () => {
+                try {
+                    console.log("test")
+                    
+            
+            
+                    
+                } catch (err) {
+                    // Handle Error Here
+                    console.error(err);
+                }
+            };        
 
 
             var deleteCourse = async (courseid) => {
@@ -370,7 +381,7 @@ const getLJCart = async () => {
             <div class="checkout-button">
                 <button>
                     Save my learning journey! 	&nbsp;	&nbsp;          
-                    <i class="fa fa-floppy-o" aria-hidden="true" style="margin-top:5px;"></i>
+                    <i class="fa fa-floppy-o" aria-hidden="true" onclick="saveLJ()" style="margin-top:5px;"></i>
                 </button>
             </div>
         </div>
