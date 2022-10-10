@@ -322,8 +322,15 @@ const getLJCart = async () => {
                 try {
                     
                     var ljid = document.getElementById("ljId").value;
-                    var update = await axios.get('http://127.0.0.1:5010/LJ/saveLJById' + ljid);
-                    
+                    var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljid);
+           
+                    if(updateLJ.data.code==201){
+                        console.log("success")
+
+                    }
+                    else{
+                        console.log("failure")
+                    }
             
                     
                 } catch (err) {

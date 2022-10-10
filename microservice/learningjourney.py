@@ -76,5 +76,31 @@ def saveLJById():
         return jsonify({"message": "An error occurred when updating the description.", "code":500})
     return {"Success":True, "code": 201 }
 
+
+@app.route("/LJ/insertgetLJID")
+def insertgetLJID():
+    args = request.args
+    userid = args.get('userid')
+    roleid = args.get('roleid')
+    createLJ = learningjourney(
+    # RoleID = 3,
+    UserID = userid,
+    Saved = 0,
+    RoleID = roleid,
+
+    )
+
+
+
+    try:
+        db.session.add(createLJ)
+        db.session.flush()
+        db.session.refresh(createLJ)
+        db.session.commit()
+
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"LJID": createLJ.LJID, "Success":True, "code": 201 }
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5010, debug=True)
