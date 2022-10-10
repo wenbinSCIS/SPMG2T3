@@ -222,7 +222,8 @@
       var ljidhidden = document.getElementById("ljId")
       var ljid = document.getElementById("ljId");
       var itemelem = document.getElementById("numitems");
-      var activeroleelem = document.getElementById("activerole");  
+      var activeroleelem = document.getElementById("activerole");
+      var noitems = document.getElementById("noitems"); 
       let openPanelButton = document.getElementById("flip");
 
 let cartPanel = document.querySelector(".cart-panel");
@@ -248,7 +249,7 @@ const getLJCart = async () => {
 				res = resp.data.data;
                 ljidhidden.value = res[0].LJID
         var activeroleid = res[0].RoleID;
-        console.log(activeroleid)        
+            
         var getRoleName = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ activeroleid);
         activeRole =getRoleName.data.data;
         activeRoleName = activeRole[0].RoleName;
@@ -263,10 +264,10 @@ const getLJCart = async () => {
         var getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
         courses = getCartCourses.data.data;
         if(courses.length>0){
-          
+          noitems.value = courses.length
        
-          var itemelem = document.getElementById("numitems");
-          itemelem.innerText = "(" +courses.length + ")"
+          
+          itemelem.innerText = "(" + noitems.value + ")"
           for (course of courses){
             var coursename = await getCourseName(course.CourseID)
       
@@ -330,7 +331,12 @@ const getLJCart = async () => {
                         console.log("success")
                         cartrole.innerHTML = ""
                         itemelem.innerText = "(0)"
-                        activeroleelem.innerHTML = ""
+                        activeroleelem.innerHTML = `
+        <br>
+        <h5> &nbsp;	&nbsp;  &nbsp;	&nbsp; Active Role : None
+
+        </h5>
+        `
                     }
                     else{
                         console.log("failure")
@@ -353,8 +359,12 @@ const getLJCart = async () => {
                 console.log(res)
                 var course = "course" + courseid
                 var element = document.getElementById(course);
+                
 
                 element.remove();
+                noitems.value -=1
+                itemelem.innerText = "(" + noitems.value + ")"
+
 				
 			} catch (err) {
 				// Handle Error Here
@@ -369,6 +379,7 @@ const getLJCart = async () => {
 
         My Learning Journey
         <input type="hidden" id="ljId">
+        <input type="hidden" id="noitems">
         <span id="numitems"></span>
         <i class="fa fa-angle-double-up" id="up" style=" position:absolute;margin-left:10px;margin-top:5px"></i>
         <i class="fa fa-angle-double-down" id="down" style="position:absolute;margin-left:10px;margin-top:5px;display:none"></i>

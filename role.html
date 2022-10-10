@@ -31,6 +31,40 @@
 			<link rel="stylesheet" href="css/animate.min.css">
 			<link rel="stylesheet" href="css/owl.carousel.css">
 			<link rel="stylesheet" href="css/main.css">
+		<style>
+			.modal .modal-dialog {
+	max-width: 400px;
+}
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+	padding: 20px 30px;
+}
+.modal .modal-content {
+	border-radius: 3px;
+	font-size: 14px;
+}
+.modal .modal-footer {
+	background: #ecf0f1;
+	border-radius: 0 0 3px 3px;
+}
+.modal .modal-title {
+	display: inline-block;
+}
+.modal .form-control {
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
+}
+.modal textarea.form-control {
+	resize: vertical;
+}
+.modal .btn {
+	border-radius: 2px;
+	min-width: 100px;
+}	
+.modal form label {
+	font-weight: normal;
+}	
+		</style>
 		</head>
 		<body>
 
@@ -67,7 +101,26 @@
 						</div>
 					</div>	
 				</section>
-
+				<div id="warningModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<form>
+								<div class="modal-header">						
+									<h4 class="modal-title">Warning</h4>
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p>You currently have an unsaved Learning Journey, would you like to save it before proceeding?</p>
+									<p class="text-warning"><small>This action cannot be undone.</small></p>
+								</div>
+								<div class="modal-footer">
+									<input type="button" class="btn btn-default" data-dismiss="modal" value="No, Proceed">
+									<input type="submit" class="btn btn-danger" value="Yes, Save">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 				<div id="includedContent"></div>
 			</div>
 			
@@ -197,7 +250,7 @@
 		
 		const addRoleLJ = async (roleid) => {
 			try {
-				var resp2 = await axios.get('http://127.0.0.1:5010//LJ/getUnsavedLJById?userid=' + userid);
+				var resp2 = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid=' + userid);
 				getRole = resp2.data.data
 				console.log(getRole)
 			
@@ -208,10 +261,16 @@
 		
 				} else {
 					//successful
-					var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + roleid);
-					cartResults = createCart.data;
-					if(cartResults.code == 201){
-						ljidhidden = cartResults.LJID
+					if(noroles.value >0){
+						$("#warningModel").modal('show');
+					}
+					else{
+						var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + roleid);
+						cartResults = createCart.data;
+						if(cartResults.code == 201){
+							ljidhidden = cartResults.LJID
+
+						}
 					}
 					
 				}

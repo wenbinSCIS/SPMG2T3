@@ -60,9 +60,10 @@ def get_UnsavedLJByID():
     lj_list = learningjourney.query.filter(learningjourney.Saved=="0", learningjourney.UserID==userid).all()
 
     # print(role_list, flush=True)
-    if len(lj_list):
+    try:
+    
         return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
-    else:
+    except:
         return jsonify({ "code": 404, "message": 0 }), 404
 
 @app.route("/LJ/saveLJById")
