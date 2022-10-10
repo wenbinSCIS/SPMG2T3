@@ -115,7 +115,7 @@
 								</div>
 								<div class="modal-footer">
 									<input type="button" class="btn btn-default" data-dismiss="modal" value="No, Proceed">
-									<input type="submit" class="btn btn-danger" value="Yes, Save">
+									<input type="submit" class="btn btn-primary" value="Yes, Save">
 								</div>
 							</form>
 						</div>
@@ -252,16 +252,19 @@
 			try {
 				var resp2 = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid=' + userid);
 				getRole = resp2.data.data
-				console.log(getRole)
 			
+				console.log(getRole)
 
 				skillstext = "";
 				if(getRole.length>0){
 
-		
+					if(roleid == getRole[0].RoleID){
+						$('#warningModel').modal('show')
+					}
 				} else {
 					//successful
 					if(noroles.value >0){
+						console.log("here")
 						$("#warningModel").modal('show');
 					}
 					else{
