@@ -220,7 +220,9 @@
       var numitems = 0
       var cartrole = document.getElementById("courses")
       var ljidhidden = document.getElementById("ljId")
-
+      var ljid = document.getElementById("ljId");
+      var itemelem = document.getElementById("numitems");
+      var activeroleelem = document.getElementById("activerole");  
       let openPanelButton = document.getElementById("flip");
 
 let cartPanel = document.querySelector(".cart-panel");
@@ -250,8 +252,8 @@ const getLJCart = async () => {
         var getRoleName = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ activeroleid);
         activeRole =getRoleName.data.data;
         activeRoleName = activeRole[0].RoleName;
-        console.log(activeRoleName)
-        var activeroleelem = document.getElementById("activerole");       
+
+     
 		activeroleelem.innerHTML = `
         <br>
         <h5> &nbsp;	&nbsp;  &nbsp;	&nbsp; Active Role : ` + activeRoleName +`
@@ -295,7 +297,7 @@ const getLJCart = async () => {
 				
 			} catch (err) {
 				// Handle Error Here
-        var itemelem = document.getElementById("numitems");
+     
         itemelem.innerText = "(0)"
         
 				console.error(err);
@@ -326,7 +328,9 @@ const getLJCart = async () => {
            
                     if(updateLJ.data.code==201){
                         console.log("success")
-
+                        cartrole.innerHTML = ""
+                        itemelem.innerText = "(0)"
+                        activeroleelem.innerHTML = ""
                     }
                     else{
                         console.log("failure")
@@ -344,8 +348,8 @@ const getLJCart = async () => {
 			try {
                 console.log(courseid)
                 
-                var ljid = document.getElementById("ljId").value;
-                var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljid);
+                
+                var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljid.value);
                 console.log(res)
                 var course = "course" + courseid
                 var element = document.getElementById(course);

@@ -109,7 +109,7 @@
 			const sendGetRequest = async () => {
 			try {
 			
-				const resp = await axios.get('http://127.0.0.1:5000/roles/getAll');
+				var resp = await axios.get('http://127.0.0.1:5000/roles/getAll');
 				roles = resp.data.data;
 
 	
@@ -122,7 +122,7 @@
 			  
 				for (role of roles){
 
-					const resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + role.RoleID);
+					var resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + role.RoleID);
 					SRBR = resp2.data.data;
 					var skills="";
 					var skillsID;
@@ -197,7 +197,7 @@
 		
 		const addRoleLJ = async (roleid) => {
 			try {
-				const resp2 = await axios.get('http://127.0.0.1:5010//LJ/getUnsavedLJById?userid=' + userid);
+				var resp2 = await axios.get('http://127.0.0.1:5010//LJ/getUnsavedLJById?userid=' + userid);
 				getRole = resp2.data.data
 				console.log(getRole)
 			
@@ -208,6 +208,12 @@
 		
 				} else {
 					//successful
+					var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + roleid);
+					cartResults = createCart.data;
+					if(cartResults.code == 201){
+						ljidhidden = cartResults.LJID
+					}
+					
 				}
 				
 		
@@ -222,7 +228,7 @@
 		
 		const getSkill = async (roleid,skillid) => {
 			try {
-				const resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
+				var resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
 				
 				return resp3.data.data
 				
