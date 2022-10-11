@@ -225,7 +225,7 @@
       var activeroleelem = document.getElementById("activerole");
       var noitems = document.getElementById("noitems"); 
       let openPanelButton = document.getElementById("flip");
-      
+ 
 let cartPanel = document.querySelector(".cart-panel");
 
 openPanelButton.onclick = () => {
@@ -244,6 +244,13 @@ document.addEventListener('mouseup', function(e) {
 
 var getLJCart = async () => {
 			try {
+                activeroleelem.innerHTML = `
+        <br>
+        <h5> &nbsp;	&nbsp;  &nbsp;	&nbsp; Active Role :  None
+
+        </h5>
+        `	
+            noitems.value = 0
 			cartrole.innerHTML = ''
 				var resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
 				res = resp.data.data;
@@ -328,15 +335,9 @@ var getLJCart = async () => {
                     var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljid);
            
                     if(updateLJ.data.code==201){
-                        console.log("success")
-                        cartrole.innerHTML = ""
-                        itemelem.innerText = "(0)"
-                        activeroleelem.innerHTML = `
-        <br>
-        <h5> &nbsp;	&nbsp;  &nbsp;	&nbsp; Active Role : None
-
-        </h5>
-        `
+                        console.log("Save successfully!")
+                        getLJCart();
+        
                     }
                     else{
                         console.log("failure")
