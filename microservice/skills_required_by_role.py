@@ -70,17 +70,11 @@ def add_skill_role():
     srbr_list = SRBR.query.all()
     # print(role_list, flush=True)
     skill_list=data["Skills"]
-    if len(srbr_list):
-        cur_srbr=len(srbr_list)
 
-    else:
-        cur_srbr=0
     for cur_skill in skill_list:
-        cur_srbr+=1
         add_skill_role = SRBR(
-                RoleID = data["RoleID"],
-            SkillsID = cur_skill["SkillsID"],
-            SRBR = cur_srbr
+            RoleID = data["RoleID"],
+            SkillsID = cur_skill["SkillsID"]
         )
         try:
             db.session.add(add_skill_role)
