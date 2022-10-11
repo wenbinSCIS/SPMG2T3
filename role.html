@@ -107,15 +107,36 @@
 							<form>
 								<div class="modal-header">						
 									<h4 class="modal-title">Warning</h4>
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<button type="button" class="close" onclick="closeWarning()" data-dismiss="modal" aria-hidden="true">&times;</button>
 								</div>
 								<div class="modal-body">					
 									<p>You currently have an unsaved Learning Journey, would you like to save it before proceeding?</p>
 									<p class="text-warning"><small>This action cannot be undone.</small></p>
 								</div>
 								<div class="modal-footer">
-									<input type="button" class="btn btn-default" data-dismiss="modal" value="No, Proceed">
-									<input type="submit" class="btn btn-primary" value="Yes, Save">
+									<button type="button" class="btn btn-danger" onclick="clearAndProceed()" data-dismiss="modal"> No, Proceed </button>
+									<button type="button" class="btn btn-primary" onclick="saveAndProceed()" > Yes, Save and Proceed </button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div id="similarModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<form id="selectedBefore">
+								<div class="modal-header">						
+									<h4 class="modal-title">Warning</h4>
+									<button type="button" class="close" onclick="closeSimilar()" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p>This learning journey is currently already being selected</p>
+								
+								</div>
+								<div class="modal-footer">
+									
+									<button type="button" class="btn btn-primary" onclick="closeSimilar()" data-dismiss="modal" aria-hidden="true">OK</button>
 								</div>
 							</form>
 						</div>
@@ -149,12 +170,31 @@
 						$(function(){
 							$("#nav-placeholder").load("sidebar_staff.html");
 						});
+
 					</script>
 		
 		
 		
 					<script>
-																
+			function closeWarning(){
+				
+				$('#warningModel').modal('hide')
+			}		
+			function closeSimilar(){
+				
+				$('#similarModel').modal('hide')
+			}
+			function clearAndProceed(){
+				$('#warningModel').modal('hide')
+				
+
+
+			}
+			function saveAndProceed(){
+				$('#warningModel').modal('hide')
+			}
+
+															
 			var roles = []
 			var skills=[]
 
@@ -259,6 +299,9 @@
 				if(getRole.length>0){
 
 					if(roleid == getRole[0].RoleID){
+						$('#similarModel').modal('show')
+					}
+					else{
 						$('#warningModel').modal('show')
 					}
 				} else {
