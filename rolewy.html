@@ -102,7 +102,7 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<input type="submit" class="btn btn-success" value="Add" v-on:click="create_role">
+								<input type="button" class="btn btn-success" value="Add" v-on:click="create_role">
 							</div>
 						</form>
 					</div>
@@ -436,6 +436,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			} catch (err) {
 				// Handle Error Here
 				console.error(err);
+				console.log(err.response.data)
 			}
 		};
 		
@@ -509,8 +510,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
             role_name:"",
             description:"",
             skill_selected:[],
-            role_list:[],
-            new_role_id:""
+            new_role_id:"",
             };
         },
         methods:
@@ -530,39 +530,27 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                     axios.post('http://127.0.0.1:5000/roles/create', {
                         "Role Name": this.role_name,
                         "Created By": "function test",
-                        "Description": this.description,
-                        "role_id": this.new_role_id
+                        "Description": this.description
                         })
                         .then(function (response) {
-                            console.log(response);
+							this.new_role_id=response.data.data.RoleID
                         })
                         .catch(function (error) {
-                            console.log(error);
+                            console.log(error.response.data);
                         });
 
-                            axios.post('http://127.0.0.1:5001/addskillrole', {
-                                "RoleID": this.new_role_id,
-                                "Skills": this.skill_selected
-                                })
-                                .then(function (response) {
-                                console.log(response);
-                                })
-                                .catch(function (error) {
-                                    console.log(error);
-                                });
-            },
-            calculate_role_id(){
-                axios.get('http://127.0.0.1:5000/roles/getAll')
-                            .then(response => {
-                                // this gets the data, which is an array, and pass the data to Vue instance's posts property
-                                this.role_list = response.data.data
-                                this.new_role_id=response.data.data.length+1
-                            })
-                            .catch(error => {
-                                this.role_list = [{ entry: 'There was an error: ' + error.message }]
-                            })
 
-            }
+                        axios.post('http://127.0.0.1:5001/addskillrole', {
+                            "RoleID": this.new_role_id,
+                            "Skills": this.skill_selected
+                            })
+                            .then(function (response) {
+                            console.log(response);
+                            })
+                            .catch(function (error) {
+                                console.log(error.response.data);
+                            });
+            },
         },
         computed:
         {
@@ -570,7 +558,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         },
         created(){
             this.get_all_skill()
-            this.calculate_role_id()
         },
         components: { vuemultiselect: window.Vue3Multiselect.default },
     }).mount('#add_role_modal')

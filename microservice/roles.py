@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://flight_admin:6kKVm7C2PHtVtgGT@esd-g7t6-rds.cs2kfkrucphj.ap-southeast-1.rds.amazonaws.com:3306/flight_booking'
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://admin:spmfinalpassword6956@spmdb2.cte5x3a9ynus.ap-southeast-1.rds.amazonaws.com:3306/LearningApp'
@@ -20,7 +21,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 1800}
 
 db = SQLAlchemy(app)
 
-CORS(app)
+
 
 
 class Roles(db.Model):
@@ -87,7 +88,6 @@ def create_role():
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
     Add_Role = Roles(
-        # RoleID = 3,
         RoleName = data["Role Name"],
         CreatedBy = data["Created By"],
         Fulfilled = " ",
@@ -96,9 +96,10 @@ def create_role():
     try:
         db.session.add(Add_Role)
         db.session.commit()
+
     except:
         return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
-    return { "role data": Add_Role.json(), "code": 201 }
+    return { "data": Add_Role.json(), "code": 201}
 
 @app.route("/roles/deletebyID/",methods=["GET"])
 def delete_role_by_ID():
