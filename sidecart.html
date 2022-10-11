@@ -220,7 +220,7 @@
       var numitems = 0
       var cartrole = document.getElementById("courses")
       var ljidhidden = document.getElementById("ljId")
-      var ljid = document.getElementById("ljId");
+     
       var itemelem = document.getElementById("numitems");
       var activeroleelem = document.getElementById("activerole");
       var noitems = document.getElementById("noitems"); 
@@ -324,7 +324,7 @@ const getLJCart = async () => {
             var saveLJ = async () => {
                 try {
                     
-                    var ljid = document.getElementById("ljId").value;
+                    var ljid = ljidhidden.value
                     var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljid);
            
                     if(updateLJ.data.code==201){

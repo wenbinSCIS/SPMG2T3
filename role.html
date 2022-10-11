@@ -176,6 +176,8 @@
 		
 		
 					<script>
+			var roles = []
+			var skills=[]
 			function closeWarning(){
 				
 				$('#warningModel').modal('hide')
@@ -183,23 +185,102 @@
 			function closeSimilar(){
 				
 				$('#similarModel').modal('hide')
+
 			}
-			function clearAndProceed(){
+			var clearAndProceed = async () => {
+
+				var deleteSuccess = await deleteByLJID();
+				console.log(deleteSuccess)
+				if (deleteSuccess == 1){
+					console.log("Success")
+					var proceedWithNew = await updateRoleID();
+				}
+				else{
+					console.log("Failure")
+				}
 				$('#warningModel').modal('hide')
+
+
+
+			}
+			var saveAndProceed = async () => {
+
+			var saveSuccess = await saveLJ();
+			console.log(saveSuccess)
+			if (saveSuccess == 1){
+				console.log("Success")
 				
+			}
+			else{
+				console.log("here")
+				console.log("Failure")
+			}
+			$('#warningModel').modal('hide')
+
 
 
 			}
-			function saveAndProceed(){
-				$('#warningModel').modal('hide')
-			}
-
 															
-			var roles = []
-			var skills=[]
+			var saveLJ = async () => {
+				try {
 
-		  
-			const sendGetRequest = async () => {
+					var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljhidden.value);
+					console.log(updateLJ)
+					if(updateLJ.data.code==201){
+						return 1
+		
+					}
+					else{
+						return 0
+					}
+			
+					
+				} catch (err) {
+					// Handle Error Here
+					console.error(err);
+				}
+			};    
+
+			var deleteByLJID = async () => {
+			try {
+				var deleteResult = await axios.get('http://127.0.0.1:5011/LJC/deleteAllLJCbyLJID/?ljid=' + ljidhidden.value);
+				console.log(deleteResult)
+				if(deleteResult.data.code == 201){
+					
+					return 1
+				}
+				else{
+					return 0
+				}
+
+				
+			} catch (err) {
+				// Handle Error Here
+				console.error(err);
+			}
+		};
+
+		var updateRoleID = async () => {
+			try {
+				var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/updateRoleIDByLJID?ljid=' + ljidhidden.value + '&roleid=');
+           
+		   
+				if(updateLJ.data.code == 201){
+					
+					return 1
+				}
+				else{
+					return 0
+				}	
+		
+		
+				
+			} catch (err) {
+				// Handle Error Here
+				console.error(err);
+			}
+		};
+			var sendGetRequest = async () => {
 			try {
 			
 				var resp = await axios.get('http://127.0.0.1:5000/roles/getAll');
@@ -288,7 +369,7 @@
 		
 		var skillstext = "";
 		
-		const addRoleLJ = async (roleid) => {
+		var addRoleLJ = async (roleid) => {
 			try {
 				var resp2 = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid=' + userid);
 				getRole = resp2.data.data
@@ -307,7 +388,7 @@
 				} else {
 					//successful
 					if(noroles.value >0){
-						console.log("here")
+					
 						$("#warningModel").modal('show');
 					}
 					else{
@@ -331,7 +412,7 @@
 		};
 		
 		
-		const getSkill = async (roleid,skillid) => {
+		var getSkill = async (roleid,skillid) => {
 			try {
 				var resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
 				

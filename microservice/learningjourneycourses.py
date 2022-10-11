@@ -82,6 +82,25 @@ def delete_LJC_by_ID():
     return { "Success":True, "code": 201 }
 
 
+@app.route("/LJC/deleteAllLJCbyLJID/")
+def delete_ALLLJC_by_LJID():
+    '''
+
+    '''
+    args = request.args
+
+    ljid = args.get('ljid')
+
+
+
+    try:
+        learningjourneycourses.query.filter_by(LJID=ljid).delete()
+        db.session.commit()
+    except:
+        return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
+    return { "Success":True, "code": 201 }
+
+
 
 
 if __name__ == '__main__':

@@ -78,6 +78,19 @@ def saveLJById():
     return {"Success":True, "code": 201 }
 
 
+@app.route("/LJ/updateRoleIDByLJID")
+def UpdateRoleIDByLJId():
+    args = request.args
+    roleid = args.get('role')
+    ljid = args.get('ljid')
+    try:
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'RoleID': roleid, })
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"Success":True, "code": 201 }
+
+
 @app.route("/LJ/insertgetLJID")
 def insertgetLJID():
     args = request.args
