@@ -178,6 +178,7 @@
 					<script>
 			var roles = []
 			var skills=[]
+			var currRoleToBeChanged;
 			function closeWarning(){
 				
 				$('#warningModel').modal('hide')
@@ -205,12 +206,20 @@
 			}
 			var saveAndProceed = async () => {
 
-			var saveSuccess = await saveLJ();
-			console.log(saveSuccess)
+			var saveSuccess = await saveLJRole();
+			
 			if (saveSuccess == 1){
-				console.log("Success")
+			
+			
+					var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + currRoleToBeChanged);
+						cartResults = createCart.data;
+						if(cartResults.code == 201){
+							ljidhidden = cartResults.LJID
+							console.log("Success!")
+				
 				
 			}
+		}
 			else{
 				console.log("here")
 				console.log("Failure")
@@ -221,10 +230,11 @@
 
 			}
 															
-			var saveLJ = async () => {
+			var saveLJRole = async () => {
 				try {
-
-					var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljhidden.value);
+			
+					var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljidhidden.value);
+			
 					console.log(updateLJ)
 					if(updateLJ.data.code==201){
 						return 1
@@ -262,8 +272,11 @@
 
 		var updateRoleID = async () => {
 			try {
-				var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/updateRoleIDByLJID?ljid=' + ljidhidden.value + '&roleid=');
-           
+			
+				console.log(currRoleToBeChanged)
+				var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/updateRoleIDByLJID?ljid=' + ljidhidden.value + '&role=' + currRoleToBeChanged);
+				console.log(updateLJ.data)
+			
 		   
 				if(updateLJ.data.code == 201){
 					
@@ -371,6 +384,7 @@
 		
 		var addRoleLJ = async (roleid) => {
 			try {
+				currRoleToBeChanged = roleid
 				var resp2 = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid=' + userid);
 				getRole = resp2.data.data
 			

@@ -220,12 +220,12 @@
       var numitems = 0
       var cartrole = document.getElementById("courses")
       var ljidhidden = document.getElementById("ljId")
-     
+      var currRoleID = document.getElementById("currRoleID");
       var itemelem = document.getElementById("numitems");
       var activeroleelem = document.getElementById("activerole");
       var noitems = document.getElementById("noitems"); 
       let openPanelButton = document.getElementById("flip");
-
+      
 let cartPanel = document.querySelector(".cart-panel");
 
 openPanelButton.onclick = () => {
@@ -249,7 +249,7 @@ const getLJCart = async () => {
 				res = resp.data.data;
                 ljidhidden.value = res[0].LJID
         var activeroleid = res[0].RoleID;
-            
+        currRoleID.value = activeroleid;    
         var getRoleName = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ activeroleid);
         activeRole =getRoleName.data.data;
         activeRoleName = activeRole[0].RoleName;
@@ -380,6 +380,7 @@ const getLJCart = async () => {
         My Learning Journey
         <input type="hidden" id="ljId">
         <input type="hidden" id="noitems">
+        <input type="hidden" id="currRoleID">
         <span id="numitems"></span>
         <i class="fa fa-angle-double-up" id="up" style=" position:absolute;margin-left:10px;margin-top:5px"></i>
         <i class="fa fa-angle-double-down" id="down" style="position:absolute;margin-left:10px;margin-top:5px;display:none"></i>

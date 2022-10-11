@@ -71,7 +71,7 @@ def saveLJById():
     args = request.args
     ljid = args.get('ljid')
     try:
-        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'Saved': 1, })
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'Saved': 1 })
         db.session.commit()
     except:
         return jsonify({"message": "An error occurred when updating the description.", "code":500})
@@ -84,7 +84,7 @@ def UpdateRoleIDByLJId():
     roleid = args.get('role')
     ljid = args.get('ljid')
     try:
-        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'RoleID': roleid, })
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'RoleID': roleid })
         db.session.commit()
     except:
         return jsonify({"message": "An error occurred when updating the description.", "code":500})
