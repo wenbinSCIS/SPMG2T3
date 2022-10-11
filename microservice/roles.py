@@ -83,7 +83,7 @@ def create_role():
     }
     '''
     data = request.get_json()
-    if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description',"role_id")):
+    if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
     Add_Role = Roles(
@@ -91,8 +91,7 @@ def create_role():
         RoleName = data["Role Name"],
         CreatedBy = data["Created By"],
         Fulfilled = " ",
-        Description = data["Description"],
-        RoleID = data["role_id"]
+        Description = data["Description"]
     )
     try:
         db.session.add(Add_Role)
@@ -106,8 +105,8 @@ def delete_role_by_ID():
     '''
         How to - URL - localhost:5000/roles/deletebyID/?roleID=3
     '''
-    args = request.args
-    rid = args.get('roleID')
+    data = request.get_json()
+    rid = data["RoleID"]
     #Check if role is created in DB
     role = Roles.query.filter_by(RoleID=rid).first()
     if not role:
