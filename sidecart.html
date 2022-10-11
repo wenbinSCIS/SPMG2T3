@@ -242,9 +242,9 @@ document.addEventListener('mouseup', function(e) {
     }
 });
 
-const getLJCart = async () => {
+var getLJCart = async () => {
 			try {
-			
+			cartrole.innerHTML = ''
 				var resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
 				res = resp.data.data;
                 ljidhidden.value = res[0].LJID

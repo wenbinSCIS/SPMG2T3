@@ -195,6 +195,11 @@
 				if (deleteSuccess == 1){
 					console.log("Success")
 					var proceedWithNew = await updateRoleID();
+
+					if(proceedWithNew == 1){
+						console.log("Success this one")
+						getLJCart();
+					}
 				}
 				else{
 					console.log("Failure")
@@ -215,13 +220,15 @@
 						cartResults = createCart.data;
 						if(cartResults.code == 201){
 							ljidhidden = cartResults.LJID
+							currRoleID.value = currRoleToBeChanged
+							getLJCart();
 							console.log("Success!")
 				
 				
 			}
 		}
 			else{
-				console.log("here")
+		
 				console.log("Failure")
 			}
 			$('#warningModel').modal('hide')
