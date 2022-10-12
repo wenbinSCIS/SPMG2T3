@@ -142,6 +142,27 @@
 						</div>
 					</div>
 				</div>
+
+				<div id="successModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<form>
+								<div class="modal-header">						
+									<h4 class="modal-title">Success</h4>
+									<button type="button" class="close" onclick="closeSuccess()" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p>Learning Journey saved successfully!</p>
+								
+								</div>
+								<div class="modal-footer">
+									
+									<button type="button" class="btn btn-primary" onclick="closeSuccess()" data-dismiss="modal" aria-hidden="true">OK</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 				<div id="includedContent"></div>
 			</div>
 			
@@ -186,6 +207,11 @@
 			function closeSimilar(){
 				
 				$('#similarModel').modal('hide')
+
+			}
+			function closeSuccess(){
+				
+				$('#successModel').modal('hide')
 
 			}
 			var clearAndProceed = async () => {
