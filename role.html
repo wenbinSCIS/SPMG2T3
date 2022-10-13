@@ -380,7 +380,7 @@
 					<div class="details">
 						<div style="width:450px !important">
 							<div class="titles" >
-								<a href="single.html"><h4>` + role.RoleName + `</h4></a>
+								<a href=""><h4>` + role.RoleName + `</h4></a>
 								
 							</div>
 						</div>
@@ -433,6 +433,7 @@
 					else{
 						if(noitems.value == 0){
 							updateRoleID();
+							getLJCart();
 						}
 						else{
 						$('#warningModel').modal('show')
@@ -446,7 +447,7 @@
 						cartResults = createCart.data;
 						if(cartResults.code == 201){
 							ljidhidden = cartResults.LJID
-
+							getLJCart();
 						
 					}
 					

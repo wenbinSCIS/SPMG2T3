@@ -393,7 +393,7 @@ var getLJCart = async () => {
                 console.log(courseid)
                 
                 
-                var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljid.value);
+                var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljidhidden.value);
                 console.log(res)
                 var course = "course" + courseid
                 var element = document.getElementById(course);

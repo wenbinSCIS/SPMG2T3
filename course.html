@@ -107,7 +107,7 @@
         var skills=[]
 
       
-        const sendGetRequest = async () => {
+        var sendGetRequest = async () => {
         try {
         
             var urlParams = new URLSearchParams(window.location.search);
@@ -139,7 +139,7 @@
                 <div class="details">
                     <div style="width:450px !important">
                         <div class="titles" >
-                            <a href="single.html"><h4>` + courses[0].CourseName + `</h4></a>
+                            <a href=""><h4>` + courses[0].CourseName + `</h4></a>
                             
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                 </div>
                 <div class="thumb">
                     <ul class="btns">
-                        <button onclick="AddCourseToLJ(this.value)" value=${courses[0].CourseName} class="btn btn-primary">Enroll</a>
+                        <button onclick="AddCourseToLJ(this.value)" value=${cid} class="btn btn-primary">Enroll</a>
                     </ul>
               
                 </div>
@@ -173,9 +173,31 @@
     
     var skillstext = "";
     
-    function AddCourseToLJ(){
-        
-    }
+    var AddCourseToLJ = async (cidfrombtn) => {
+				try {
+                    var checkCourse = await axios.get('http://127.0.0.1:5011/LJC/checkIfCourseInLJ?ljid=' + ljidhidden.value + '&cid=' +cidfrombtn);
+
+                    if(checkCourse.data.code == 404){
+                        var addCourse = await axios.get('http://127.0.0.1:5011/LJC/addCourseIntoBasket?ljid=' + ljidhidden.value + '&cid=' +cidfrombtn);
+                
+                    
+                        if(addCourse.data.code==201){
+                            getLJCart();
+            
+                        }
+                        else{
+                            console.log("Add unsuccessful!")
+                        }
+                    }
+                    else{
+                        console.log("Course is already in your basket")
+                    }
+					
+				} catch (err) {
+					// Handle Error Here
+					console.error(err);
+				}
+			};    
     
 
     

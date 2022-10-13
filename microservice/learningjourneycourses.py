@@ -100,8 +100,40 @@ def delete_ALLLJC_by_LJID():
         return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
     return { "Success":True, "code": 201 }
 
+@app.route("/LJC/addCourseIntoBasket")
+def addCourseIntoBaskets():
+    args = request.args
+    ljid = args.get('ljid')
+    courseid = args.get('cid')
+    createLJC = learningjourneycourses(
+    LJID = ljid,
+    CourseID = courseid,
+    )
+
+    try:
+        db.session.add(createLJC)
+        db.session.flush()
+        db.session.refresh(createLJC)
+        db.session.commit()
+
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"LJID": createLJC.LJCID, "Success":True, "code": 201 }
 
 
+
+@app.route("/LJC/checkIfCourseInLJ")
+def checkIfCourseInLJs():
+    args = request.args
+    ljids = args.get('ljid')
+    cid = args.get('cid')
+    lj_list = learningjourneycourses.query.filter(learningjourneycourses.LJID==ljids, learningjourneycourses.CourseID==cid).all()
+
+    # print(role_list, flush=True)
+    if len(lj_list):
+        return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
+    else:
+        return jsonify({ "code": 404, "message": 0 })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5011, debug=True)
