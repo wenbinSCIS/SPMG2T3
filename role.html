@@ -306,15 +306,14 @@
 		var updateRoleID = async () => {
 			try {
 			
-				console.log(currRoleToBeChanged)
-				console.log(ljidhidden.value)
+
 				var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/updateRoleIDByLJID?ljid=' + ljidhidden.value + '&role=' + currRoleToBeChanged);
 				
 			
 		   
 				if(updateLJ.data.code == 201){
 					
-					return 1
+					getLJCart();
 				}
 				else{
 					return 0
@@ -433,7 +432,7 @@
 					else{
 						if(noitems.value == 0){
 							updateRoleID();
-							getLJCart();
+						
 						}
 						else{
 						$('#warningModel').modal('show')
@@ -446,7 +445,7 @@
 						var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + roleid);
 						cartResults = createCart.data;
 						if(cartResults.code == 201){
-							ljidhidden = cartResults.LJID
+							ljidhidden.value = cartResults.LJID
 							getLJCart();
 						
 					}

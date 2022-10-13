@@ -307,34 +307,38 @@ var getLJCart = async () => {
         `		
         var getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
         courses = getCartCourses.data.data;
-        if(courses.length>0){
-          noitems.value = courses.length
+        if(getCartCourses.data.code == 404){
+
+            itemelem.innerText = "(0)"
+            noitems.value = 0
+
+        }
+        else{
+            noitems.value = courses.length
        
           
-          itemelem.innerText = "(" + noitems.value + ")"
-          for (course of courses){
-            var coursename = await getCourseName(course.CourseID)
-      
-            cartrole.innerHTML += `
-                <div class="course" id ="course` + course.CourseID + `">
-                    <div>
-                        <span>
-                            ` + coursename[0].CourseName +`
-                        </span>
-                        <button onclick="deleteCourse(this.value)" value=`+course.CourseID+` ">
-                            <i class="fa fa-minus" aria-hidden="true"></i>
-                        </button>
+       itemelem.innerText = "(" + noitems.value + ")"
+       for (course of courses){
+         var coursename = await getCourseName(course.CourseID)
+   
+         cartrole.innerHTML += `
+             <div class="course" id ="course` + course.CourseID + `">
+                 <div>
+                     <span>
+                         ` + coursename[0].CourseName +`
+                     </span>
+                     <button onclick="deleteCourse(this.value)" value=`+course.CourseID+` ">
+                         <i class="fa fa-minus" aria-hidden="true"></i>
+                     </button>
 
 
-                    </div>
+                 </div>
 
 
-                </div>
-            `
+             </div>
+         `
 
-          }
-  
-
+       }
         }
 		
 

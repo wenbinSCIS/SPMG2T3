@@ -64,7 +64,7 @@ def get_UnsavedLJByID():
     
         return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
     except:
-        return jsonify({ "code": 404, "message": 0 }), 404
+        return jsonify({ "code": 404, "message": 0 })
 
 @app.route("/LJ/saveLJById")
 def saveLJById():
