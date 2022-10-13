@@ -194,7 +194,38 @@
     }
 }  
 
-
+.modal .modal-dialog {
+	max-width: 400px;
+}
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+	padding: 20px 30px;
+}
+.modal .modal-content {
+	border-radius: 3px;
+	font-size: 14px;
+}
+.modal .modal-footer {
+	background: #ecf0f1;
+	border-radius: 0 0 3px 3px;
+}
+.modal .modal-title {
+	display: inline-block;
+}
+.modal .form-control {
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
+}
+.modal textarea.form-control {
+	resize: vertical;
+}
+.modal .btn {
+	border-radius: 2px;
+	min-width: 100px;
+}	
+.modal form label {
+	font-weight: normal;
+}	
     </style>
 
     <script>
@@ -241,6 +272,12 @@ document.addEventListener('mouseup', function(e) {
         openPanelButton.classList.remove("hide");
     }
 });
+
+function closeSave(){
+				
+				$('#saveModel').modal('hide')
+                getLJCart();
+			}
 
 var getLJCart = async () => {
 			try {
@@ -335,8 +372,8 @@ var getLJCart = async () => {
                     var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljid);
            
                     if(updateLJ.data.code==201){
-                        console.log("Save successfully!")
-                        getLJCart();
+                        $('#saveModel').modal('show')
+                        
         
                     }
                     else{
@@ -412,6 +449,25 @@ var getLJCart = async () => {
         </div>
     </div>
 
-      
+    <div id="saveModel" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Success</h4>
+                        <button type="button" class="close" onclick="closeSave()" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">					
+                        <p>Learning Journey saved successfully!</p>
+                    
+                    </div>
+                    <div class="modal-footer">
+                        
+                        <button type="button" class="btn btn-primary" onclick="closeSave()" data-dismiss="modal" aria-hidden="true">OK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
