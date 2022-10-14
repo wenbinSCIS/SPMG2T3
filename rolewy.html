@@ -528,29 +528,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
             },
 
             create_role(){
-                    axios.post('http://127.0.0.1:5000/roles/create', {
+                    axios.post('http://127.0.0.1:5020/add_role', {
                         "Role Name": this.role_name,
                         "Created By": "function test",
-                        "Description": this.description
+                        "Description": this.description,
+						"skill_list": this.skill_list
                         })
                         .then(function (response) {
-							this.new_role_id=response.data.data.RoleID
+							console.log(response)
                         })
                         .catch(function (error) {
-                            console.log(error.response.data);
+                            console.log(error);
                         });
-
-
-                        axios.post('http://127.0.0.1:5001/addskillrole', {
-                            "RoleID": this.new_role_id,
-                            "Skills": this.skill_selected
-                            })
-                            .then(function (response) {
-                            console.log(response);
-                            })
-                            .catch(function (error) {
-                                console.log(error.response.data);
-                            });
             },
         },
         computed:

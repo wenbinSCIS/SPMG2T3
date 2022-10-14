@@ -7,6 +7,7 @@ from os import environ
 import os
 from dotenv import load_dotenv
 from datetime import datetime
+import requests
 
 load_dotenv()
 
@@ -33,6 +34,7 @@ class Roles(db.Model):
     CreatedBy = db.Column(db.String(255), nullable=False)
     Fulfilled = db.Column(db.String(255), nullable=False)
     Description = db.Column(db.String(255), nullable=False)
+    TimeAdded = db.Column(db.String(255),nullable=True)
 
     def to_dict(self):
         """
@@ -86,6 +88,7 @@ def create_role():
     '''
     data = request.get_json()
     cur_time = datetime.now()
+
     if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
@@ -94,7 +97,7 @@ def create_role():
         CreatedBy = data["Created By"],
         Fulfilled = " ",
         Description = data["Description"],
-        time_added = cur_time
+        TimeAdded = cur_time
     )
     try:
         db.session.add(Add_Role)
@@ -102,6 +105,7 @@ def create_role():
 
     except:
         return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
+
     return { "data": Add_Role.json(), "code": 201}
 
 @app.route("/roles/deletebyID/",methods=["GET"])
