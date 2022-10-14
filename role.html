@@ -200,6 +200,7 @@
 			var roles = []
 			var skills=[]
 			var currRoleToBeChanged;
+
 			function closeWarning(){
 				
 				$('#warningModel').modal('hide')
@@ -223,8 +224,9 @@
 					var proceedWithNew = await updateRoleID();
 
 					if(proceedWithNew == 1){
-						console.log("Success this one")
-						getLJCart();
+						
+						await getLJCart();
+						setBtns();
 					}
 				}
 				else{
@@ -245,9 +247,10 @@
 					var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + currRoleToBeChanged);
 						cartResults = createCart.data;
 						if(cartResults.code == 201){
-							ljidhidden.value = cartResults.LJID
-							currRoleID.value = currRoleToBeChanged
+							
 							$('#saveModel').modal('show')
+							await getLJCart();
+							setBtns();
 							
 				
 				
@@ -313,7 +316,9 @@
 		   
 				if(updateLJ.data.code == 201){
 					
-					getLJCart();
+					await getLJCart();
+					
+					setBtns();
 				}
 				else{
 					return 0
@@ -391,7 +396,20 @@
 					</div>
 					<div class="thumb">
 						<ul class="btns">
-							<button onclick="addRoleLJ(this.value)" value=${role.RoleID} class="btn btn-primary">Create a Learning Journey</a>
+							`
+							if(currRoleID.value == role.RoleID){
+								innerstring += `
+								<button onclick="addRoleLJ(this.value)"  value=${role.RoleID} class="checkBtns btn btn-success">Selected</a>
+									`
+							}
+							else{
+								innerstring += `
+								<button onclick="addRoleLJ(this.value)"  value=${role.RoleID} class="checkBtns btn btn-primary">Create a Learning Journey</a>
+									`
+							}
+							
+								innerstring += 
+								`
 						</ul>
 						<ul class="tags">
 							`+skills+`
@@ -432,6 +450,7 @@
 					else{
 						if(noitems.value == 0){
 							updateRoleID();
+
 						
 						}
 						else{
@@ -446,7 +465,8 @@
 						cartResults = createCart.data;
 						if(cartResults.code == 201){
 							ljidhidden.value = cartResults.LJID
-							getLJCart();
+							await getLJCart();
+							setBtns();
 						
 					}
 					
@@ -461,7 +481,25 @@
 			}
 		};
 		
-		
+		function setBtns(){
+			var btns=  document.getElementsByClassName("checkBtns")
+			for(i = 0;i < btns.length; ++i) {
+      
+
+				if(btns[i].value == currRoleID.value){
+				
+					btns[i].classList.remove('btn-primary')
+					btns[i].classList.add('btn-success')
+					btns[i].innerText = "Selected"
+				
+				}
+				else{
+					btns[i].classList.remove('btn-success')
+					btns[i].classList.add('btn-primary')
+					btns[i].innerText = "Create a Learning Journey"
+				}
+    }
+		}
 		var getSkill = async (roleid,skillid) => {
 			try {
 				var resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);

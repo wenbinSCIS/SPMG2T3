@@ -276,7 +276,7 @@ document.addEventListener('mouseup', function(e) {
 function closeSave(){
 				
 				$('#saveModel').modal('hide')
-                getLJCart();
+                
 			}
 
 var getLJCart = async () => {
@@ -293,7 +293,8 @@ var getLJCart = async () => {
 				res = resp.data.data;
                 ljidhidden.value = res[0].LJID
         var activeroleid = res[0].RoleID;
-        currRoleID.value = activeroleid;    
+        currRoleID.value = activeroleid;
+         
         var getRoleName = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ activeroleid);
         activeRole =getRoleName.data.data;
         activeRoleName = activeRole[0].RoleName;
@@ -348,7 +349,9 @@ var getLJCart = async () => {
 				// Handle Error Here
      
         itemelem.innerText = "(0)"
+                ljidhidden.value=-1
         
+                currRoleID.value = -1
 				console.error(err);
 			}
 		};
@@ -376,6 +379,12 @@ var getLJCart = async () => {
                     var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljid);
            
                     if(updateLJ.data.code==201){
+                        var btns=  document.getElementsByClassName("checkBtns")
+                        console.log(btns)
+                        if (btns.length>0){
+                            await getLJCart();
+                            setBtns();
+                        }
                         $('#saveModel').modal('show')
                         
         
