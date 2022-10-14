@@ -6,6 +6,7 @@ from flask_cors import CORS
 from os import environ
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -84,6 +85,7 @@ def create_role():
     }
     '''
     data = request.get_json()
+    cur_time = datetime.now()
     if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
@@ -91,7 +93,8 @@ def create_role():
         RoleName = data["Role Name"],
         CreatedBy = data["Created By"],
         Fulfilled = " ",
-        Description = data["Description"]
+        Description = data["Description"],
+        time_added = cur_time
     )
     try:
         db.session.add(Add_Role)
