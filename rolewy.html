@@ -68,47 +68,7 @@
 			</section>
 			<!-- End banner Area -->	
 			
-			<input type="button" class="btn btn-success mt-5 ms-5" data-toggle="modal" id="add_role_button" value="Add New Role">
-			<div id="add_role_modal" class="modal">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<form>
-							<div class="modal-header">						
-								<h4 class="modal-title">Add Role</h4>
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close_add_role_button">&times;</button>
-							</div>
-							<div class="modal-body">				
-								<div class="form-group">
-									<label for="role_name">Role Name</label>
-									<input type="text" v-model="role_name" class="form-control" id="skill_name"  placeholder="Enter role">
-								</div>
-					
-								<div class="form-group">
-									<label for="role_description">Description</label>
-									<textarea class="form-control" v-model="description" id="skill_description" placeholder="Description"></textarea>
-								</div>
-					
-								<div class="form-group">
-									<label for="skill_required_selection">Skill Required</label>
-		
-									<VueMultiselect id="skill_required_selection"
-									v-model="skill_selected"
-									:options="skill_list"
-									:multiple="true"
-									:close-on-select="false" :clear-on-select="false"
-									:max="5"
-									placeholder="Select Skills"
-									label="Skillname"
-									track-by="SkillsID"/>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<input type="button" class="btn btn-success" value="Add" v-on:click="create_role">
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
+			<input type="button" class="btn btn-success mt-5 ms-5" value="Create Role" onclick="window.location.href='manager_create_role.html'">
 			
 			<!-- Start post Area -->
 			<section class="post-area section-gap">
@@ -500,57 +460,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		};
 		
 		$(function(){
-			  $("#includedContent").load("sidecart.html"); 
-			});
+			$("#includedContent").load("sidecart.html"); 
+		});
 		
 
-			Vue.createApp({
-        data() {
-            return {
-            skill_list:[],
-            role_name:"",
-            description:"",
-            skill_selected:[],
-            new_role_id:"",
-            };
-        },
-        methods:
-        {
-            get_all_skill(){
-                axios.get('http://127.0.0.1:5002/getAllSkill')
-                .then(response => {
-                    // this gets the data, which is an array, and pass the data to Vue instance's posts property
-                    this.skill_list = response.data.data
-                })
-                .catch(error => {
-                    this.skill_list = [{ entry: 'There was an error: ' + error.message }]
-                })
-            },
-
-            create_role(){
-                    axios.post('http://127.0.0.1:5020/add_role', {
-                        "Role Name": this.role_name,
-                        "Created By": "function test",
-                        "Description": this.description,
-						"skill_list": this.skill_list
-                        })
-                        .then(function (response) {
-							console.log(response)
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-            },
-        },
-        computed:
-        {
-            
-        },
-        created(){
-            this.get_all_skill()
-        },
-        components: { vuemultiselect: window.Vue3Multiselect.default },
-    }).mount('#add_role_modal')
 
     //Modal
     var add_role_modal = document.getElementById("add_role_modal");

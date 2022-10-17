@@ -20,7 +20,7 @@
 <body>
     <div id="nav-placeholder"></div>
     
-    <div id="app1" class="container">
+    <div id="role_table" class="container">
         <h1 class="py-3">All Created Role</h1>
 
         <button type="button" class="btn btn-success" v-on:click="nav_create_role()">Create Role</button>
@@ -34,14 +34,16 @@
                             <th>Role Name</th>
                             <th>Fulfilled Status</th>
                             <th>Description</th>
+                            <th>Skill Required</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="cur_role_id in role_list.length">
-                            <td>{{ cur_role_id }}</td>
-                            <td>{{ role_list[cur_role_id-1].RoleName}}</td>
-                            <td>{{ role_list[cur_role_id-1].Fulfilled  }}</td>
-                            <td>{{ role_list[cur_role_id-1].Description  }}</td>
+                        <tr v-for="cur_role_no in role_list.length">
+                            <td>{{ role_list[cur_role_no-1].RoleID }}</td>
+                            <td>{{ role_list[cur_role_no-1].RoleName }}</td>
+                            <td>{{ role_list[cur_role_no-1].Fulfilled  }}</td>
+                            <td>{{ role_list[cur_role_no-1].Description  }}</td>
+                            <td>{{role_skill_list[role_list[cur_role_no-1].RoleID]}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -49,11 +51,16 @@
         </div> <!-- row -->
     </div> <!-- app: container -->
 
+
+
     <script>
         Vue.createApp({
             data() {
                 return {
                     role_list:[],
+                    skill_list:[],
+                    role_skill_list:{},
+                    cur_skill_role_list:[],
                 };
             },
             methods:
@@ -63,17 +70,57 @@
                     .then(response => {
                         // this gets the data, which is an array, and pass the data to Vue instance's posts property
                         this.role_list = response.data.data
-                    })
-                    .catch(error => {
-                        this.role_list = [{ entry: 'There was an error: ' + error.message }]
-                    })
-                },
+                        role_list = response.data.data
+
+                        for(let i = 0; i < role_list.length; i++)
+                        {
+                            cur_role_id=role_list[i].RoleID
+                            this.role_skill_list[cur_role_id]=[]
+
+                            axios.get('http://127.0.0.1:5001/getSRBRbyRoleID/'+String(cur_role_id))
+                            .then(response => {
+                                // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                                cur_role_skill_list = response.data.data
+                                console.log(cur_role_id)
+
+                                for (let j=0; j < cur_role_skill_list.length; j++)
+                                {
+                                    cur_skill_id=cur_role_skill_list[j].SkillsID
+                                    
+                                    for (search_skill_no in this.skill_list)
+                                    {
+                                        if(this.skill_list[search_skill_no].SkillsID==cur_skill_id)
+                                        {
+                                            cur_skill_name=this.skill_list[search_skill_no].Skillname
+                                            this.role_skill_list[cur_role_id].push(cur_skill_name)
+                                        }
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                this.role_skill_list = [{ entry: 'There was an error: ' + error.message }]
+                            })
+                            }
+                        })
+                        .catch(error => {
+                            this.role_list = [{ entry: 'There was an error: ' + error.message }]
+                        })
+                    },
+
+                get_all_skill(){
+                axios.get('http://127.0.0.1:5002/getAllSkill')
+                .then(response => {
+                    // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                    this.skill_list = response.data.data
+                })
+                .catch(error => {
+                    this.skill_list = [{ entry: 'There was an error: ' + error.message }]
+                })
+            },
 
                 nav_create_role(){
                     window.location.href = "../manager_create_role.html"
                 },
-
-
             },
             computed:
             {
@@ -81,14 +128,11 @@
             },
             created(){
                 this.get_all_role()
+                this.get_all_skill()
                 }
-        }).mount('#app1')
+        }).mount('#role_table')
 
         role_name=1
-    </script>
-    <script type="module">
-        import navbar from "/navbar.js";
-        window.addEventListener('load', () => document.getElementById('nav-placeholder').innerHTML = navbar);
     </script>
 </body>
 </html>
