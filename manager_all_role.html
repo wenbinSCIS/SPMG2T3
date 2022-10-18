@@ -74,14 +74,13 @@
 
                         for(let i = 0; i < role_list.length; i++)
                         {
-                            cur_role_id=role_list[i].RoleID
+                            let cur_role_id=role_list[i].RoleID
                             this.role_skill_list[cur_role_id]=[]
 
-                            axios.get('http://127.0.0.1:5001/getSRBRbyRoleID/'+String(cur_role_id))
+                            axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID='+String(cur_role_id))
                             .then(response => {
                                 // this gets the data, which is an array, and pass the data to Vue instance's posts property
                                 cur_role_skill_list = response.data.data
-                                console.log(cur_role_id)
 
                                 for (let j=0; j < cur_role_skill_list.length; j++)
                                 {
