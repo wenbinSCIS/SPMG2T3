@@ -47,11 +47,12 @@ class SRBR(db.Model):
             "RoleID": self.RoleID, 
             "SkillsID": self.SkillsID,
 
-     }
+    }
 
-@app.route("/getSRBRbyRoleID/<int:rid>")
-def get_all_by_roleid(rid):
-    print(rid)
+@app.route("/getSRBRbyRoleID")
+def get_all_by_roleid():
+    args = request.args
+    rid = args.get('RoleID')
     select = SRBR.query.filter_by(RoleID=rid)
     return jsonify(
         {
