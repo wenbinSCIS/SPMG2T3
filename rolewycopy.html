@@ -145,23 +145,11 @@
 														<table class="table table-striped table-hover">
 															<thead>
 																<tr>
-																	<th>
-																		<span class="custom-checkbox">
-																			<input type="checkbox" id="selectAll">
-																			<label for="selectAll"></label>
-																		</span>
-																	</th>
-																	<th>Skill Required</th>
+																	<th>Skill Required<a class="edit btn" data-toggle="modal" :data-target="'#editroleskill'+cur_role.RoleID" v-on:click="add_to_initial_skill(role_skill_list[cur_role.RoleID])"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a></th>
 																</tr>
 															</thead>
 															<tbody id="skilldisplay">
 																<tr v-for="cur_skill in role_skill_list[cur_role.RoleID]">
-																	<td>
-																		<span class="custom-checkbox">
-																		<input type="checkbox" id="{{cur_skill[0]}}" name="options[]" value="{{cur_skill[0]}}" class="checks">
-																		<label for="{{cur_skill[0]}}"></label>
-																		</span>
-																	</td>
 																	<td>{{cur_skill[1]}}</td>
 																</tr>
 															</tbody>
@@ -222,6 +210,39 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Edit role skill Modal HTML -->
+                <div :id="'editroleskill'+cur_role.RoleID" class="modal fade">
+                    <div class="modal-dialog" id="edit">
+                        <div class="modal-content">
+                            <form>
+                                <div class="modal-header">						
+                                    <h4 class="modal-title">Edit Role skill</h4>
+                                    <button type="button" class="close" onclick="$('#editrolename').modal('hide');" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">					
+                                    <div class="form-group">
+                                        <label>Choose new skill</label>
+										<VueMultiselect id="skill_required_selection"
+										v-model="editted_skill_selected"
+										:options="skill_list"
+										:multiple="true"
+										:close-on-select="false" :clear-on-select="false"
+										:max="5"
+										placeholder="Select Skills"
+										label="Skillname"
+										track-by="SkillsID"/>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editrolename').modal('hide');">
+                                    <input type="button" class="btn btn-info" value="Save" v-on:click="edit_role_name(cur_role)">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
 				<!-- Delete Modal HTML -->
 				<div id="deleterole" class="modal fade">
 					<div class="modal-dialog">
@@ -359,6 +380,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                     cur_skill_role_list:[],
 					editted_role_name:"",
 					editted_description:"",
+					editted_skill_selected:[],
                 };
             },
             methods:
@@ -464,6 +486,13 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				this.editted_description=""
 			},
 
+			add_to_initial_skill(cur_skill_list){
+				for (i=0;i<cur_skill_list.length;i++)
+				{
+					this.editted_skill_selected.push({"SkillsID":cur_skill_list[i][0],"Skillname":cur_skill_list[i][1]})
+				}
+			},
+
                 nav_create_role(){
                     window.location.href = "../manager_create_role.html"
                 },
@@ -477,6 +506,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 this.get_all_skill()
                 },
 			components: { vuemultiselect: window.Vue3Multiselect.default },
+			
+
+			
         }).mount('#role_table')
 
 
