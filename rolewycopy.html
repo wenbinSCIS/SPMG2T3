@@ -99,7 +99,6 @@
 			<section class="post-area section-gap">
 				<input type="button" class="btn btn-success mt-5 mb-2" value="Create Role" onclick="window.location.href='manager_create_role.html'">
 				<div class="container" id="role_table">
-
 					<div class="row justify-content-center d-flex">
 						<div class="col-lg-8 post-list">
 
@@ -236,7 +235,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editrolename').modal('hide');">
-                                    <input type="button" class="btn btn-info" value="Save" v-on:click="edit_role_name(cur_role)">
+                                    <input type="button" class="btn btn-info" value="Save" v-on:click="edit_role_skill(cur_role)">
                                 </div>
                             </form>
                         </div>
@@ -491,6 +490,127 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				{
 					this.editted_skill_selected.push({"SkillsID":cur_skill_list[i][0],"Skillname":cur_skill_list[i][1]})
 				}
+			},
+
+			edit_role_skill(cur_role){
+				let cur_role_id = cur_role.RoleID
+				let new_skill_list = this.editted_skill_selected
+
+				let delete_skill_list=[]
+				let added_skill_list=[]
+
+				let non_deleted_skill_index=[]
+				let non_added_skill_index=[]
+
+				//fill delete_skill_list with all existing skill id
+				for (i=0;i<this.role_skill_list[cur_role_id].length;i++)
+				{
+					delete_skill_list.push({"SkillsID":this.role_skill_list[cur_role_id][i][0]})
+				}
+
+				//fill added_skill_list with all new skill id
+				for (i=0;i<new_skill_list.length;i++)
+				{
+					added_skill_list.push({"SkillsID":new_skill_list[i].SkillsID})
+				}
+
+				//find out which skill id is existing and is not deleted and add to non_deleted_skill_index
+				for (i=0;i<new_skill_list.length;i++)
+				{
+					for (j=0;j<this.role_skill_list[cur_role_id].length;j++)
+					{
+						if(new_skill_list[i].SkillsID==this.role_skill_list[cur_role_id][j][0])
+						{
+
+							if (!non_deleted_skill_index.includes(j))
+							{
+								non_deleted_skill_index.push(j)
+							}
+						}
+					}
+				}
+
+				if(non_deleted_skill_index.length>0)
+				{
+					non_deleted_skill_index=non_deleted_skill_index.reverse()
+
+					//remove all skills not needed to be deleted from delete_skill_list
+					for (i=0;i<non_deleted_skill_index.length;i++)
+					{
+						delete_skill_list.splice(non_deleted_skill_index[i],1)
+					}
+				}
+
+				//find out which skill id is existing and is not added and add to non_deleted_skill_index
+				for (i=0;i<this.role_skill_list[cur_role_id].length;i++)
+				{
+					for (j=0;j<new_skill_list.length;j++)
+					{
+						if(new_skill_list[j].SkillsID==this.role_skill_list[cur_role_id][i][0])
+						{
+							if(!non_added_skill_index.includes(j))
+							{
+								non_added_skill_index.push(j)
+							}
+						}
+					}
+
+				}
+
+				
+				if (non_added_skill_index.length>0)
+				{
+					non_added_skill_index=non_added_skill_index.reverse()
+
+					//remove all skills not needed to be added from delete_skill_list
+					for (i=0;i<non_added_skill_index.length;i++)
+					{
+						added_skill_list.splice(non_added_skill_index[i],1)
+					}
+				}
+
+				console.log(delete_skill_list.length)
+				if(delete_skill_list.length>0)
+				{
+					axios.post('http://127.0.0.1:5001/deletebyskillrole/', {
+                    "RoleID": cur_role_id,
+                    "Skills": delete_skill_list
+                    })
+                    .then(function (response) {
+                        console.log(response)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+				}
+
+				if(added_skill_list.length>0)
+				{
+					axios.post('http://127.0.0.1:5001/deletebyskillrole/', {
+                        "RoleID": cur_role_id,
+                        "Skills": added_skill_list
+                        })
+                        .then(function (response) {
+                            console.log(response)
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+				}
+
+				//to change data so page is updated
+
+				console.log(editted_skill_selected)
+				console.log(this.role_skill_list)
+				this.role_skill_list[cur_role_id]=[]
+				for (i=0;i<editted_skill_selected.length;i++)
+				{
+					this.role_skill_list[cur_role_id].push([editted_skill_selected[i].SkillsID,editted_skill_selected[i].Skillname])
+				}
+
+				this.editted_skill_selected=[]
+				
 			},
 
                 nav_create_role(){

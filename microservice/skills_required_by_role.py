@@ -83,7 +83,24 @@ def add_skill_role():
             return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
     return { "role data": add_skill_role.json(), "code": 201 }
 
-
+@app.route("/deletebyskillrole/",methods=["POST"])
+def delete_by_skill_role():
+    data = request.get_json()
+    rid = data["RoleID"]
+    skill_list = data["SKills"]
+    #Check if role is created in DB
+    for cur_skill in skill_list:
+        cur_skill_id = cur_skill.SkillID
+        skill_role = SRBR.query.filter_by(RoleID=rid,SkillsID=cur_skill_id).first()
+        if not skill_role:
+            return jsonify({ "message": "SRBR is not valid." }), 500
+        else:
+            try:
+                skill_role.query.filter_by(RoleID = rid,SkillsID=cur_skill_id).delete()
+                db.session.commit()
+            except:
+                return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
+        return { "RoleID": rid,"Success":True, "code": 201 }
 
 
 if __name__ == '__main__':
