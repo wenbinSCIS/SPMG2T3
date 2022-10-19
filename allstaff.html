@@ -1,0 +1,504 @@
+	<!DOCTYPE html>
+	<html lang="zxx" class="no-js">
+	<head>
+		<!-- Mobile Specific Meta -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Favicon-->
+		<link rel="shortcut icon" href="img/fav.png">
+		<!-- Author Meta -->
+		<meta name="author" content="codepixer">
+		<!-- Meta Description -->
+		<meta name="description" content="">
+		<!-- Meta Keyword -->
+		<meta name="keywords" content="">
+		<!-- meta character set -->
+		<meta charset="UTF-8">
+		<!-- Site Title -->
+		<title>Job Listing</title>
+
+		<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
+			<!--
+			CSS
+			============================================= -->
+			<link rel="stylesheet" href="css/linearicons.css">
+			<link rel="stylesheet" href="css/font-awesome.min.css">
+			<link rel="stylesheet" href="css/bootstrap.css">
+			<link rel="stylesheet" href="css/magnific-popup.css">
+			<link rel="stylesheet" href="css/nice-select.css">					
+			<link rel="stylesheet" href="css/animate.min.css">
+			<link rel="stylesheet" href="css/owl.carousel.css">
+			<link rel="stylesheet" href="css/main.css">
+			<link rel="stylesheet" href="css/modal.css">
+		<!-- Vue 3 -->
+        <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.js'></script>
+        <!-- Vue 3: production version, optimized for size and speed -->
+        <!-- <script src='https://cdn.jsdelivr.net/npm/vue@3.0.2/dist/vue.global.prod.js'></script> -->
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+			
+		</head>
+		<body>
+			<div id="nav-placeholder"></div>
+			<div id="allstaff">
+		  
+			<!-- start banner Area -->	
+				<section class="banner-area relative" id="home">	
+					<div class="overlay overlay-bg"></div>
+					<div class="container">
+						<div class="row d-flex align-items-center justify-content-center">
+							<div class="about-content col-lg-12">
+								<h1 class="text-white">
+									Blog Posts				
+								</h1>	
+								<p class="text-white link-nav"><a href="index.html">Home </a>  <span class="lnr lnr-arrow-right"></span>  <a href="blog-home.html"> Blog Posts</a></p>
+							</div>											
+						</div>
+					</div>
+				</section>
+
+				<section class="blog-posts-area section-gap">
+					<div id="allstaff">
+					<div class="container-fluid" >
+						<div class="row">
+							<div class="col-lg-8 post-list blog-post-list">
+								<div class="table-responsive">
+									<div class="table-wrapper">
+										<div class="table-title">
+											<div class="row">
+												<div class="col-sm-6">
+													<h2><b style="color:white">All Employees</b></h2>
+												</div>
+												<div class="col-sm-6">
+													<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+													<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
+												</div>
+											</div>
+										</div>
+										<table class="table table-striped table-hover">
+											<thead>
+												<tr>
+													<th>
+														<span class="custom-checkbox">
+															<input type="checkbox" id="selectAll">
+															<label for="selectAll"></label>
+														</span>
+													</th>
+													<th>Skill name</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="skill in get_all_skills()">
+													<td>
+														<span class="custom-checkbox">
+															<input type="checkbox" id="checkbox1" name="options[]" value="1">
+															<label for="checkbox1"></label>
+														</span>
+													</td>
+													<td>Thomas Hardy</td>
+													<td>
+														<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+														<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="clearfix">
+											<div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+											<ul class="pagination">
+												<li class="page-item disabled"><a href="#">Previous</a></li>
+												<li class="page-item"><a href="#" class="page-link">1</a></li>
+												<li class="page-item"><a href="#" class="page-link">2</a></li>
+												<li class="page-item active"><a href="#" class="page-link">3</a></li>
+												<li class="page-item"><a href="#" class="page-link">4</a></li>
+												<li class="page-item"><a href="#" class="page-link">5</a></li>
+												<li class="page-item"><a href="#" class="page-link">Next</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<!-- Edit Modal HTML -->
+								<div id="addEmployeeModal" class="modal fade">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<form>
+												<div class="modal-header">						
+													<h4 class="modal-title">Add Employee</h4>
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+												</div>
+												<div class="modal-body">					
+													<div class="form-group">
+														<label>Name</label>
+														<input type="text" class="form-control" required>
+													</div>
+													<div class="form-group">
+														<label>Email</label>
+														<input type="email" class="form-control" required>
+													</div>
+													<div class="form-group">
+														<label>Address</label>
+														<textarea class="form-control" required></textarea>
+													</div>
+													<div class="form-group">
+														<label>Phone</label>
+														<input type="text" class="form-control" required>
+													</div>					
+												</div>
+												<div class="modal-footer">
+													<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+													<input type="submit" class="btn btn-success" value="Add">
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+								<!-- Edit Modal HTML -->
+								<div id="editEmployeeModal" class="modal fade">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<form>
+												<div class="modal-header">						
+													<h4 class="modal-title">Edit Employee</h4>
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+												</div>
+												<div class="modal-body">					
+													<div class="form-group">
+														<label>Name</label>
+														<input type="text" class="form-control" required>
+													</div>
+													<div class="form-group">
+														<label>Email</label>
+														<input type="email" class="form-control" required>
+													</div>
+													<div class="form-group">
+														<label>Address</label>
+														<textarea class="form-control" required></textarea>
+													</div>
+													<div class="form-group">
+														<label>Phone</label>
+														<input type="text" class="form-control" required>
+													</div>					
+												</div>
+												<div class="modal-footer">
+													<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+													<input type="submit" class="btn btn-info" value="Save">
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+								<!-- Delete Modal HTML -->
+								<div id="deleteEmployeeModal" class="modal fade">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<form>
+												<div class="modal-header">						
+													<h4 class="modal-title">Delete Employee</h4>
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+												</div>
+												<div class="modal-body">					
+													<p>Are you sure you want to delete these Records?</p>
+													<p class="text-warning"><small>This action cannot be undone.</small></p>
+												</div>
+												<div class="modal-footer">
+													<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+													<input type="submit" class="btn btn-danger" value="Delete">
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>													
+							</div>
+							<div class="col-lg-4 rightbar">
+								<div class="single-widget search-widget">
+									<form class="example" action="#" style="margin:auto;max-width:300px">
+									  <input type="text" placeholder="Search Posts" name="search2">
+									  <button type="submit"><i class="fa fa-search"></i></button>
+									</form>								
+								</div>
+	
+								<div class="single-widget protfolio-widget">
+									<img src="img/blog/user2.jpg" alt="">
+									<a href="#"><h4>Adele Gonzalez</h4></a>
+									<p>
+										MCSE boot camps have its supporters and
+										its detractors. Some people do not understand why you should have to spend money
+										on boot camp when you can get.
+									</p>
+									<ul>
+										<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+										<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+										<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+										<li><a href="#"><i class="fa fa-behance"></i></a></li>
+									</ul>								
+								</div>
+	
+								<div class="single-widget category-widget">
+									<h4 class="title">Post Categories</h4>
+									<ul>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Techlology</h6> <span>37</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Lifestyle</h6> <span>24</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Fashion</h6> <span>59</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Art</h6> <span>29</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Food</h6> <span>15</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Architecture</h6> <span>09</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Adventure</h6> <span>44</span></a></li>
+									</ul>
+								</div>
+	
+								<div class="single-widget recent-posts-widget">
+									<h4 class="title">Recent Posts</h4>
+									<div class="blog-list ">
+										<div class="single-recent-post d-flex flex-row">
+											<div class="recent-thumb">
+												<img class="img-fluid" src="img/blog/r1.jpg" alt="">
+											</div>
+											<div class="recent-details">
+												<a href="blog-single.html">
+													<h4>
+														Home Audio Recording
+														For Everyone
+													</h4>
+												</a>
+												<p>
+													02 hours ago
+												</p>
+											</div>
+										</div>	
+										<div class="single-recent-post d-flex flex-row">
+											<div class="recent-thumb">
+												<img class="img-fluid" src="img/blog/r2.jpg" alt="">
+											</div>
+											<div class="recent-details">
+												<a href="blog-single.html">
+													<h4>
+														Home Audio Recording
+														For Everyone
+													</h4>
+												</a>
+												<p>
+													02 hours ago
+												</p>
+											</div>
+										</div>	
+										<div class="single-recent-post d-flex flex-row">
+											<div class="recent-thumb">
+												<img class="img-fluid" src="img/blog/r3.jpg" alt="">
+											</div>
+											<div class="recent-details">
+												<a href="blog-single.html">
+													<h4>
+														Home Audio Recording
+														For Everyone
+													</h4>
+												</a>
+												<p>
+													02 hours ago
+												</p>
+											</div>
+										</div>	
+										<div class="single-recent-post d-flex flex-row">
+											<div class="recent-thumb">
+												<img class="img-fluid" src="img/blog/r4.jpg" alt="">
+											</div>
+											<div class="recent-details">
+												<a href="blog-single.html">
+													<h4>
+														Home Audio Recording
+														For Everyone
+													</h4>
+												</a>
+												<p>
+													02 hours ago
+												</p>
+											</div>
+										</div>																																					
+									</div>								
+								</div>
+	
+								<div class="single-widget category-widget">
+									<h4 class="title">Post Archive</h4>
+									<ul>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Dec '17</h6> <span>37</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Nov '17</h6> <span>24</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Oct '17</h6> <span>59</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Sep '17</h6> <span>29</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Aug '17</h6> <span>15</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Jul '17</h6> <span>09</span></a></li>
+										<li><a href="#" class="justify-content-between align-items-center d-flex"><h6>Jun '17</h6> <span>44</span></a></li>
+									</ul>
+								</div>			
+	
+								<div class="single-widget tags-widget">
+									<h4 class="title">Tag Clouds</h4>
+									 <ul>
+										 <li><a href="#">Lifestyle</a></li>
+										 <li><a href="#">Art</a></li>
+										 <li><a href="#">Adventure</a></li>
+										 <li><a href="#">Food</a></li>
+										 <li><a href="#">Techlology</a></li>
+										 <li><a href="#">Fashion</a></li>
+										 <li><a href="#">Architecture</a></li>
+										 <li><a href="#">Food</a></li>
+										 <li><a href="#">Technology</a></li>
+									 </ul>
+								</div>				
+	
+							</div>
+						</div>
+					</div>	
+					</div>
+				</section>
+			
+			
+			<!-- start footer Area -->		
+			<footer class="footer-area section-gap">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3  col-md-12">
+							<div class="single-footer-widget">
+								<h6>Top Products</h6>
+								<ul class="footer-nav">
+									<li><a href="#">Managed Website</a></li>
+									<li><a href="#">Manage Reputation</a></li>
+									<li><a href="#">Power Tools</a></li>
+									<li><a href="#">Marketing Service</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-lg-6  col-md-12">
+							<div class="single-footer-widget newsletter">
+								<h6>Newsletter</h6>
+								<p>You can trust us. we only send promo offers, not a single spam.</p>
+								<div id="mc_embed_signup">
+									<form target="_blank" novalidate="true" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get" class="form-inline">
+
+										<div class="form-group row" style="width: 100%">
+											<div class="col-lg-8 col-md-12">
+												<input name="EMAIL" placeholder="Enter Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email '" required="" type="email">
+												<div style="position: absolute; left: -5000px;">
+													<input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
+												</div>
+											</div> 
+										
+											<div class="col-lg-4 col-md-12">
+												<button class="nw-btn primary-btn">Subscribe<span class="lnr lnr-arrow-right"></span></button>
+											</div> 
+										</div>		
+										<div class="info"></div>
+									</form>
+								</div>		
+							</div>
+						</div>
+						<div class="col-lg-3  col-md-12">
+							<div class="single-footer-widget mail-chimp">
+								<h6 class="mb-20">Instragram Feed</h6>
+								<ul class="instafeed d-flex flex-wrap">
+									<li><img src="img/i1.jpg" alt=""></li>
+									<li><img src="img/i2.jpg" alt=""></li>
+									<li><img src="img/i3.jpg" alt=""></li>
+									<li><img src="img/i4.jpg" alt=""></li>
+									<li><img src="img/i5.jpg" alt=""></li>
+									<li><img src="img/i6.jpg" alt=""></li>
+									<li><img src="img/i7.jpg" alt=""></li>
+									<li><img src="img/i8.jpg" alt=""></li>
+								</ul>
+							</div>
+						</div>						
+					</div>
+
+					
+				</div>
+			</footer>
+			<!-- End footer Area -->
+		</div>		
+
+			<script src="js/vendor/jquery-2.2.4.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+			<script src="js/vendor/bootstrap.min.js"></script>			
+			<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+  			<script src="js/easing.min.js"></script>			
+			<script src="js/hoverIntent.js"></script>
+			<script src="js/superfish.min.js"></script>	
+			<script src="js/jquery.ajaxchimp.min.js"></script>
+			<script src="js/jquery.magnific-popup.min.js"></script>	
+			<script src="js/owl.carousel.min.js"></script>			
+			<script src="js/jquery.sticky.js"></script>
+			<script src="js/jquery.nice-select.min.js"></script>			
+			<script src="js/parallax.min.js"></script>		
+			<script src="js/mail-script.js"></script>	
+			<script src="js/main.js"></script>	
+		</body>
+		<script>
+			$(function(){
+				$("#nav-placeholder").load("sidebar_manager.html");
+			});
+		</script>
+		<script>
+			Vue.createApp({
+				data() {
+					return {
+					  
+					};
+				},
+				methods:
+				{
+				  get_all_skills(){
+					  axios.get('http://localhost:5002/getAllSkill')
+					  .then(response => {
+							// this gets the data, which is an array, and pass the data to Vue instance's posts property
+						  this.skill_list = response.data
+					  })
+					  .catch(error => {
+						  this.skill_list = [{ entry: 'There was an error: ' + error.message }]
+					  })
+				  },
+				  get_skills_by_role(roleID){
+					  axios.get('http://localhost:5001/getSRBRbyRoleID?RoleID='+ roleID)
+					  .then(response => {
+							// this gets the data, which is an array, and pass the data to Vue instance's posts property
+						  this.skill_list = response.data
+					  })
+					  .catch(error => {
+						  this.skill_list = [{ entry: 'There was an error: ' + error.message }]
+					  })
+				  },
+				  test(obj){
+					  this.current_role = obj["cur_role"]
+					  //console.log(this.current_role)
+					  let element = $("#editrole").modal()
+					  $(element).modal('show')
+				  },
+				  editrolename(){
+					  let element = $("#editrolename").modal()
+					  $(element).modal('show')
+				  },
+				  saverolename(){
+					  newname = document.getElementById("newrolename").value;
+					  this.current_role.RoleName = newname
+					  $('#editrolename').modal('hide');
+				  },
+				  editdescription(){
+					  let element = $("#editdescription").modal()
+					  $(element).modal('show')
+				  },
+				  savedescription(){
+					  newdes = document.getElementById("newdescription").value;
+					  this.current_role.Description = newdes
+					  $('#editdescription').modal('hide');
+				  },
+	  
+	  
+				},
+				computed:
+				{
+					
+				},
+				created(){
+				  this.get_all_skills()
+				  console.log(this.get_all_skills())
+					}
+			}).mount('#allstaff')
+		</script>
+	</html>

@@ -2212,16 +2212,16 @@ body.mobile-nav-active #mobile-nav-toggle {
   }
 }
 
-.p1-gradient-bg, .banner-area .overlay-bg, .sidebar .single-slidebar .cat-list li:hover, .callto-action-area, .single-price:hover .price-bottom, .single-service:hover, .submit-right, .submit-left, .contact-btns, .form-area .primary-btn {
-  background-image: -moz-linear-gradient(0deg, #bfacff 0%, #795fff 100%);
-  background-image: -webkit-linear-gradient(0deg, #bfacff 0%, #795fff 100%);
-  background-image: -ms-linear-gradient(0deg, #bfacff 0%, #795fff 100%);
+.p1-gradient-bg, .banner-area .overlay-bg, .rightbar .single-slidebar .cat-list li:hover, .callto-action-area, .single-price:hover .price-bottom, .single-service:hover, .submit-right, .submit-left, .contact-btns, .form-area .primary-btn {
+  background-image: -moz-linear-gradient(0deg, #9769ff 0%, #9769ff 100%);
+  background-image: -webkit-linear-gradient(0deg, #9769ff 0%, #9769ff 100%);
+  background-image: -ms-linear-gradient(0deg, #9769ff 0%, #9769ff 100%);
 }
 
 .p1-gradient-color, .feat-txt h1 {
-  background: -moz-linear-gradient(0deg, #bfacff 0%, #795fff 100%);
-  background: -webkit-linear-gradient(0deg, #bfacff 0%, #795fff 100%);
-  background: -ms-linear-gradient(0deg, #bfacff 0%, #795fff 100%);
+  background: -moz-linear-gradient(0deg, #9769ff 0%, #9769ff 100%);
+  background: -webkit-linear-gradient(0deg, #9769ff 0%, #9769ff 100%);
+  background: -ms-linear-gradient(0deg, #9769ff 0%, #9769ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -2723,11 +2723,11 @@ body.mobile-nav-active #mobile-nav-toggle {
   max-width: 200px;
 }
 
-.sidebar .owl-carousel .owl-item img {
+.rightbar .owl-carousel .owl-item img {
   width: auto !important;
 }
 
-.sidebar .owl-dots {
+.rightbar .owl-dots {
   text-align: center;
   bottom: 5px;
   margin-top: 20px;
@@ -2738,7 +2738,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   backface-visibility: hidden;
 }
 
-.sidebar .owl-dot {
+.rightbar .owl-dot {
   height: 10px;
   width: 10px;
   display: inline-block;
@@ -2751,7 +2751,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   transition: all 0.3s ease 0s;
 }
 
-.sidebar .owl-dot.active {
+.rightbar .owl-dot.active {
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
@@ -2759,17 +2759,17 @@ body.mobile-nav-active #mobile-nav-toggle {
   background: #49e4fa;
 }
 
-.sidebar .single-slidebar {
+.rightbar .single-slidebar {
   background-color: #f9f9ff;
   padding: 30px 20px;
   margin-bottom: 30px;
 }
 
-.sidebar .single-slidebar h4 {
+.rightbar .single-slidebar h4 {
   margin-bottom: 20px;
 }
 
-.sidebar .single-slidebar .cat-list li {
+.rightbar .single-slidebar .cat-list li {
   padding: 0px 10px;
   background-color: #fff;
   -webkit-transition: all 0.3s ease 0s;
@@ -2778,44 +2778,44 @@ body.mobile-nav-active #mobile-nav-toggle {
   transition: all 0.3s ease 0s;
 }
 
-.sidebar .single-slidebar .cat-list li:hover a {
+.rightbar .single-slidebar .cat-list li:hover a {
   color: #fff;
 }
 
-.sidebar .single-slidebar .cat-list p {
+.rightbar .single-slidebar .cat-list p {
   margin-bottom: 0;
 }
 
-.sidebar .single-slidebar .cat-list a {
+.rightbar .single-slidebar .cat-list a {
   color: #777;
   padding: 10px;
   margin-bottom: 10px;
 }
 
-.sidebar .single-rated img {
+.rightbar .single-rated img {
   margin-bottom: 20px;
 }
 
-.sidebar .single-rated h4 {
+.rightbar .single-rated h4 {
   margin-bottom: 8px;
 }
 
-.sidebar .single-rated h6 {
+.rightbar .single-rated h6 {
   font-weight: 300;
   margin-bottom: 10px;
 }
 
-.sidebar .single-rated h5 {
+.rightbar .single-rated h5 {
   font-weight: 300;
   margin-bottom: 5px;
 }
 
-.sidebar .single-rated .address {
+.rightbar .single-rated .address {
   color: #222;
   margin-bottom: 8px;
 }
 
-.sidebar .single-rated .btns {
+.rightbar .single-rated .btns {
   background-color: #49e4fa;
   color: #fff;
   border: 1px solid transparent;
@@ -2828,28 +2828,28 @@ body.mobile-nav-active #mobile-nav-toggle {
   transition: all 0.3s ease 0s;
 }
 
-.sidebar .single-rated .btns:hover {
+.rightbar .single-rated .btns:hover {
   background-color: transparent;
   border-color: #49e4fa;
   color: #49e4fa;
 }
 
-.sidebar .single-blog {
+.rightbar .single-blog {
   background-size: cover !important;
   padding: 0px 20px;
   margin-bottom: 30px;
 }
 
-.sidebar .single-blog:last-child {
+.rightbar .single-blog:last-child {
   margin-bottom: 0px;
 }
 
-.sidebar .single-blog h4 {
+.rightbar .single-blog h4 {
   color: #fff;
   padding-top: 20px;
 }
 
-.sidebar .single-blog .meta p {
+.rightbar .single-blog .meta p {
   color: #fff;
 }
 

@@ -24,3 +24,5 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+microservice/ezrunall.py
+microservice/ezrunall.py
