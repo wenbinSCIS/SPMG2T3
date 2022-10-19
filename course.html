@@ -67,7 +67,27 @@
                 </div>
             </div>	
         </section>
-	
+        
+				<div id="failModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<form>
+								<div class="modal-header">						
+									<h4 class="modal-title" style="color:red">Failure</h4>
+									<button type="button" class="close" onclick="closeFailure()" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p style="color:red;">This course was not successfully added because it is not required by your Role Selected for this Learning Journey</p>
+								
+								</div>
+								<div class="modal-footer">
+									
+									<button type="button" class="btn btn-primary" onclick="closeFailure()" data-dismiss="modal" aria-hidden="true">OK</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
       
         <div id="includedContent"></div>
     </div>
@@ -101,7 +121,11 @@
     
     
                 <script>
-
+function closeFailure(){
+				
+				$('#failModel').modal('hide')
+                
+			}
                                                    
         var roles = []
         var skills=[]
@@ -130,7 +154,14 @@
                 var courses = await getCourse(cid)
                 var skills="";
                 var skillsID;
-
+                var checkCourse = await axios.get('http://127.0.0.1:5011/LJC/checkIfCourseInLJ?ljid=' + ljidhidden.value + '&cid=' +cid);
+                var classname = ""
+                if(checkCourse.data.code == 404){
+                    classname = 0
+                }
+                else{
+                    classname = 1
+                }
         
 
                 innerstring += `
@@ -151,7 +182,20 @@
                 </div>
                 <div class="thumb">
                     <ul class="btns">
-                        <button onclick="AddCourseToLJ(this.value)" value=${cid} class="btn btn-primary">Add to Learning Journey</a>
+                        `
+                        if(classname == 0){
+                        innerstring += `
+                        <button onclick="AddCourseToLJ(this.value)" value=${cid} id='coursehtml${cid}' class="checkBtn btn btn-primary">Add to Learning Journey</a>
+                            `
+                        }
+                        else{
+                            innerstring +=
+                            `
+                            <button onclick="AddCourseToLJ(this.value)" value=${cid} id='coursehtml${cid}' class="checkBtn btn btn-success">Already added</a>
+                            `
+
+                        }
+                          innerstring +=  `
                     </ul>
               
                 </div>
@@ -172,8 +216,31 @@
     sendGetRequest();
     
     var skillstext = "";
-    
+
+    var checkIfRoleRequireSkill = async (cid) => {
+    try {
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var sid = urlParams.get('sid');
+        var checkIfSkillneeded = await axios.get('http://127.0.0.1:5001/getByRIDSID?roleid=' + currRoleID.value + '&sid=' +sid)
+
+        if(checkIfSkillneeded.data.code == 404){
+            return 0
+        }
+        else{
+            return 1
+        }
+
+        
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+};
     var AddCourseToLJ = async (cidfrombtn) => {
+            var checkRoleRequireSkill= await checkIfRoleRequireSkill();
+
+            if(checkRoleRequireSkill == 1){
 				try {
                     var checkCourse = await axios.get('http://127.0.0.1:5011/LJC/checkIfCourseInLJ?ljid=' + ljidhidden.value + '&cid=' +cidfrombtn);
 
@@ -182,6 +249,15 @@
                 
                     
                         if(addCourse.data.code==201){
+                            var checkCourse = document.getElementById('coursehtml' + cidfrombtn)
+                            if (checkCourse == null){
+
+                            }
+                            else{
+                                checkCourse.classList.remove('btn-primary')
+                                checkCourse.classList.add('btn-success')
+                                checkCourse.innerText = "Already added"
+                            }
                             getLJCart();
             
                         }
@@ -197,7 +273,13 @@
 					// Handle Error Here
 					console.error(err);
 				}
-			};    
+			}
+            else{
+                $('#failModel').modal('show')
+            };
+            
+        }
+          
     
 
     

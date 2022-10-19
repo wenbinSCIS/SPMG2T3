@@ -61,6 +61,21 @@ def get_all_by_roleid():
         }
     ), 200
 
+
+@app.route("/getByRIDSID")
+def get_byRIDSID():
+  
+    args = request.args
+    roleid = args.get('roleid')
+    skillid = args.get('sid')
+
+    res = SRBR.query.filter(SRBR.RoleID==roleid,SRBR.SkillsID== skillid).all()
+    # print(role_list, flush=True)
+    if len(res):
+        return jsonify({ "code": 201,"message": "Required." })
+    else:
+        return jsonify({ "code": 404, "message": "Not required." })
+
 @app.route("/addskillrole",methods=["POST"])
 def add_skill_role():
     data = request.get_json()

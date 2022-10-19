@@ -403,16 +403,26 @@ var getLJCart = async () => {
 
             var deleteCourse = async (courseid) => {
 			try {
-                console.log(courseid)
+       
                 
                 
                 var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljidhidden.value);
-                console.log(res)
+         
                 var course = "course" + courseid
                 var element = document.getElementById(course);
                 
 
                 element.remove();
+
+                var checkCourse = document.getElementById('coursehtml' + courseid)
+                if (checkCourse == null){
+
+                }
+                else{
+                    checkCourse.classList.remove('btn-success')
+					checkCourse.classList.add('btn-primary')
+                    checkCourse.innerText = "Add to Learning Journey"
+                }
                 noitems.value -=1
                 itemelem.innerText = "(" + noitems.value + ")"
 
