@@ -71,6 +71,9 @@ def add_skill_role():
     # print(role_list, flush=True)
     skill_list=data["Skills"]
 
+    if skill_list==[]:
+        return { "RoleID": data["RoleID"],"Success":True, "code": 201 }
+
     for cur_skill in skill_list:
         add_skill_role = SRBR(
             RoleID = data["RoleID"],
@@ -87,10 +90,13 @@ def add_skill_role():
 def delete_by_skill_role():
     data = request.get_json()
     rid = data["RoleID"]
-    skill_list = data["SKills"]
+    skill_list = data["Skills"]
+
+    if skill_list==[]:
+        return { "RoleID": rid,"Success":True, "code": 201 }
     #Check if role is created in DB
     for cur_skill in skill_list:
-        cur_skill_id = cur_skill.SkillID
+        cur_skill_id = cur_skill["SkillsID"]
         skill_role = SRBR.query.filter_by(RoleID=rid,SkillsID=cur_skill_id).first()
         if not skill_role:
             return jsonify({ "message": "SRBR is not valid." }), 500
