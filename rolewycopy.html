@@ -211,12 +211,12 @@
                                 <div class="modal-body">					
                                     <div class="form-group">
                                         <label>New Description</label>
-                                        <textarea id="newdescription" class="form-control" required> </textarea>
+                                        <textarea id="newdescription" class="form-control" v-model="editted_description" required> </textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editdescription').modal('hide');">
-                                    <input type="submit" class="btn btn-info" value="Save" onclick="savedescription()">
+                                    <input type="submit" class="btn btn-info" value="Save" v-on:click="edit_description(cur_role)">
                                 </div>
                             </form>
                         </div>
@@ -357,7 +357,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                     skill_list:[],
                     role_skill_list:{},
                     cur_skill_role_list:[],
-					editted_role_name:""
+					editted_role_name:"",
+					editted_description:"",
                 };
             },
             methods:
@@ -437,6 +438,30 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					}
 				}
 				this.editted_role_name=""
+			},
+
+			edit_description(cur_role){
+				cur_role_id = cur_role.RoleID
+				new_description = this.editted_description
+
+				axios.post('http://127.0.0.1:5000/roles/updateDescriptionbyID', {
+                        "Role ID": cur_role_id,
+                        "Description": new_description
+                        })
+                        .then(function (response) {
+                            console.log(response)
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+				for(i=0;i<this.role_list.length;i++){
+					if (this.role_list[i].RoleID==cur_role_id)
+					{
+						this.role_list[i].Description=new_description
+					}
+				}
+				this.editted_description=""
 			},
 
                 nav_create_role(){
