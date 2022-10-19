@@ -108,7 +108,7 @@ def create_role():
 
     return { "data": Add_Role.json(), "code": 201}
 
-@app.route("/roles/deletebyID/",methods=["GET"])
+@app.route("/roles/deletebyID/",methods=["POST"])
 def delete_role_by_ID():
     '''
         How to - URL - localhost:5000/roles/deletebyID/?roleID=3
