@@ -31,6 +31,40 @@
 			<link rel="stylesheet" href="css/animate.min.css">
 			<link rel="stylesheet" href="css/owl.carousel.css">
 			<link rel="stylesheet" href="css/main.css">
+		<style>
+			.modal .modal-dialog {
+	max-width: 400px;
+}
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+	padding: 20px 30px;
+}
+.modal .modal-content {
+	border-radius: 3px;
+	font-size: 14px;
+}
+.modal .modal-footer {
+	background: #ecf0f1;
+	border-radius: 0 0 3px 3px;
+}
+.modal .modal-title {
+	display: inline-block;
+}
+.modal .form-control {
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
+}
+.modal textarea.form-control {
+	resize: vertical;
+}
+.modal .btn {
+	border-radius: 2px;
+	min-width: 100px;
+}	
+.modal form label {
+	font-weight: normal;
+}	
+		</style>
 		</head>
 		<body>
 
@@ -67,7 +101,68 @@
 						</div>
 					</div>	
 				</section>
+				<div id="warningModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<form>
+								<div class="modal-header">						
+									<h4 class="modal-title">Warning</h4>
+									<button type="button" class="close" onclick="closeWarning()" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p>You currently have an unsaved Learning Journey, would you like to save it before proceeding?</p>
+									<p class="text-warning"><small>This action cannot be undone.</small></p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger" onclick="clearAndProceed()" data-dismiss="modal"> No, Proceed </button>
+									<button type="button" class="btn btn-primary" onclick="saveAndProceed()" > Yes, Save and Proceed </button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 
+				<div id="similarModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<form id="selectedBefore">
+								<div class="modal-header">						
+									<h4 class="modal-title">Warning</h4>
+									<button type="button" class="close" onclick="closeSimilar()" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p>This learning journey is currently already being selected</p>
+								
+								</div>
+								<div class="modal-footer">
+									
+									<button type="button" class="btn btn-primary" onclick="closeSimilar()" data-dismiss="modal" aria-hidden="true">OK</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div id="successModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<form>
+								<div class="modal-header">						
+									<h4 class="modal-title">Success</h4>
+									<button type="button" class="close" onclick="closeSuccess()" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p>Learning Journey saved successfully!</p>
+								
+								</div>
+								<div class="modal-footer">
+									
+									<button type="button" class="btn btn-primary" onclick="closeSuccess()" data-dismiss="modal" aria-hidden="true">OK</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 				<div id="includedContent"></div>
 			</div>
 			
@@ -96,20 +191,150 @@
 						$(function(){
 							$("#nav-placeholder").load("sidebar_staff.html");
 						});
+
 					</script>
 		
 		
 		
 					<script>
-																
 			var roles = []
 			var skills=[]
+			var currRoleToBeChanged;
 
-		  
-			const sendGetRequest = async () => {
+			function closeWarning(){
+				
+				$('#warningModel').modal('hide')
+			}		
+			function closeSimilar(){
+				
+				$('#similarModel').modal('hide')
+
+			}
+			function closeSuccess(){
+				
+				$('#successModel').modal('hide')
+
+			}
+			var clearAndProceed = async () => {
+
+				var deleteSuccess = await deleteByLJID();
+				console.log(deleteSuccess)
+				if (deleteSuccess == 1){
+					console.log("Success")
+					var proceedWithNew = await updateRoleID();
+
+					if(proceedWithNew == 1){
+						
+						await getLJCart();
+						setBtns();
+					}
+				}
+				else{
+					console.log("Failure")
+				}
+				$('#warningModel').modal('hide')
+
+
+
+			}
+			var saveAndProceed = async () => {
+
+			var saveSuccess = await saveLJRole();
+			
+			if (saveSuccess == 1){
+			
+			
+					var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + currRoleToBeChanged);
+						cartResults = createCart.data;
+						if(cartResults.code == 201){
+							
+							$('#saveModel').modal('show')
+							await getLJCart();
+							setBtns();
+							
+				
+				
+			}
+		}
+			else{
+		
+				console.log("Failure")
+			}
+			$('#warningModel').modal('hide')
+
+
+
+			}
+															
+			var saveLJRole = async () => {
+				try {
+			
+					var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljidhidden.value);
+			
+					console.log(updateLJ)
+					if(updateLJ.data.code==201){
+						return 1
+		
+					}
+					else{
+						return 0
+					}
+			
+					
+				} catch (err) {
+					// Handle Error Here
+					console.error(err);
+				}
+			};    
+
+			var deleteByLJID = async () => {
+			try {
+				var deleteResult = await axios.get('http://127.0.0.1:5011/LJC/deleteAllLJCbyLJID/?ljid=' + ljidhidden.value);
+				console.log(deleteResult)
+				if(deleteResult.data.code == 201){
+					
+					return 1
+				}
+				else{
+					return 0
+				}
+
+				
+			} catch (err) {
+				// Handle Error Here
+				console.error(err);
+			}
+		};
+
+		var updateRoleID = async () => {
 			try {
 			
-				const resp = await axios.get('http://127.0.0.1:5000/roles/getAll');
+
+				var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/updateRoleIDByLJID?ljid=' + ljidhidden.value + '&role=' + currRoleToBeChanged);
+				
+			
+		   
+				if(updateLJ.data.code == 201){
+					
+					await getLJCart();
+					
+					setBtns();
+				}
+				else{
+					return 0
+				}	
+		
+		
+				
+			} catch (err) {
+				// Handle Error Here
+				console.error(err);
+			}
+		};
+			var sendGetRequest = async () => {
+			try {
+			
+				var resp = await axios.get('http://127.0.0.1:5000/roles/getAll');
 				roles = resp.data.data;
 
 	
@@ -122,7 +347,7 @@
 			  
 				for (role of roles){
 
-					const resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + role.RoleID);
+					var resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + role.RoleID);
 					SRBR = resp2.data.data;
 					var skills="";
 					var skillsID;
@@ -159,19 +384,32 @@
 					<div class="details">
 						<div style="width:450px !important">
 							<div class="titles" >
-								<a href="single.html"><h4>` + role.RoleName + `</h4></a>
+								<a href=""><h4>` + role.RoleName + `</h4></a>
 								
 							</div>
 						</div>
 				
 						<h5 id="text`+role.RoleID+`">`+ role.Description + `</h5>
 
-						<p class="address"><span class="lnr lnr-map"></span> 56/8, Panthapath Dhanmondi Dhaka</p>
-						<p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
+						<p class="address"></p>
+						<p class="address"></p>
 					</div>
 					<div class="thumb">
 						<ul class="btns">
-							<button onclick="addRoleLJ(this.value)" value=${role.RoleID} class="btn btn-primary">Create a Learning Journey</a>
+							`
+							if(currRoleID.value == role.RoleID){
+								innerstring += `
+								<button onclick="addRoleLJ(this.value)"  value=${role.RoleID} class="checkBtns btn btn-success">Selected</a>
+									`
+							}
+							else{
+								innerstring += `
+								<button onclick="addRoleLJ(this.value)"  value=${role.RoleID} class="checkBtns btn btn-primary">Create a Learning Journey</a>
+									`
+							}
+							
+								innerstring += 
+								`
 						</ul>
 						<ul class="tags">
 							`+skills+`
@@ -195,19 +433,43 @@
 		
 		var skillstext = "";
 		
-		const addRoleLJ = async (roleid) => {
+		var addRoleLJ = async (roleid) => {
 			try {
-				const resp2 = await axios.get('http://127.0.0.1:5010//LJ/getUnsavedLJById?userid=' + userid);
+				currRoleToBeChanged = roleid
+				var resp2 = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid=' + userid);
 				getRole = resp2.data.data
-				console.log(getRole)
 			
+				console.log(getRole)
 
 				skillstext = "";
 				if(getRole.length>0){
 
-		
+					if(roleid == getRole[0].RoleID){
+						$('#similarModel').modal('show')
+					}
+					else{
+						if(noitems.value == 0){
+							updateRoleID();
+
+						
+						}
+						else{
+						$('#warningModel').modal('show')
+						}
+					}
 				} else {
 					//successful
+
+
+						var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + roleid);
+						cartResults = createCart.data;
+						if(cartResults.code == 201){
+							ljidhidden.value = cartResults.LJID
+							await getLJCart();
+							setBtns();
+						
+					}
+					
 				}
 				
 		
@@ -219,10 +481,28 @@
 			}
 		};
 		
-		
-		const getSkill = async (roleid,skillid) => {
+		function setBtns(){
+			var btns=  document.getElementsByClassName("checkBtns")
+			for(i = 0;i < btns.length; ++i) {
+      
+
+				if(btns[i].value == currRoleID.value){
+				
+					btns[i].classList.remove('btn-primary')
+					btns[i].classList.add('btn-success')
+					btns[i].innerText = "Selected"
+				
+				}
+				else{
+					btns[i].classList.remove('btn-success')
+					btns[i].classList.add('btn-primary')
+					btns[i].innerText = "Create a Learning Journey"
+				}
+    }
+		}
+		var getSkill = async (roleid,skillid) => {
 			try {
-				const resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
+				var resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
 				
 				return resp3.data.data
 				

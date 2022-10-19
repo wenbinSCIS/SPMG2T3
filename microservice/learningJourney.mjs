@@ -24,11 +24,17 @@ async function learningJourney(app, opts) {
     const savedInt = parseInt(Saved);
     try {
       if (!UserID || typeof UserID_int !== "number") throw new Error("UserID must be a number and not null");
-      if (savedInt !== 0 && savedInt !== 1) throw new Error("Saved must be 0 or 1.");
-      const data = await prisma.learningJourney.findMany({
-        where: { UserID: UserID_int, Saved: savedInt },
-        select: { LJID: true }
-      });
+      let data;
+      if (savedInt === 0 || savedInt === 1) // if savedInt is 0/1, return specific data
+        data = await prisma.learningJourney.findMany({
+          where: { UserID: UserID_int, Saved: savedInt },
+          select: { LJID: true, RoleID: true },
+        });
+      else // else return all
+        data = await prisma.learningJourney.findMany({
+          where: { UserID: UserID_int, Saved: savedInt },
+          select: { LJID: true, RoleID: true }
+        });
       return { data };
     } catch (err) {
       return { err };
@@ -41,7 +47,7 @@ async function learningJourney(app, opts) {
       if (!LJID || typeof LJID_int !== "number") throw new Error("LJID must be a number and not null");
       const data = await prisma.learningJourney.findUniqueOrThrow({
         where: { LJID: LJID_int },
-        select: { LJID: true }
+        select: { LJID: true, RoleID: true }
       });
       return { data };
     } catch (err) {
@@ -49,11 +55,39 @@ async function learningJourney(app, opts) {
     }
   });
   app.post("/create", async (request, reply) => {
-    const { UserID, Saved } = request.body;
+    const { UserID, Saved, RoleID } = request.body;
     try {
       if (!UserID || typeof UserID !== "number") throw new Error("UserID must be a number and not null");
       if (Saved !== 0 && Saved !== 1) throw new Error("Saved must be 0 or 1.");
-      const data = await prisma.learningJourney.create({ data: { UserID, Saved } });
+      if (RoleID.trim() === "") throw new Error("RoleID cannot be empty spaces.");
+      const data = await prisma.learningJourney.create({ data: { UserID, Saved, RoleID } });
+      return { data };
+    } catch (err) {
+      return { err };
+    }
+  });
+  // update just for the save state
+  app.patch("/update", async (request, reply) => {
+    const { LJID, Saved } = request.body;
+    try {
+      if (!LJID || typeof LJID !== "number") throw new Error("LJID must be a number and not null");
+      if (Saved !== 0 && Saved !== 1) throw new Error("Saved must be 0 or 1.");
+      const data = await prisma.learningJourney.update({
+        where: { LJID },
+        data: { Saved },
+      });
+      return { data };
+    } catch (err) {
+      return { err };
+    }
+  });
+  app.delete("/delete", async (request, reply) => {
+    const { LJID } = request.body;
+    try {
+      if (!LJID || typeof LJID !== "number") throw new Error("LJID must be a number and not null.");
+      const data = await prisma.learningJourney.delete({
+        where: { LJID },
+      });
       return { data };
     } catch (err) {
       return { err };

@@ -15,7 +15,7 @@
 		<!-- meta character set -->
 		<meta charset="UTF-8">
 		<!-- Site Title -->
-		<title>Job Listing</title>
+		<title>Skills</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -52,23 +52,62 @@
 
 			<!-- start banner Area -->
 			
-			<div id="rolewy">
+			<div id="skills">
 				<section class="banner-area relative" id="home">	
 				<div class="overlay overlay-bg"></div>
 				<div class="container">
 					<div class="row d-flex align-items-center justify-content-center">
 						<div class="about-content col-lg-12">
 							<h1 class="text-white">
-								Job Roles				
+								Skills				
 							</h1>	
-							<p class="text-white link-nav"><a href="index.html">Home </a>  <span class="lnr lnr-arrow-right"></span>  <a href="category.html"> Job category</a></p>
+							<p class="text-white link-nav"><a href="home.html">Home </a>  <span class="lnr lnr-arrow-right"></span>  <a href="category.html"> Job category</a></p>
 						</div>											
 					</div>
 				</div>
 			</section>
 			<!-- End banner Area -->	
 			
-			<input type="button" class="btn btn-success mt-5 ms-5" value="Create Role" onclick="window.location.href='manager_create_role.html'">
+			<input type="button" class="btn btn-success mt-5 ms-5" data-toggle="modal" id="add_role_button" value="Add New Role">
+			<div id="add_role_modal" class="modal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<form>
+							<div class="modal-header">						
+								<h4 class="modal-title">Add Role</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="close_add_role_button">&times;</button>
+							</div>
+							<div class="modal-body">				
+								<div class="form-group">
+									<label for="role_name">Role Name</label>
+									<input type="text" v-model="role_name" class="form-control" id="skill_name"  placeholder="Enter role">
+								</div>
+					
+								<div class="form-group">
+									<label for="role_description">Description</label>
+									<textarea class="form-control" v-model="description" id="skill_description" placeholder="Description"></textarea>
+								</div>
+					
+								<div class="form-group">
+									<label for="skill_required_selection">Skill Required</label>
+		
+									<VueMultiselect id="skill_required_selection"
+									v-model="skill_selected"
+									:options="skill_list"
+									:multiple="true"
+									:close-on-select="false" :clear-on-select="false"
+									placeholder="Select Skills"
+									label="Skillname"
+									track-by="SkillsID"/>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="submit" class="btn btn-success" value="Add" v-on:click="create_role">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 			
 			<!-- Start post Area -->
 			<section class="post-area section-gap">
@@ -88,7 +127,7 @@
                             <form>
                                 <div class="modal-header">						
                                     <h4 class="modal-title">Edit Role</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <button type="button" class="close" onclick="$('#editrole').modal('hide');" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">					
                                     <div class="form-group">
@@ -129,7 +168,7 @@
                             <form>
                                 <div class="modal-header">						
                                     <h4 class="modal-title">Edit Role name</h4>
-                                    <button type="button" class="close" data-dismiss="modal aria-hidden="true">&times;</button>
+                                    <button type="button" class="close" onclick="$('#editrolename').modal('hide');" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">					
                                     <div class="form-group">
@@ -139,7 +178,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editrolename').modal('hide');">
-                                    <input type="button" class="btn btn-info" value="Save" onclick="saverolename() ">
+                                    <input type="button" class="btn btn-info" value="Save" onclick="saverolename()">
                                 </div>
                             </form>
                         </div>
@@ -161,8 +200,8 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="button" class="btn btn-default" value="Cancel" data-dismiss="modal">
-                                    <input type="button" class="btn btn-info" value="Save" onclick="savedescription()">
+                                    <input type="button" class="btn btn-default" value="Cancel" onclick="$('#editdescription').modal('hide');">
+                                    <input type="submit" class="btn btn-info" value="Save" onclick="savedescription()">
                                 </div>
                             </form>
                         </div>
@@ -397,7 +436,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			} catch (err) {
 				// Handle Error Here
 				console.error(err);
-				console.log(err.response.data)
 			}
 		};
 		
@@ -460,10 +498,82 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		};
 		
 		$(function(){
-			$("#includedContent").load("sidecart.html"); 
-		});
+			  $("#includedContent").load("sidecart.html"); 
+			});
 		
 
+			Vue.createApp({
+        data() {
+            return {
+            skill_list:[],
+            role_name:"",
+            description:"",
+            skill_selected:[],
+            role_list:[],
+            new_role_id:""
+            };
+        },
+        methods:
+        {
+            get_all_skill(){
+                axios.get('http://127.0.0.1:5002/getAllSkill')
+                .then(response => {
+                    // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                    this.skill_list = response.data.data
+                })
+                .catch(error => {
+                    this.skill_list = [{ entry: 'There was an error: ' + error.message }]
+                })
+            },
+
+            create_role(){
+                    axios.post('http://127.0.0.1:5000/roles/create', {
+                        "Role Name": this.role_name,
+                        "Created By": "function test",
+                        "Description": this.description,
+                        "role_id": this.new_role_id
+                        })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                            axios.post('http://127.0.0.1:5001/addskillrole', {
+                                "RoleID": this.new_role_id,
+                                "Skills": this.skill_selected
+                                })
+                                .then(function (response) {
+                                console.log(response);
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+            },
+            calculate_role_id(){
+                axios.get('http://127.0.0.1:5000/roles/getAll')
+                            .then(response => {
+                                // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                                this.role_list = response.data.data
+                                this.new_role_id=response.data.data.length+1
+                            })
+                            .catch(error => {
+                                this.role_list = [{ entry: 'There was an error: ' + error.message }]
+                            })
+
+            }
+        },
+        computed:
+        {
+            
+        },
+        created(){
+            this.get_all_skill()
+            this.calculate_role_id()
+        },
+        components: { vuemultiselect: window.Vue3Multiselect.default },
+    }).mount('#add_role_modal')
 
     //Modal
     var add_role_modal = document.getElementById("add_role_modal");

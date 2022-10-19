@@ -194,7 +194,38 @@
     }
 }  
 
-
+.modal .modal-dialog {
+	max-width: 400px;
+}
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+	padding: 20px 30px;
+}
+.modal .modal-content {
+	border-radius: 3px;
+	font-size: 14px;
+}
+.modal .modal-footer {
+	background: #ecf0f1;
+	border-radius: 0 0 3px 3px;
+}
+.modal .modal-title {
+	display: inline-block;
+}
+.modal .form-control {
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
+}
+.modal textarea.form-control {
+	resize: vertical;
+}
+.modal .btn {
+	border-radius: 2px;
+	min-width: 100px;
+}	
+.modal form label {
+	font-weight: normal;
+}	
     </style>
 
     <script>
@@ -220,9 +251,12 @@
       var numitems = 0
       var cartrole = document.getElementById("courses")
       var ljidhidden = document.getElementById("ljId")
-
+      var currRoleID = document.getElementById("currRoleID");
+      var itemelem = document.getElementById("numitems");
+      var activeroleelem = document.getElementById("activerole");
+      var noitems = document.getElementById("noitems"); 
       let openPanelButton = document.getElementById("flip");
-
+ 
 let cartPanel = document.querySelector(".cart-panel");
 
 openPanelButton.onclick = () => {
@@ -239,19 +273,33 @@ document.addEventListener('mouseup', function(e) {
     }
 });
 
-const getLJCart = async () => {
+function closeSave(){
+				
+				$('#saveModel').modal('hide')
+                
+			}
+
+var getLJCart = async () => {
 			try {
-			
+                activeroleelem.innerHTML = `
+        <br>
+        <h5> &nbsp;	&nbsp;  &nbsp;	&nbsp; Active Role :  None
+
+        </h5>
+        `	
+            noitems.value = 0
+			cartrole.innerHTML = ''
 				var resp = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid='+userid);
 				res = resp.data.data;
                 ljidhidden.value = res[0].LJID
         var activeroleid = res[0].RoleID;
-        console.log(activeroleid)        
+        currRoleID.value = activeroleid;
+         
         var getRoleName = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ activeroleid);
         activeRole =getRoleName.data.data;
         activeRoleName = activeRole[0].RoleName;
-        console.log(activeRoleName)
-        var activeroleelem = document.getElementById("activerole");       
+
+     
 		activeroleelem.innerHTML = `
         <br>
         <h5> &nbsp;	&nbsp;  &nbsp;	&nbsp; Active Role : ` + activeRoleName +`
@@ -260,34 +308,38 @@ const getLJCart = async () => {
         `		
         var getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
         courses = getCartCourses.data.data;
-        if(courses.length>0){
-          
+        if(getCartCourses.data.code == 404){
+
+            itemelem.innerText = "(0)"
+            noitems.value = 0
+
+        }
+        else{
+            noitems.value = courses.length
        
-          var itemelem = document.getElementById("numitems");
-          itemelem.innerText = "(" +courses.length + ")"
-          for (course of courses){
-            var coursename = await getCourseName(course.CourseID)
-      
-            cartrole.innerHTML += `
-                <div class="course" id ="course` + course.CourseID + `">
-                    <div>
-                        <span>
-                            ` + coursename[0].CourseName +`
-                        </span>
-                        <button onclick="deleteCourse(this.value)" value=`+course.CourseID+` ">
-                            <i class="fa fa-minus" aria-hidden="true"></i>
-                        </button>
+          
+       itemelem.innerText = "(" + noitems.value + ")"
+       for (course of courses){
+         var coursename = await getCourseName(course.CourseID)
+   
+         cartrole.innerHTML += `
+             <div class="course" id ="course` + course.CourseID + `">
+                 <div>
+                     <span>
+                         ` + coursename[0].CourseName +`
+                     </span>
+                     <button onclick="deleteCourse(this.value)" value=`+course.CourseID+` ">
+                         <i class="fa fa-minus" aria-hidden="true"></i>
+                     </button>
 
 
-                    </div>
+                 </div>
 
 
-                </div>
-            `
+             </div>
+         `
 
-          }
-  
-
+       }
         }
 		
 
@@ -295,9 +347,11 @@ const getLJCart = async () => {
 				
 			} catch (err) {
 				// Handle Error Here
-        var itemelem = document.getElementById("numitems");
+     
         itemelem.innerText = "(0)"
+                ljidhidden.value=-1
         
+                currRoleID.value = -1
 				console.error(err);
 			}
 		};
@@ -306,7 +360,7 @@ const getLJCart = async () => {
 
     var getCourseName = async (cid) => {
                 try {
-                    const courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
+                    var courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
               
                     return courses.data.data
                     
@@ -318,20 +372,60 @@ const getLJCart = async () => {
                     console.error(err);
                 }
             };
-
+            var saveLJ = async () => {
+                try {
+                    
+                    var ljid = ljidhidden.value
+                    var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljid);
+           
+                    if(updateLJ.data.code==201){
+                        var btns=  document.getElementsByClassName("checkBtns")
+                        console.log(btns)
+                        if (btns.length>0){
+                            await getLJCart();
+                            setBtns();
+                        }
+                        $('#saveModel').modal('show')
+                        
+        
+                    }
+                    else{
+                        console.log("failure")
+                    }
+            
+                    
+                } catch (err) {
+                    // Handle Error Here
+                    console.error(err);
+                }
+            };        
 
 
             var deleteCourse = async (courseid) => {
 			try {
-                console.log(courseid)
+       
                 
-                var ljid = document.getElementById("ljId").value;
-                const res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljid);
-                console.log(res)
+                
+                var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljidhidden.value);
+         
                 var course = "course" + courseid
                 var element = document.getElementById(course);
+                
 
                 element.remove();
+
+                var checkCourse = document.getElementById('coursehtml' + courseid)
+                if (checkCourse == null){
+
+                }
+                else{
+                    checkCourse.classList.remove('btn-success')
+					checkCourse.classList.add('btn-primary')
+                    checkCourse.innerText = "Add to Learning Journey"
+                }
+                noitems.value -=1
+                itemelem.innerText = "(" + noitems.value + ")"
+
 				
 			} catch (err) {
 				// Handle Error Here
@@ -346,6 +440,8 @@ const getLJCart = async () => {
 
         My Learning Journey
         <input type="hidden" id="ljId">
+        <input type="hidden" id="noitems">
+        <input type="hidden" id="currRoleID">
         <span id="numitems"></span>
         <i class="fa fa-angle-double-up" id="up" style=" position:absolute;margin-left:10px;margin-top:5px"></i>
         <i class="fa fa-angle-double-down" id="down" style="position:absolute;margin-left:10px;margin-top:5px;display:none"></i>
@@ -368,7 +464,7 @@ const getLJCart = async () => {
 
             </div>
             <div class="checkout-button">
-                <button>
+                <button onclick="saveLJ()">
                     Save my learning journey! 	&nbsp;	&nbsp;          
                     <i class="fa fa-floppy-o" aria-hidden="true" style="margin-top:5px;"></i>
                 </button>
@@ -376,6 +472,25 @@ const getLJCart = async () => {
         </div>
     </div>
 
-      
+    <div id="saveModel" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Success</h4>
+                        <button type="button" class="close" onclick="closeSave()" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">					
+                        <p>Learning Journey saved successfully!</p>
+                    
+                    </div>
+                    <div class="modal-footer">
+                        
+                        <button type="button" class="btn btn-primary" onclick="closeSave()" data-dismiss="modal" aria-hidden="true">OK</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -16,9 +16,10 @@ model CourseRegistered {
 }
 
 model LearningJourney {
-  LJID   Int  @id @default(autoincrement())
+  LJID   Int     @id @default(autoincrement())
   UserID Int?
   Saved  Int?
+  RoleID String? @db.VarChar(45)
 }
 
 model LearningJourneyCourses {
@@ -28,7 +29,7 @@ model LearningJourneyCourses {
 }
 
 model Skills_Acquired_By_Course {
-  SABC     Int  @id
+  SABC     Int  @id @default(autoincrement())
   CourseID Int?
   SkillsID Int?
 }
@@ -36,7 +37,7 @@ model Skills_Acquired_By_Course {
 model Skills_Required_By_Role {
   SkillsID Int?
   RoleID   Int?
-  SRBR     Int  @id
+  SRBR     Int  @id @default(autoincrement())
 }
 
 model course {
@@ -46,7 +47,7 @@ model course {
 }
 
 model roles {
-  RoleID      Int     @id
+  RoleID      Int     @id @default(autoincrement())
   RoleName    String? @db.VarChar(255)
   CreatedBy   String  @db.VarChar(255)
   Fulfilled   String  @db.VarChar(255)

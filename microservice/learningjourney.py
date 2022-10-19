@@ -13,8 +13,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://flight_admin:6kKVm7C2PHtVtgGT@esd-g7t6-rds.cs2kfkrucphj.ap-southeast-1.rds.amazonaws.com:3306/flight_booking'
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://admin:password@spmdb.cte5x3a9ynus.ap-southeast-1.rds.amazonaws.com:3306/LearningApp'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://admin:spmfinalpassword6956@spmdb2.cte5x3a9ynus.ap-southeast-1.rds.amazonaws.com:3306/LearningApp'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 1800}
@@ -61,10 +60,61 @@ def get_UnsavedLJByID():
     lj_list = learningjourney.query.filter(learningjourney.Saved=="0", learningjourney.UserID==userid).all()
 
     # print(role_list, flush=True)
-    if len(lj_list):
+    try:
+    
         return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
-    else:
-        return jsonify({ "code": 404, "message": 0 }), 404
+    except:
+        return jsonify({ "code": 404, "message": 0 })
+
+@app.route("/LJ/saveLJById")
+def saveLJById():
+    args = request.args
+    ljid = args.get('ljid')
+    try:
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'Saved': 1 })
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"Success":True, "code": 201 }
+
+
+@app.route("/LJ/updateRoleIDByLJID")
+def UpdateRoleIDByLJId():
+    args = request.args
+    roleid = args.get('role')
+    ljid = args.get('ljid')
+    try:
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'RoleID': roleid })
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"Success":True, "code": 201 }
+
+
+@app.route("/LJ/insertgetLJID")
+def insertgetLJID():
+    args = request.args
+    userid = args.get('userid')
+    roleid = args.get('roleid')
+    createLJ = learningjourney(
+    # RoleID = 3,
+    UserID = userid,
+    Saved = 0,
+    RoleID = roleid,
+
+    )
+
+
+
+    try:
+        db.session.add(createLJ)
+        db.session.flush()
+        db.session.refresh(createLJ)
+        db.session.commit()
+
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"LJID": createLJ.LJID, "Success":True, "code": 201 }
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5010, debug=True)

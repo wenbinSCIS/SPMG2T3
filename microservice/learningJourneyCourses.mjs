@@ -28,18 +28,15 @@ async function learningJourneyCourses(app, opts) {
         where: { LJID: LJID_int },
         select: { LJCID: true, CourseID: true },
       });
-
       const courses = [];
       for (let { LJCID, CourseID } of data) {
-        // fetch built into Nodejs 18 fully, but not for others. Just in case, will use node-fetch instead
         const res = await fetch(`http://127.0.0.1:5004/getCoursebyId?cid=${CourseID}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });
         const { data } = await res.json();
-        courses.push({ LJCID, ...data[0] }); // will push in { LJID, CourseID, CourseName, CourseDescription }
+        courses.push({ LJCID, ...data[0] });
       }
-
       return { data: courses };
     } catch (err) {
       return { err }
@@ -52,7 +49,7 @@ async function learningJourneyCourses(app, opts) {
       if (!LJCID || typeof LJCID_int !== "number") throw new Error("LJCID must be a number and not null");
       const data = await prisma.learningJourneyCourses.findUniqueOrThrow({
         where: { LJCID: LJCID_int },
-        select: { LJCID: true, CourseID: true }
+        select: { LJCID: true }
       });
       return { data };
     } catch (err) {
@@ -68,6 +65,20 @@ async function learningJourneyCourses(app, opts) {
       return { data };
     } catch (err) {
       return { err }
+    }
+  });
+  // update not needed since that isn't how it works, how it works is just create and delete, each LJC is LJ + 1 course
+  // so to update the course, we create a new row, where LJ is the same, but course is different (the idea is dropping courses should drop the row)
+  app.delete("/delete", async (request, response) => {
+    const { LJCID } = request.body;
+    try {
+      if (!LJCID) throw new Error("LJCID must be a number and not null");
+      const data = await prisma.learningJourneyCourses.delete({
+        where: { LJCID },
+      });
+      return { data };
+    } catch (err) {
+      return { err };
     }
   });
 }

@@ -15,7 +15,7 @@
     <!-- meta character set -->
     <meta charset="UTF-8">
     <!-- Site Title -->
-    <title>Job Listing</title>
+    <title>Course Listing</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
@@ -38,7 +38,7 @@
 
 
         <!-- start banner Area -->
-
+        <div id="course">
         <section class="banner-area relative" id="home" style="height:350px !important">	
             <div class="overlay overlay-bg" style="height: 250px !important"></div>
             <div>
@@ -60,16 +60,37 @@
                 <div class="row justify-content-center d-flex">
                     <div class="col-lg-8 post-list">
 
-                        <div class="container" id ="roleList"></div>
+                        <div class="container" id ="courseList"></div>
                         
                     </div>
 
                 </div>
             </div>	
         </section>
-	
+        
+				<div id="failModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<form>
+								<div class="modal-header">						
+									<h4 class="modal-title" style="color:red">Failure</h4>
+									<button type="button" class="close" onclick="closeFailure()" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p style="color:red;">This course was not successfully added because it is not required by your Role Selected for this Learning Journey</p>
+								
+								</div>
+								<div class="modal-footer">
+									
+									<button type="button" class="btn btn-primary" onclick="closeFailure()" data-dismiss="modal" aria-hidden="true">OK</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
       
         <div id="includedContent"></div>
+    </div>
     </body>
 
                 <!-- End footer Area -->		
@@ -91,30 +112,36 @@
                 <script src="js/main.js"></script>	
     
                 
-                <script type="module">
-                    import navbar from "/navbar.js";
-                    window.addEventListener('load', () => document.getElementById('nav-placeholder').innerHTML = navbar);
-                </script>
-    
+
+            <script>
+                $(function(){
+							$("#nav-placeholder").load("sidebar_staff.html");
+						});
+            </script>
     
     
                 <script>
-                                                            
+function closeFailure(){
+				
+				$('#failModel').modal('hide')
+                
+			}
+                                                   
         var roles = []
         var skills=[]
 
       
-        const sendGetRequest = async () => {
+        var sendGetRequest = async () => {
         try {
         
-            const urlParams = new URLSearchParams(window.location.search);
-            const sid = urlParams.get('sid');
+            var urlParams = new URLSearchParams(window.location.search);
+            var sid = urlParams.get('sid');
 
-            const resp = await axios.get('http://127.0.0.1:5003/getSABCbySkillID?sid=' + sid);
+            var resp = await axios.get('http://127.0.0.1:5003/getSABCbySkillID?sid=' + sid);
             roles = resp.data.data;
             
         
-            var roleTable = document.getElementById("roleList");
+            var roleTable = document.getElementById("courseList");
             
             
             var innerstring = ''
@@ -127,7 +154,14 @@
                 var courses = await getCourse(cid)
                 var skills="";
                 var skillsID;
-
+                var checkCourse = await axios.get('http://127.0.0.1:5011/LJC/checkIfCourseInLJ?ljid=' + ljidhidden.value + '&cid=' +cid);
+                var classname = ""
+                if(checkCourse.data.code == 404){
+                    classname = 0
+                }
+                else{
+                    classname = 1
+                }
         
 
                 innerstring += `
@@ -136,19 +170,32 @@
                 <div class="details">
                     <div style="width:450px !important">
                         <div class="titles" >
-                            <a href="single.html"><h4>` + courses[0].CourseName + `</h4></a>
+                            <a href=""><h4>` + courses[0].CourseName + `</h4></a>
                             
                         </div>
                     </div>
             
                     <h5 id="text`+courses[0].CourseName+`">`+ courses[0].CourseDescription  + `</h5>
 
-                    <p class="address"><span class="lnr lnr-map"></span> 56/8, Panthapath Dhanmondi Dhaka</p>
-                    <p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
+                    <p class="address"></p>
+                    <p class="address"></p>
                 </div>
                 <div class="thumb">
                     <ul class="btns">
-                        <button onclick="sendSRBRRequest(this.value)" value=${courses[0].CourseName} class="btn btn-primary">Enroll</a>
+                        `
+                        if(classname == 0){
+                        innerstring += `
+                        <button onclick="AddCourseToLJ(this.value)" value=${cid} id='coursehtml${cid}' class="checkBtn btn btn-primary">Add to Learning Journey</a>
+                            `
+                        }
+                        else{
+                            innerstring +=
+                            `
+                            <button onclick="AddCourseToLJ(this.value)" value=${cid} id='coursehtml${cid}' class="checkBtn btn btn-success">Already added</a>
+                            `
+
+                        }
+                          innerstring +=  `
                     </ul>
               
                 </div>
@@ -169,58 +216,72 @@
     sendGetRequest();
     
     var skillstext = "";
-    
-    const sendSRBRRequest = async (roleid) => {
-        try {
-            const resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + roleid);
-            SRBR = resp2.data.data
-            var elem = document.getElementById("text" + roleid);
-            elem.innerHTML += "</br>";
-            elem.innerHTML += "<strong> Skills Required </strong>";
-            skillstext = "";
-            if(SRBR.length>0){
-                skillstext += "<ul>";
-                for(sr of SRBR){
 
-                    skillstext += "<li>"
-                    skillstext += '<a href="course.html?sid=' + sr.SkillsID +'">'   
-                    var skillname = await getSkill(roleid,sr.SkillsID)
-                    skillstext += skillname[0].Skillname
-                 
-                    skillstext += "</a></li>" 
-                   
-                }
-                skillstext += "</ul>"
-                elem.innerHTML += skillstext
-    
-            } else {
-                elem.innerHTML += "None";
-            }
-            
-    
-    
-            
-        } catch (err) {
-            // Handle Error Here
-            console.error(err);
+    var checkIfRoleRequireSkill = async (cid) => {
+    try {
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var sid = urlParams.get('sid');
+        var checkIfSkillneeded = await axios.get('http://127.0.0.1:5001/getByRIDSID?roleid=' + currRoleID.value + '&sid=' +sid)
+
+        if(checkIfSkillneeded.data.code == 404){
+            return 0
         }
-    };
-    
-    
-    const getSkill = async (roleid,skillid) => {
-        try {
-            const resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
-            
-            return resp3.data.data
-            
-    
-    
-            
-        } catch (err) {
-            // Handle Error Here
-            console.error(err);
+        else{
+            return 1
         }
-    };
+
+        
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+};
+    var AddCourseToLJ = async (cidfrombtn) => {
+            var checkRoleRequireSkill= await checkIfRoleRequireSkill();
+
+            if(checkRoleRequireSkill == 1){
+				try {
+                    var checkCourse = await axios.get('http://127.0.0.1:5011/LJC/checkIfCourseInLJ?ljid=' + ljidhidden.value + '&cid=' +cidfrombtn);
+
+                    if(checkCourse.data.code == 404){
+                        var addCourse = await axios.get('http://127.0.0.1:5011/LJC/addCourseIntoBasket?ljid=' + ljidhidden.value + '&cid=' +cidfrombtn);
+                
+                    
+                        if(addCourse.data.code==201){
+                            var checkCourse = document.getElementById('coursehtml' + cidfrombtn)
+                            if (checkCourse == null){
+
+                            }
+                            else{
+                                checkCourse.classList.remove('btn-primary')
+                                checkCourse.classList.add('btn-success')
+                                checkCourse.innerText = "Already added"
+                            }
+                            getLJCart();
+            
+                        }
+                        else{
+                            console.log("Add unsuccessful!")
+                        }
+                    }
+                    else{
+                        console.log("Course is already in your basket")
+                    }
+					
+				} catch (err) {
+					// Handle Error Here
+					console.error(err);
+				}
+			}
+            else{
+                $('#failModel').modal('show')
+            };
+            
+        }
+          
+    
+
     
     $(function(){
           $("#includedContent").load("sidecart.html"); 
@@ -230,51 +291,6 @@
 
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const sid = urlParams.get('sid');
-        
-
-        const getCID = async (sid) => {
-    try {
-        const resp = await axios.get('http://127.0.0.1:5003/getSABCbySkillID?sid=' + sid);
-        roles = resp.data.data;
-        var courseTable = document.getElementById("courseList");
-        
-        
-        var innerstring = '<div class="card-deck"> <div class="row">'
-        for (role of roles){
-
-            var cid = role.CourseID;
-            var courses = await getCourse(cid)
-            innerstring += `
-           
-                <div class="card h-100"  style="width: 20rem;">
-                    <img class="card-img-top" src="..." alt="Card image cap">
-                    <div class="card-body">
-                    <h5 class="card-title">` + courses[0].CourseName + `</h5>
-                    <p class="card-text" id="text">` + courses[0].CourseDescription + `</p>
-                    </div>
-                    <div class="card-footer">
-                    <button onclick="sendSRBRRequest(this.value)" value=`+courses[0].CourseID+` class="btn btn-primary">Add to learning journey</a>
-                    </div>
-                </div>
-     
-                `
-            
-
-        }
-        innerstring += "</div></div>"
-       
-        courseTable.innerHTML = innerstring
-       
-        
-    } catch (err) {
-        // Handle Error Here
-        console.error(err);
-    }
-};
-
-getCID(sid)
 
 
 
