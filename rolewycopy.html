@@ -119,7 +119,7 @@
 												<a href="single.html"><h4>{{cur_role.RoleName}}</h4></a>
 												
 											</div>
-											<a class="btn btn-outline-success"href="#edit_role_modal" data-toggle="modal" data-target="#editrole">Edit Role</a></li>
+											<a class="btn btn-outline-success" v-bind:href="'#edit_role_modal'+ cur_role.RoleID"  data-toggle="modal" :data-target="'#editrole'+cur_role.RoleID">Edit Role</a></li>
 										</div>
 								
 										<h5 id="text`+role.RoleID+`">{{cur_role.Description}}</h5>
@@ -127,7 +127,7 @@
 										<p class="address"><span class="lnr lnr-database"></span> 15k - 25k</p>
 									</div>
 									
-									<div id="editrole" class="modal fade">
+									<div :id="'editrole'+cur_role.RoleID" class="modal fade">
 										<div class="modal-dialog">
 											<div class="modal-content">
 												<form>
@@ -137,10 +137,10 @@
 													</div>
 													<div class="modal-body">					
 														<div class="form-group">
-															<h5>Current role title:</h5> <h3 style="display: inline" id="displayrolename">{{cur_role.RoleName}}</h3> <a class="edit btn" data-toggle="modal" data-target="#editrolename"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
+															<h5>Current role title:</h5> <h3 style="display: inline" id="displayrolename">{{cur_role.RoleName}}</h3> <a class="edit btn" data-toggle="modal" :data-target="'#editrolename'+cur_role.RoleID"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> 
 														</div>
 														<div class="form-group">
-															<h5>Description</h5> <p style="display: inline" id="displaydescription">{{cur_role.Description}}</p> <a class="edit btn" data-toggle="modal" data-target="#editdescription" ><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> </p>
+															<h5>Description</h5> <p style="display: inline" id="displaydescription">{{cur_role.Description}}</p> <a class="edit btn" data-toggle="modal" :data-target="'#editdescription'+cur_role.RoleID" ><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> </p>
 														</div>
 														<table class="table table-striped table-hover">
 															<thead>
@@ -177,7 +177,7 @@
 										</div>
 									</div>
                 <!-- Edit role Modal HTML -->
-                <div id="editrolename" class="modal fade">
+                <div :id="'editrolename'+cur_role.RoleID" class="modal fade">
                     <div class="modal-dialog" id="edit">
                         <div class="modal-content">
                             <form>
@@ -200,7 +200,7 @@
                     </div>
                 </div>
                 <!-- Edit Description Modal HTML -->
-                <div id="editdescription" class="modal fade">
+                <div :id="'editdescription'+cur_role.RoleID" class="modal fade">
                     <div class="modal-dialog" id="edit">
                         <div class="modal-content">
                             <form>
