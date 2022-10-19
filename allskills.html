@@ -41,7 +41,7 @@
 		</head>
 		<body>
 			<div id="nav-placeholder"></div>
-			<div id="allstaff">
+			<div id="skills1">
 		  
 			<!-- start banner Area -->	
 				<section class="banner-area relative" id="home">	
@@ -50,9 +50,9 @@
 						<div class="row d-flex align-items-center justify-content-center">
 							<div class="about-content col-lg-12">
 								<h1 class="text-white">
-									Blog Posts				
+									Skills				
 								</h1>	
-								<p class="text-white link-nav"><a href="index.html">Home </a>  <span class="lnr lnr-arrow-right"></span>  <a href="blog-home.html"> Blog Posts</a></p>
+								<p class="text-white link-nav"><a href="index.html">Home </a>  <span class="lnr lnr-arrow-right"></span>  <a href="allskills.html"> Skills</a></p>
 							</div>											
 						</div>
 					</div>
@@ -68,7 +68,7 @@
 										<div class="table-title">
 											<div class="row">
 												<div class="col-sm-6">
-													<h2><b style="color:white">All Employees</b></h2>
+													<h2><b style="color:white">All Skills</b></h2>
 												</div>
 												<div class="col-sm-6">
 													<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
@@ -89,14 +89,14 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr v-for="skill in get_all_skills()">
+												<tr v-for="skill in all_skills">
 													<td>
 														<span class="custom-checkbox">
 															<input type="checkbox" id="checkbox1" name="options[]" value="1">
 															<label for="checkbox1"></label>
 														</span>
 													</td>
-													<td>Thomas Hardy</td>
+													<td>{{skill.Skillname}}</td>
 													<td>
 														<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 														<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
@@ -439,7 +439,7 @@
 			Vue.createApp({
 				data() {
 					return {
-					  
+					  all_skills: []
 					};
 				},
 				methods:
@@ -448,45 +448,12 @@
 					  axios.get('http://localhost:5002/getAllSkill')
 					  .then(response => {
 							// this gets the data, which is an array, and pass the data to Vue instance's posts property
-						  this.skill_list = response.data
+						  this.all_skills = response.data.data
+						  console.log(this.all_skills)
 					  })
 					  .catch(error => {
 						  this.skill_list = [{ entry: 'There was an error: ' + error.message }]
 					  })
-				  },
-				  get_skills_by_role(roleID){
-					  axios.get('http://localhost:5001/getSRBRbyRoleID?RoleID='+ roleID)
-					  .then(response => {
-							// this gets the data, which is an array, and pass the data to Vue instance's posts property
-						  this.skill_list = response.data
-					  })
-					  .catch(error => {
-						  this.skill_list = [{ entry: 'There was an error: ' + error.message }]
-					  })
-				  },
-				  test(obj){
-					  this.current_role = obj["cur_role"]
-					  //console.log(this.current_role)
-					  let element = $("#editrole").modal()
-					  $(element).modal('show')
-				  },
-				  editrolename(){
-					  let element = $("#editrolename").modal()
-					  $(element).modal('show')
-				  },
-				  saverolename(){
-					  newname = document.getElementById("newrolename").value;
-					  this.current_role.RoleName = newname
-					  $('#editrolename').modal('hide');
-				  },
-				  editdescription(){
-					  let element = $("#editdescription").modal()
-					  $(element).modal('show')
-				  },
-				  savedescription(){
-					  newdes = document.getElementById("newdescription").value;
-					  this.current_role.Description = newdes
-					  $('#editdescription').modal('hide');
 				  },
 	  
 	  
@@ -497,7 +464,7 @@
 				},
 				created(){
 				  this.get_all_skills()
-				  console.log(this.get_all_skills())
+				  
 					}
 			}).mount('#allstaff')
 		</script>
