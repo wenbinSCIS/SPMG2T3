@@ -420,7 +420,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				new_role_name = this.editted_role_name
 
 				axios.post('http://127.0.0.1:5000/roles/updateNamebyID', {
-                        "RoleID": cur_role_id,
+                        "Role ID": cur_role_id,
                         "RoleName": new_role_name
                         })
                         .then(function (response) {
@@ -430,6 +430,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                             console.log(error);
                         });
 
+				for(i=0;i<this.role_list.length;i++){
+					if (this.role_list[i].RoleID==cur_role_id)
+					{
+						this.role_list[i].RoleName=new_role_name
+					}
+				}
 				this.editted_role_name=""
 			},
 

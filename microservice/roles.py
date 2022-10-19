@@ -182,10 +182,11 @@ def update_name_by_ID():
         return jsonify({ "message": "RoleID is not valid." }), 500
     else:
         try:
-            db.session.query(Roles).filter(Roles.RoleID == data["Role ID"]).update({ 'RoleName': data["Rolename"] })
+            cur_role=db.session.query(Roles).get(data["Role ID"])
+            cur_role.RoleName = data["RoleName"]
             db.session.commit()
         except:
-            return jsonify({"message": "An error occurred when updating the description.", "code":500})
+            return jsonify({"message": "An error occurred when updating role name.", "code":500})
         return { "RoleID": data["Role ID"],"Success":True, "code": 201 }
 
 @app.route("/roles/updateDescriptionbyID",methods=["POST"])
