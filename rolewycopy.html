@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <input type="button" class="btn btn-default close" value="Cancel" data-dismiss="modal">
-                                    <input type="button" class="btn btn-info" value="Save" v-on:click="edit_role_name(cur_role)">
+                                    <input type="button" class="btn btn-info close" data-dismiss="modal" value="Save" v-on:click="edit_role_name(cur_role)">
                                 </div>
                             </form>
                         </div>
@@ -203,7 +203,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <input type="button" class="btn btn-default close" value="Cancel" data-dismiss="modal">
-                                    <input type="submit" class="btn btn-info" value="Save" v-on:click="edit_description(cur_role)">
+                                    <input type="submit" class="btn btn-info close" data-dismiss="modal" value="Save" v-on:click="edit_description(cur_role)">
                                 </div>
                             </form>
                         </div>
@@ -235,7 +235,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <input type="button" class="btn btn-default close" value="Cancel" data-dismiss="modal" v-on:click="remove_selected_skill">
-                                    <input type="button" class="btn btn-info" value="Save" v-on:click="edit_role_skill(cur_role)">
+                                    <input type="button" class="btn btn-info close" data-dismiss="modal" value="Save" v-on:click="edit_role_skill(cur_role)">
                                 </div>
                             </form>
                         </div>
