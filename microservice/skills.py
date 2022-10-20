@@ -77,7 +77,29 @@ def get_all_skill():
             "message": "There are no skill creation."
         }
     ), 404
-
+@app.route("/updateskillnamebyID",methods=["POST"])
+def update_skillname_by_ID():
+    '''
+        How to - URL - localhost:5000/roles/updateAllbyID
+        json = {
+            "Skill ID":0,
+            "Skillname": "newskillnamehere"
+        }
+    '''
+    data = request.get_json()
+    if not all(key in data.keys() for key in ('Skill ID', 'Skillname')):
+        return jsonify({ "message": "Incorrect JSON object provided."}), 500
+    #Check if role is created in DB
+    role = skills.query.filter_by(SkillsID=data["Skill ID"]).first()
+    if not role:
+        return jsonify({ "message": "Skill ID is not valid." }), 500
+    else:
+        try:
+            db.session.query(skills).filter(skills.SkillsID == data["Skill ID"]).update({ 'Skillname': data["Skillname"] })
+            db.session.commit()
+        except:
+            return jsonify({"message": "An error occurred when updating the skillname.", "code":500})
+        return { "Skill ID": data["Skill ID"],"Success":True, "code": 201 }
 
 
 if __name__ == '__main__':
