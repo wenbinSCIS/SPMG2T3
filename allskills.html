@@ -118,13 +118,13 @@
 												<tr v-for="skill in all_skills">
 													<td>
 														<span class="custom-checkbox">
-															<input type="checkbox" id="checkbox1" name="options[]" value={{skill.SkillsID}}>
+															<input type="checkbox" id="checkbox1" name="options[]" >
 															<label for="checkbox1"></label>
 														</span>
 													</td>
 													<td>{{skill.Skillname}}</td>
 													<td>
-														<a href="#editskillname" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+														<a href="#editskillname" class="edit" data-toggle="modal" @click="openeditmodal(skill.SkillsID)"><i class="material-icons" data-toggle="tooltip" title="Edit"  >&#xE254;</i>{{skill.SkillsID}}</a>
 														<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 													</td>
 												</tr>
@@ -151,7 +151,7 @@
 											<form>
 												<div class="modal-header">						
 													<h4 class="modal-title">Edit Skill name</h4>
-													<button type="button" class="close" onclick="$('#editrolename').modal('hide');" aria-hidden="true">&times;</button>
+													<button type="button" class="close" onclick="$('#editskillname').modal('hide');" aria-hidden="true">&times;</button>
 												</div>
 												<div class="modal-body">					
 													<div class="form-group">
@@ -160,8 +160,8 @@
 													</div>
 												</div>
 												<div class="modal-footer">
-													<input type="button" class="btn btn-default" value="Cancel" onclick="$('#editroleskillname').modal('hide');">
-													<input type="button" class="btn btn-info" value="Save" @click="saveskillname()">
+													<input type="button" class="btn btn-default" value="Cancel" onclick="$('#editskillname').modal('hide');">
+													<input type="button" class="btn btn-info" value="Save" @click="saveskillname()" id="saveskill">
 												</div>
 											</form>
 										</div>
@@ -454,6 +454,9 @@
 					
                 	$('#editskillname').modal('hide');
             	},
+				openeditmodal(skillid){
+					document.getElementById("saveskill").setAttribute('onclick',`saveskillname(${skillid})`)
+				}
 		
 	  
 				},
