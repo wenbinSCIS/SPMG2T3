@@ -102,5 +102,51 @@ def update_skillname_by_ID():
         return { "Skill ID": data["Skill ID"],"Success":True, "code": 201 }
 
 
+    data = request.get_json()
+    if not all(key in data.keys() for key in ('Skill ID', 'Skillname')):
+        return jsonify({ "message": "Incorrect JSON object provided."}), 500
+    #Check if role is created in DB
+    role = skills.query.filter_by(SkillsID=data["Skill ID"]).first()
+    if role:
+        return jsonify({ "message": "Skill ID already exists in database." }), 500
+    else:
+        try:
+            db.session.query(skills).filter(skills.SkillsID == data["Skill ID"]).update({ 'Skillname': data["Skillname"] })
+            db.session.commit()
+        except:
+            return jsonify({"message": "An error occurred when updating the skillname.", "code":500})
+        return { "Skill ID": data["Skill ID"],"Success":True, "code": 201 }
+
+@app.route("/skills/create",methods=["POST"])
+def create_skill():
+    '''
+    How to: url - localhost:5000/roles/create
+    json - {
+        "Role Name":"Product Manager 2",
+        "Created By": "Mr Dumb 2",
+        "Description": "Testing 123 to see if adding roles work 2"
+    }
+    '''
+    data = request.get_json()
+
+    if not all(key in data.keys() for key in ('SkillsID', 'Skillname')):
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+    
+    Add_skills = skills(
+        SkillsID = data["SkillsID"],
+        Skillname = data["Skillname"],
+
+    )
+    try:
+        db.session.add(Add_skills)
+        db.session.commit()
+
+    except:
+        return jsonify({ "message": "An error occurred when adding the role to the database.", "code":500 })
+
+    return { "data": Add_skills.json(), "code": 201}
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5002, debug=True)
