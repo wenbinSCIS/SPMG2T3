@@ -102,21 +102,6 @@ def update_skillname_by_ID():
         return { "Skill ID": data["Skill ID"],"Success":True, "code": 201 }
 
 
-    data = request.get_json()
-    if not all(key in data.keys() for key in ('Skill ID', 'Skillname')):
-        return jsonify({ "message": "Incorrect JSON object provided."}), 500
-    #Check if role is created in DB
-    role = skills.query.filter_by(SkillsID=data["Skill ID"]).first()
-    if role:
-        return jsonify({ "message": "Skill ID already exists in database." }), 500
-    else:
-        try:
-            db.session.query(skills).filter(skills.SkillsID == data["Skill ID"]).update({ 'Skillname': data["Skillname"] })
-            db.session.commit()
-        except:
-            return jsonify({"message": "An error occurred when updating the skillname.", "code":500})
-        return { "Skill ID": data["Skill ID"],"Success":True, "code": 201 }
-
 @app.route("/skills/create",methods=["POST"])
 def create_skill():
     '''
