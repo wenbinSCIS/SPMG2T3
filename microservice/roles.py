@@ -53,7 +53,8 @@ class Roles(db.Model):
             "RoleName": self.RoleName, 
             "CreatedBy": self.CreatedBy,
             "Fulfilled": self.Fulfilled, 
-            'Description': self.Description
+            'Description': self.Description,
+            'CreatedTime' : self.TimeAdded
         }
 
 @app.route("/roles/getAll")
