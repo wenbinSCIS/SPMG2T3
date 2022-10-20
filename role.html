@@ -376,7 +376,9 @@
 			
 					} 
 
-			
+					var date = new Date(role.TimeAdded);
+					var dateconverted = formatAMPM(date)
+					var dateneeded = date.toString().substring(4,15)
 
 					innerstring += `
 					<div class="single-post d-flex flex-row">
