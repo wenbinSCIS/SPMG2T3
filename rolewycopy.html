@@ -134,7 +134,7 @@
 												<form>
 													<div class="modal-header">						
 														<h4 class="modal-title">Edit Role</h4>
-														<button type="button" class="close" onclick="$('#editrole').modal('hide');" aria-hidden="true">&times;</button>
+														<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 													</div>
 													<div class="modal-body">					
 														<div class="form-group">
@@ -213,7 +213,7 @@
                 </div>
 
                 <!-- Edit role skill Modal HTML -->
-                <div :id="'editroleskill'+cur_role.RoleID" class="modal fade">
+                <div :id="'editroleskill'+cur_role.RoleID" class="modal fade" data-keyboard="false" data-backdrop="static">
                     <div class="modal-dialog" id="edit">
                         <div class="modal-content">
                             <form>
