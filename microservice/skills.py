@@ -129,12 +129,12 @@ def create_skill():
     '''
     data = request.get_json()
 
-    if not all(key in data.keys() for key in ('SkillsID', 'Skillname')):
+    if not (key in data.keys() for key in ( 'Skillname')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
     Add_skills = skills(
-        SkillsID = data["SkillsID"],
-        Skillname = data["Skillname"],
+        
+        Skillname = data["Skillname"]
 
     )
     try:
