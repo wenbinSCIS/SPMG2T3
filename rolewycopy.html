@@ -167,13 +167,13 @@
 										</div>
 									</div>
                 <!-- Edit role Modal HTML -->
-                <div :id="'editrolename'+cur_role.RoleID" class="modal fade">
+                <div :id="'editrolename'+cur_role.RoleID" class="modal fade" data-keyboard="false" data-backdrop="static">
                     <div class="modal-dialog" id="edit">
                         <div class="modal-content">
                             <form>
                                 <div class="modal-header">						
                                     <h4 class="modal-title">Edit Role name</h4>
-                                    <button type="button" class="close" onclick="$('#editrolename').modal('hide');" aria-hidden="true">&times;</button>
+                                    <button type="button" class="close" data-dismiss="modal" v-on:click="clear_editted_role_name" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">					
                                     <div class="form-group">
@@ -182,7 +182,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="button" class="btn btn-default" value="Cancel" data-dismiss="modal">
+                                    <input type="button" class="btn btn-default" value="Cancel" data-dismiss="modal" v-on:click="clear_editted_role_name">
                                     <input type="button" class="btn btn-info" data-dismiss="modal" value="Save" v-on:click="edit_role_name(cur_role)">
                                 </div>
                             </form>
@@ -190,13 +190,13 @@
                     </div>
                 </div>
                 <!-- Edit Description Modal HTML -->
-                <div :id="'editdescription'+cur_role.RoleID" class="modal fade">
+                <div :id="'editdescription'+cur_role.RoleID" class="modal fade" data-keyboard="false" data-backdrop="static">
                     <div class="modal-dialog" id="edit">
                         <div class="modal-content">
                             <form>
                                 <div class="modal-header">						
                                     <h4 class="modal-title">Change Description</h4>
-                                    <button type="button" class="close" onclick="$('#editdescription').modal('hide');" aria-hidden="true">&times;</button>
+                                    <button type="button" class="close" data-dismiss="modal" v-on:click="clear_editted_description" aria-hidden="true">&times;</button>
                                 </div>
                                 <div class="modal-body">					
                                     <div class="form-group">
@@ -205,7 +205,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="button" class="btn btn-default" value="Cancel" data-dismiss="modal">
+                                    <input type="button" class="btn btn-default" value="Cancel" data-dismiss="modal" v-on:click="clear_editted_description">
                                     <input type="submit" class="btn btn-info" data-dismiss="modal" value="Save" v-on:click="edit_description(cur_role)">
                                 </div>
                             </form>
@@ -464,6 +464,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				this.editted_role_name=""
 			},
 
+			clear_editted_role_name(){
+				this.editted_role_name=""
+			},
+
 			edit_description(cur_role){
 				cur_role_id = cur_role.RoleID
 				new_description = this.editted_description
@@ -485,6 +489,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						this.role_list[i].Description=new_description
 					}
 				}
+				this.editted_description=""
+			},
+
+			clear_editted_description(){
 				this.editted_description=""
 			},
 
