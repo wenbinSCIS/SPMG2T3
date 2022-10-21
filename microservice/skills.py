@@ -131,6 +131,28 @@ def create_skill():
 
     return { "data": Add_skills.json(), "code": 201}
 
+@app.route("/deleteskillsbyID",methods=["POST"])
+def delete_skillname_by_ID():
+    '''Skillid is in a list'''
+    data = request.get_json()
+    all_pass = True
+    if not (key in data.keys() for key in ('Skill IDs')):
+        return jsonify({ "message": "Incorrect JSON object provided."}), 500
+    #Check if skills is created in DB
+    for each_skill in data["Skill IDs"]:
+        skill = skills.query.filter_by(SkillsID=each_skill).first()
+        if not skill:
+            all_pass = False
+            return jsonify({ "message": "Skill ID is not valid." }), 500
+    if all_pass:
+        try:
+            for each_skillID in data["Skill IDs"]:
+                skills.query.filter_by(SkillsID = each_skillID).delete()
+            db.session.commit()
+        except:
+            return jsonify({"message": "An error occurred when deleting the skills", "code":500})
+        return { "Skill IDs": data["Skill IDs"],"Success":True, "code": 201 }
+
 
 
 if __name__ == '__main__':

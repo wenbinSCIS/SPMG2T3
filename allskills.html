@@ -125,7 +125,7 @@
 													<td>{{skill.Skillname}}</td>
 													<td>
 														<a href="#editskillname" class="edit" data-toggle="modal" @click="openeditmodal(skill.SkillsID)"><i class="material-icons" data-toggle="tooltip" title="Edit"  >&#xE254;</i></a>
-														<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+														<a href="#deleteskills" class="delete" data-toggle="modal" @click="opendeletemodal(skill.SkillsID)"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 													</td>
 												</tr>
 											</tbody>
@@ -182,7 +182,7 @@
 												</div>
 												<div class="modal-footer">
 													<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-													<input type="submit" class="btn btn-danger" value="Delete">
+													<input type="button" class="btn btn-danger" value="Delete" v-on:click="deleteskills(deleteskillslist)" >
 												</div>
 											</form>
 										</div>
@@ -420,7 +420,8 @@
 					return {
 					  all_skills: [],
 					  current_skill: "",
-					  current_skillid: ""
+					  current_skillid: "",
+					  deleteskillslist:[],
 					};
 				},
 				methods:
@@ -438,9 +439,6 @@
 				  },
 				saveskillname(skillid){
                 	var newname = document.getElementById("newskillname").value;
-
-					console.log(newname)
-					console.log(skillid)
                 	
 					axios.post('http://localhost:5002/updateskillnamebyID',{
 						"Skill ID":skillid,
@@ -453,13 +451,24 @@
 					  .catch(error => {
 						console.log(error);
 					  })
-
-					  	
-					
-                	$('#editskillname').modal('hide');
             	},
+				deleteskills(deleteskillslist){
+					axios.post('http://localhost:5002/deleteskillsbyID',{
+						"Skill IDs":deleteskillslist}
+						)
+					  .then(response => {
+							// this gets the data, which is an array, and pass the data to Vue instance's posts property
+						  window.location.reload()
+					  })
+					  .catch(error => {
+						console.log(error);
+					  })
+				},
 				openeditmodal(skillid){
 					this.current_skillid = skillid
+				},
+				opendeletemodal(skillid){
+					this.deleteskillslist = [skillid]
 				}
 		
 	  
