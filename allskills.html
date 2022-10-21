@@ -124,7 +124,7 @@
 													</td>
 													<td>{{skill.Skillname}}</td>
 													<td>
-														<a href="#editskillname" class="edit" data-toggle="modal" @click="openeditmodal(skill.SkillsID)"><i class="material-icons" data-toggle="tooltip" title="Edit"  >&#xE254;</i>{{skill.SkillsID}}</a>
+														<a href="#editskillname" class="edit" data-toggle="modal" @click="openeditmodal(skill.SkillsID)"><i class="material-icons" data-toggle="tooltip" title="Edit"  >&#xE254;</i></a>
 														<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 													</td>
 												</tr>
@@ -151,7 +151,7 @@
 											<form>
 												<div class="modal-header">						
 													<h4 class="modal-title">Edit Skill name</h4>
-													<button type="button" class="close" onclick="$('#editskillname').modal('hide');" aria-hidden="true">&times;</button>
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-toggle="modal">&times;</button>
 												</div>
 												<div class="modal-body">					
 													<div class="form-group">
@@ -160,8 +160,8 @@
 													</div>
 												</div>
 												<div class="modal-footer">
-													<input type="button" class="btn btn-default" value="Cancel" onclick="$('#editskillname').modal('hide');">
-													<input type="button" class="btn btn-info" value="Save" @click="saveskillname()" id="saveskill">
+													<input type="button" class="btn btn-default" value="Cancel"  data-dismiss="modal">
+													<input type="button" class="btn btn-info" value="Save" v-on:click="saveskillname(current_skillid)" id="saveskill" >
 												</div>
 											</form>
 										</div>
@@ -419,7 +419,8 @@
 				data() {
 					return {
 					  all_skills: [],
-					  current_skill: ""
+					  current_skill: "",
+					  current_skillid: ""
 					};
 				},
 				methods:
@@ -437,6 +438,9 @@
 				  },
 				saveskillname(skillid){
                 	var newname = document.getElementById("newskillname").value;
+
+					console.log(newname)
+					console.log(skillid)
                 	
 					axios.post('http://localhost:5002/updateskillnamebyID',{
 						"Skill ID":skillid,
@@ -455,7 +459,7 @@
                 	$('#editskillname').modal('hide');
             	},
 				openeditmodal(skillid){
-					document.getElementById("saveskill").setAttribute('onclick',`saveskillname(${skillid})`)
+					this.current_skillid = skillid
 				}
 		
 	  

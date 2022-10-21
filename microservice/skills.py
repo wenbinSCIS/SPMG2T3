@@ -90,8 +90,8 @@ def update_skillname_by_ID():
     if not all(key in data.keys() for key in ('Skill ID', 'Skillname')):
         return jsonify({ "message": "Incorrect JSON object provided."}), 500
     #Check if role is created in DB
-    role = skills.query.filter_by(SkillsID=data["Skill ID"]).first()
-    if not role:
+    skill = skills.query.filter_by(SkillsID=data["Skill ID"]).first()
+    if not skill:
         return jsonify({ "message": "Skill ID is not valid." }), 500
     else:
         try:
