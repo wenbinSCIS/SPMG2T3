@@ -117,8 +117,8 @@
 											<tbody>
 												<tr v-for="skill in all_skills">
 													<td>
-														<span class="custom-checkbox">
-															<input type="checkbox" id="checkbox1" name="options[]" >
+														<span class="custom-checkbox" >
+															<input type="checkbox" id="deleteskillcheckbox" :value="skill.SkillsID" v-model = "deleteskillslist">
 															<label for="checkbox1"></label>
 														</span>
 													</td>
@@ -178,6 +178,9 @@
 												</div>
 												<div class="modal-body">					
 													<p>Are you sure you want to delete these selected skills?</p>
+													<a v-for="name in get_delete_skill_list">
+														<p>{{name}}</p>
+													</a>
 													<p class="text-warning"><small>This action cannot be undone.</small></p>
 												</div>
 												<div class="modal-footer">
@@ -475,7 +478,18 @@
 				},
 				computed:
 				{
-					
+					get_delete_skill_list(){
+						return_list = []
+						for( sid of this.deleteskillslist){
+							for(skill of this.all_skills){
+								if(sid == skill.SkillsID){
+									return_list.push(skill.Skillname)
+								}
+							}
+							
+						}
+						return return_list
+					}
 				},
 				created(){
 				  this.get_all_skills()
