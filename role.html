@@ -383,15 +383,18 @@
 					innerstring += `
 					<div class="single-post d-flex flex-row">
 			
-					<div class="details">
-						<div style="width:450px !important">
+					<div class="details col-md-8">
+						<div>
 							<div class="titles" >
 								<a href=""><h4>` + role.RoleName + `</h4></a>
-								
+								</br>
+								<h5 id="text`+role.RoleName+`">`+ role.Description  + `</h5>
 							</div>
 						</div>
-				
-						<p class="address"> Created On : <strong> `+ date.toString().substring(4,15) + ' ' + dateconverted + ` </strong></p>
+						
+						<p class="address" style="position:relative;bottom:0;left:0"> <i class="fa fa-calendar" aria-hidden="true"></i> Created On : <strong> `+ date.toString().substring(4,15) + ' ' + dateconverted + ` </strong></p>
+						
+					
 					</div>
 					<div class="thumb">
 						<ul class="btns">
@@ -413,7 +416,9 @@
 						<ul class="tags">
 							`+skills+`
 						</ul>
+						
 					</div>
+					
 					</div>
 						`
 				}
