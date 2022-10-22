@@ -218,19 +218,26 @@
 			var clearAndProceed = async () => {
 
 				var deleteSuccess = await deleteByLJID();
-				console.log(deleteSuccess)
+			
 				if (deleteSuccess == 1){
 					console.log("Success")
 					var proceedWithNew = await updateRoleID();
 
 					if(proceedWithNew == 1){
 						
+						iziToast.success({
+                                title: 'Success!',
+                                message: 'New Learning Journey selected!'
+                            });
 						await getLJCart();
 						setBtns();
 					}
 				}
 				else{
-					console.log("Failure")
+					iziToast.error({
+                                title: 'Error!',
+                                message: 'Unable to select new Learning Journey. Please contact adminstrator.'
+                            });
 				}
 				$('#warningModel').modal('hide')
 
@@ -248,7 +255,10 @@
 						cartResults = createCart.data;
 						if(cartResults.code == 201){
 							
-							$('#saveModel').modal('show')
+							iziToast.success({
+                                title: 'Success!',
+                                message: 'New Learning Journey selected!'
+                            });
 							await getLJCart();
 							setBtns();
 							
@@ -257,8 +267,11 @@
 			}
 		}
 			else{
-		
-				console.log("Failure")
+				
+				iziToast.error({
+                                title: 'Error',
+                                message: 'Unable to select new Learning Journey. Please contact adminstrator.'
+                            });
 			}
 			$('#warningModel').modal('hide')
 
@@ -271,7 +284,7 @@
 			
 					var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljidhidden.value);
 			
-					console.log(updateLJ)
+				
 					if(updateLJ.data.code==201){
 						return 1
 		
@@ -455,7 +468,11 @@
 					}
 					else{
 						if(noitems.value == 0){
-							updateRoleID();
+							await updateRoleID();
+							iziToast.success({
+                                title: 'Success!',
+                                message: 'New Learning Journey selected!'
+                            });
 
 						
 						}
@@ -472,6 +489,10 @@
 						if(cartResults.code == 201){
 							ljidhidden.value = cartResults.LJID
 							await getLJCart();
+							iziToast.success({
+                                title: 'Success!',
+                                message: 'New Learning Journey selected!'
+                            });
 							setBtns();
 						
 					}
