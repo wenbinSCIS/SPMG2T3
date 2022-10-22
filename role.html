@@ -201,11 +201,12 @@
 
 					if(proceedWithNew == 1){
 						
+
+						await getLJCart();
 						iziToast.success({
                                 title: 'Success!',
                                 message: 'New Learning Journey selected!'
                             });
-						await getLJCart();
 						setBtns();
 					}
 				}
@@ -305,9 +306,7 @@
 		   
 				if(updateLJ.data.code == 201){
 					
-					await getLJCart();
-					
-					setBtns();
+					return 1
 				}
 				else{
 					return 0
@@ -375,7 +374,7 @@
 					<div class="details col-md-8">
 						<div>
 							<div class="titles" >
-								<a href=""><h4>` + role.RoleName + `</h4></a>
+								<a href=""> <h4> <i class="fa fa-user" aria-hidden="true"></i>`  + role.RoleName + `</h4></a>
 								</br>
 								<h5 id="text`+role.RoleName+`">`+ role.Description  + `</h5>
 							</div>
@@ -447,13 +446,16 @@
 					}
 					else{
 						if(noitems.value == 0){
-							await updateRoleID();
+							var res = await updateRoleID();
+
+							if(res==1){
 							iziToast.success({
                                 title: 'Success!',
                                 message: 'New Learning Journey selected!'
                             });
-
-						
+							await getLJCart();
+							setBtns();
+							}
 						}
 						else{
 						$('#warningModel').modal('show')
