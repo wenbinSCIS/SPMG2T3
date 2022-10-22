@@ -102,14 +102,12 @@ def update_skillname_by_ID():
         return { "Skill ID": data["Skill ID"],"Success":True, "code": 201 }
 
 
-@app.route("/skills/create",methods=["POST"])
+@app.route("/addSkill",methods=["POST"])
 def create_skill():
     '''
-    How to: url - localhost:5000/roles/create
+    How to: url - localhost:5002/addSkill
     json - {
-        "Role Name":"Product Manager 2",
-        "Created By": "Mr Dumb 2",
-        "Description": "Testing 123 to see if adding roles work 2"
+        "Skillname":"javascript",
     }
     '''
     data = request.get_json()

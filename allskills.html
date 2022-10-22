@@ -97,7 +97,7 @@
 													<h2><b style="color:white">All Skills</b></h2>
 												</div>
 												<div class="col-sm-6">
-													<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add skill</span></a>
+													<a href="#addSkills" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add skill</span></a>
 													<a href="#deleteskills" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete Selected</span></a>						
 												</div>
 											</div>
@@ -144,6 +144,29 @@
 										</div>
 									</div>
 								</div>
+								<!--addSkill Modal HTML-->
+								<div id="addSkills" class="modal fade">
+									<div class="modal-dialog" id="edit">
+										<div class="modal-content">
+											<form>
+												<div class="modal-header">						
+													<h4 class="modal-title">Add Skill</h4>
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-toggle="modal">&times;</button>
+												</div>
+												<div class="modal-body">					
+													<div class="form-group">
+														<label>Enter new skill name</label>
+														<input id="addNewSKill" type="text" class="form-control" required>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<input type="button" class="btn btn-default" value="Cancel"  data-dismiss="modal">
+													<input type="button" class="btn btn-info" value="Save" v-on:click="addSkill()" id="saveNewSkill" >
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
 								<!-- Edit Modal HTML -->
 								<div id="editskillname" class="modal fade">
 									<div class="modal-dialog" id="edit">
@@ -156,7 +179,7 @@
 												<div class="modal-body">					
 													<div class="form-group">
 														<label>Ente new skill name</label>
-														<input id="newskillname" type="text" class="form-control" required>
+														<input id="newskill" type="text" class="form-control" required>
 													</div>
 												</div>
 												<div class="modal-footer">
@@ -425,6 +448,7 @@
 					  current_skill: "",
 					  current_skillid: "",
 					  deleteskillslist:[],
+					  
 					};
 				},
 				methods:
@@ -440,12 +464,24 @@
 						  this.skill_list = [{ entry: 'There was an error: ' + error.message }]
 					  })
 				  },
+				addSkill(){
+					var newSkill = document.getElementById("addNewSKill").value;
+                	
+					axios.post('http://localhost:5002/addSkill',{
+						"Skillname": newSkill,
+					})
+					  .then(response => {
+						  window.location.reload()
+					  })
+					  .catch(error => {
+						console.log(error);
+					  })
+				},
 				saveskillname(skillid){
                 	var newname = document.getElementById("newskillname").value;
                 	
 					axios.post('http://localhost:5002/updateskillnamebyID',{
-						"Skill ID":skillid,
-						"Skillname": newname,
+						"Skillname": this.newname,
 					})
 					  .then(response => {
 							// this gets the data, which is an array, and pass the data to Vue instance's posts property
