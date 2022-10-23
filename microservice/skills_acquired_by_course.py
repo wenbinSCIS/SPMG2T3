@@ -55,10 +55,5 @@ def get_all_by_skillid():
     select = SABC.query.filter_by(SkillsID=sid)
     return jsonify({ "data": [item.to_dict() for item in select] }), 200
 
-
-
-
-
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
