@@ -37,8 +37,9 @@
 </head>
 <body>
     <div id="nav-placeholder"></div>
-
+    
     <div id="learningjourney">
+        <input type="hidden" id="ljtodelete">
         <section class="bg-light pt-5 pb-5 shadow-sm">
             <div class="container">
           
@@ -113,9 +114,34 @@
 				$('#warningModel').modal('hide')
 			}	
             function deleteModal(ljid){
+                var hiddendelete = document.getElementById("ljtodelete")
+                hiddendelete.value = ljid
                 $('#warningModel').modal('show')
             }
-
+            async function deleteLJ(){
+                var ljidtodelete = document.getElementById("ljtodelete").value
+                try{
+                var res = await axios.get('http://127.0.0.1:5010/LJ/deleteLJbyLJID?ljid=' + ljidtodelete);
+                if(res.data.code==201){
+                    var domdelete = document.getElementById("lj" + ljidtodelete)
+                    domdelete.remove();
+                    iziToast.success({
+                                title: 'Success!',
+                                message: 'Learning Journey Deleted!'
+                            });
+                            $('#warningModel').modal('hide')
+                }
+                else{
+                    iziToast.error({
+                                title: 'Error.',
+                                message: 'Delete unsuccessful. Please contact adminstrator for help.'
+                            });
+                }
+                }
+                catch(error){
+                    console.log(error)
+                }
+            }
 var getLearningJourney = async () => {
     try {
 
@@ -140,7 +166,7 @@ var getLearningJourney = async () => {
              
                 var LJcourses = getLJCourses.data.data;
                 htmlstring +=`
-                <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="col-lg-4 mb-3 d-flex align-items-stretch" id="lj${LJLJID}">
                     <div class="card">
                     <img src="images/placeholder.jpg" class="card-img-top" alt="Card Image">
                     <div class="card-body d-flex flex-column">
@@ -172,7 +198,7 @@ var getLearningJourney = async () => {
 
                       htmlstring +=  `
                     </p>
-                        <button onclick="deleteModal(this.value)" value=${LJRoleID} class="btn btn-primary mt-auto align-self-start">Delete</button>
+                        <button onclick="deleteModal(this.value)" value=${LJLJID} class="btn btn-primary mt-auto align-self-start">Delete</button>
                     </div>
                     </div>
                 </div>

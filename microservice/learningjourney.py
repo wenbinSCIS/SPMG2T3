@@ -129,5 +129,24 @@ def get_savedLJByID():
     except:
         return jsonify({ "code": 404, "message": 0 })
 
+
+@app.route("/LJ/deleteLJbyLJID/")
+def delete_LJ_by_LJID():
+    '''
+
+    '''
+    args = request.args
+
+    ljid = args.get('ljid')
+
+
+
+    try:
+        learningjourney.query.filter_by(LJID=ljid).delete()
+        db.session.commit()
+    except:
+        return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
+    return { "Success":True, "code": 201 }
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5010, debug=True)
