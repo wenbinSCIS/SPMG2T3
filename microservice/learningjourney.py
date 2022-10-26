@@ -61,8 +61,10 @@ def get_UnsavedLJByID():
 
     # print(role_list, flush=True)
     try:
-    
-        return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
+        if(len(lj_list)):
+            return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
+        else:
+            return jsonify({ "code": 404, "message": 0 })
     except:
         return jsonify({ "code": 404, "message": 0 })
 
@@ -77,6 +79,17 @@ def saveLJById():
         return jsonify({"message": "An error occurred when updating the description.", "code":500})
     return {"Success":True, "code": 201 }
 
+
+@app.route("/LJ/unsaveLJById")
+def unsaveLJById():
+    args = request.args
+    ljid = args.get('ljid')
+    try:
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'Saved': 0 })
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"Success":True, "code": 201 }
 
 @app.route("/LJ/updateRoleIDByLJID")
 def UpdateRoleIDByLJId():

@@ -317,16 +317,17 @@ var getLJCart = async () => {
        
           
        itemelem.innerText = "(" + noitems.value + ")"
-       for (course of courses){
-         var coursename = await getCourseName(course.CourseID)
-   
+       for (courseleem of courses){
+      
+         var coursename = await getCourseName(courseleem.CourseID)
+     
          cartrole.innerHTML += `
-             <div class="course" id ="course` + course.CourseID + `">
+             <div class="course" id ="course` + courseleem.CourseID + `">
                  <div>
                      <span>
                          ` + coursename[0].CourseName +`
                      </span>
-                     <button onclick="deleteCourse(this.value)" value=`+course.CourseID+` ">
+                     <button onclick="deleteCourse(this.value)" value=`+courseleem.CourseID+` ">
                          <i class="fa fa-minus" aria-hidden="true"></i>
                      </button>
 
@@ -358,9 +359,9 @@ var getLJCart = async () => {
 
     var getCourseName = async (cid) => {
                 try {
-                    var courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
+                    var coursenames = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
               
-                    return courses.data.data
+                    return coursenames.data.data
                     
             
             
@@ -378,14 +379,14 @@ var getLJCart = async () => {
            
                     if(updateLJ.data.code==201){
                         var btns=  document.getElementsByClassName("checkBtns")
-                        console.log(btns)
+                 
                         if (btns.length>0){
                             await getLJCart();
                             setBtns();
                         }
                         iziToast.success({
                                 title: 'Success',
-                                message: 'Course is added to your current Learning Journey'
+                                message: 'Learning Journey is saved successfully!'
                             });
                         await getLJCart();
                         cartPanel.classList.remove("open");
@@ -408,7 +409,7 @@ var getLJCart = async () => {
 			try {
        
                 
-                
+              
                 var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + courseid + "&ljid=" + ljidhidden.value);
          
                 var course = "course" + courseid
