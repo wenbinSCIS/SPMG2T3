@@ -304,7 +304,7 @@ var getLJCart = async () => {
         </h5>
         `		
         var getCartCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + res[0].LJID);
-        courses = getCartCourses.data.data;
+        
         if(getCartCourses.data.code == 404){
 
             itemelem.innerText = "(0)"
@@ -312,6 +312,7 @@ var getLJCart = async () => {
 
         }
         else{
+            var courses = getCartCourses.data.data;
             noitems.value = courses.length
        
           
