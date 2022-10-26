@@ -218,7 +218,7 @@
 							<div class="col-lg-4 rightbar">
 								<div class="single-widget search-widget">
 									<form class="example" action="#" style="margin:auto;max-width:300px">
-									  <input type="text" placeholder="Search Posts" name="search2">
+									  <input type="text" v-model="skillSearchText"  v-on:keyup="searchSkill"  placeholder="Search skills" name="search2">
 									  <button type="submit"><i class="fa fa-search"></i></button>
 									</form>								
 								</div>
@@ -448,7 +448,9 @@
 					  current_skill: "",
 					  current_skillid: "",
 					  deleteskillslist:[],
-					  
+					  skillSearchText:"",
+					  skillSearchList:[],
+					  cachedSkillList:[],
 					};
 				},
 				methods:
@@ -458,6 +460,7 @@
 					  .then(response => {
 							// this gets the data, which is an array, and pass the data to Vue instance's posts property
 						  this.all_skills = response.data.data
+						  this.cachedSkillList = response.data.data
 						  console.log(this.all_skills)
 					  })
 					  .catch(error => {
@@ -508,7 +511,33 @@
 				},
 				opendeletemodal(skillid){
 					this.deleteskillslist = [skillid]
-				}
+				},
+				searchSkill(){
+					
+					this.skillSearchList=[]
+					if (this.skillSearchText.length !=0){
+						for (i of this.cachedSkillList){
+							if (i['Skillname'].toLowerCase().includes((this.skillSearchText).toLowerCase())){
+								this.skillSearchList.push(i)
+							}
+						}
+						this.all_skills=this.skillSearchList
+						console.log(this.skillSearchList)
+					}
+
+					else{
+						axios.get('http://localhost:5002/getAllSkill')
+					  	.then(response => {
+							// this gets the data, which is an array, and pass the data to Vue instance's posts property
+						  this.all_skills = response.data.data
+						  
+					  })
+					  .catch(error => {
+						  this.skill_list = [{ entry: 'There was an error: ' + error.message }]
+					  })
+					}
+
+				},
 		
 	  
 				},
@@ -525,12 +554,13 @@
 							
 						}
 						return return_list
-					}
+					},
+					
 				},
 				created(){
 				  this.get_all_skills()
 				  
-					}
+				},
 			}).mount('#skills')
 		</script>
 	</html>
