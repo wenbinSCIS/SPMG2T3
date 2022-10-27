@@ -32,6 +32,58 @@
         <link rel="stylesheet" href="css/owl.carousel.css">
         <link rel="stylesheet" href="css/main.css">
     <style>
+body {
+  height: 100%;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+}
+
+.page-container {
+  margin: 20px;
+}
+
+
+/* horizontal panel*/
+
+.panel-container {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid silver;
+  overflow: hidden;
+  left:10%;
+}
+
+.panel-left {
+  flex: 0 0 auto;
+  /* only manually resize */
+  padding: 10px;
+  width: 30%;
+  min-height: 200px;
+
+  white-space: nowrap;
+  background: #838383;
+  color: white;
+}
+
+.splitter {
+  flex: 0 0 auto;
+  width: 5%;  
+  background: #535353;
+  min-height: 200px;
+  cursor: col-resize;  
+}
+
+.panel-right {
+  flex: 1 1 auto;
+  /* resizable */
+  padding: 10px;
+  width: 30%;
+  min-height: 200px;
+
+  background: #eee;
+}
 
     </style>
 </head>
@@ -40,9 +92,21 @@
     
     <div id="viewoneLJ">
 
-        <section class="bg-light pt-5 pb-5 shadow-sm">
       
-        </section>
+        <div class="panel-container">
+
+            <div class="panel-left">
+                left panel
+            </div>
+
+            <div class="splitter">
+            </div>
+
+            <div class="panel-right">
+                right panel
+            </div>
+        </div>
+      
     </div>
 
 
