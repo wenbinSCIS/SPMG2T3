@@ -682,45 +682,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					}
 
 					else{
-						axios.get('http://127.0.0.1:5000/roles/getAll')
-                    .then(response => {
-                        // this gets the data, which is an array, and pass the data to Vue instance's posts property
-                        this.role_list = response.data.data
-                        role_list = response.data.data
-
-                        for(let i = 0; i < role_list.length; i++)
-                        {
-                            let cur_role_id=role_list[i].RoleID
-                            this.role_skill_list[cur_role_id]=[]
-
-                            axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID='+String(cur_role_id))
-                            .then(response => {
-                                // this gets the data, which is an array, and pass the data to Vue instance's posts property
-                                cur_role_skill_list = response.data.data
-
-                                for (let j=0; j < cur_role_skill_list.length; j++)
-                                {
-                                    cur_skill_id=cur_role_skill_list[j].SkillsID
-                                    
-                                    for (search_skill_no in this.skill_list)
-                                    {
-                                        if(this.skill_list[search_skill_no].SkillsID==cur_skill_id)
-                                        {
-                                            cur_skill_name=this.skill_list[search_skill_no].Skillname
-											cur_skill_id=this.skill_list[search_skill_no].SkillsID
-                                            this.role_skill_list[cur_role_id].push([cur_skill_id,cur_skill_name])
-                                        }
-                                    }
-                                }
-                            })
-                            .catch(error => {
-                                this.role_skill_list = [{ entry: 'There was an error: ' + error.message }]
-                            })
-                            }
-                        })
-                        .catch(error => {
-                            this.role_list = [{ entry: 'There was an error: ' + error.message }]
-                        })
+						this.role_list=this.cachedRoleList
 					}
 				}
             },
