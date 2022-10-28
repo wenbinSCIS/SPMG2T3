@@ -113,6 +113,10 @@ h2{
 }
 .elem{
   border-bottom:1px solid rgb(236, 230, 230);
+   cursor: pointer; 
+}
+.elem:hover{
+  background:rgb(180, 239, 255)
 }
     </style>
 </head>
@@ -216,8 +220,9 @@ h2{
 </script>
 
 <script>
-
-
+var unsatisfied = {}
+var satisfied = {}
+var basketCourses = []
 var checkSatisfied = async () => {
                 try {
                     
@@ -230,12 +235,12 @@ var checkSatisfied = async () => {
                     var roleidofLJ = getLJData[0].RoleID
                     var resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + roleidofLJ);
 				          	SRBR = resp2.data.data;
-                    var unsatisfied = {}
-                    var satisfied = {}
+    
                     var notfulfilleddiv = document.getElementById("notfulfilled")
                
                     var fulfilleddiv = document.getElementById("fulfilled")
                     var notfulfilledstr = ''
+                    var fulfilledstr = ''
 
                             for(sr of SRBR){
                       
@@ -245,7 +250,10 @@ var checkSatisfied = async () => {
                      
                       notfulfilledstr+=
                       `
-                      <div class="row align-items-center elem" id=${sr.SkillsID}>
+
+                    
+                      <div class="row align-items-center elem" id=${sr.SkillsID} onclick=getCoursesForSkill(${sr.SkillsID})>
+                       
                             <div class="col-md-4 mb-1 mb-md-0">
                               <span>S${sr.SkillsID}</span>
                             </div>
@@ -254,7 +262,9 @@ var checkSatisfied = async () => {
 
                               <span>${name}</span>
                             </div>
+                   
                       </div>
+                     
                           `
                     
                       
@@ -269,31 +279,32 @@ var checkSatisfied = async () => {
                     }
                     else{
                     SCofLJ = selectedCourses.data.data
+                    var skillsidtocheck = []
                     for(sc of SCofLJ){
-                      console.log(sc)
-                      var skillname = await getSkill(roleidofLJ,sc.SkillsID)
-                      name = skillname[0].Skillname
-                     
-                      if(sc.SkillsID in unsatisfied){
-                        $("#" +sc.SkillsID).appendTo("#" +fulfilleddiv);
+      
+                      basketCourses.push(sc.CourseID)
+                  
+                      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + sc.CourseID);
+                      var SABCbyCIDdata = SABCbyCID.data.data
+                      for(SABC of SABCbyCIDdata){
+              
+                        skillsidtocheck.push(SABC.SkillsID)
                       }
-                     satisfied[sc.SkillsID]= name
-                      fulfilledstr+=
-                      `
-                      <div class="row align-items-center elem" id=${sc.SkillsID}>
-                            <div class="col-md-4 mb-1 mb-md-0">
-                              <span>S${sc.SkillsID}</span>
-                            </div>
-
-                            <div class="col-md-8 font-weight-medium">
-
-                              <span>${name}</span>
-                            </div>
-                      </div>
-                          `
                     }
-                    fulfilleddiv.innerHTML = fulfilledstr
-            
+
+                    for(skill of skillsidtocheck){
+                 
+                      var skillname = await getSkill(roleidofLJ,skill)
+                      name = skillname[0].Skillname
+              
+                      if(skill in unsatisfied){
+                        fulfilleddiv.appendChild(document.getElementById(skill))
+                        delete unsatisfied[skill]
+                      }
+                     satisfied[skill]= name
+
+                    }
+             
                   }
                 } catch (err) {
                     // Handle Error Here
@@ -314,6 +325,12 @@ var checkSatisfied = async () => {
 				console.error(err);
 			}
 		};
+
+    async function getCoursesForSkill(skillid){
+      console.log(skillid)
+    }
 checkSatisfied();
+
+console.log(basketCourses)
 </script>
 </html>

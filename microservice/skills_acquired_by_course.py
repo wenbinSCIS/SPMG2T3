@@ -55,6 +55,13 @@ def get_all_by_skillid():
     select = SABC.query.filter_by(SkillsID=sid)
     return jsonify({ "data": [item.to_dict() for item in select] }), 200
 
+@app.route("/getSABCbyCourseID")
+def get_all_by_courseid():
+    args = request.args
+    cid = args.get('cid')
+    select = SABC.query.filter_by(CourseID=cid)
+    return jsonify({ "data": [item.to_dict() for item in select] }), 200
+
 @app.route("/addskillcourse",methods=["POST"])
 def add_skill_course():
     data = request.get_json()
