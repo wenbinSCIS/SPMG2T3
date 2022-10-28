@@ -105,20 +105,20 @@ def delete_by_skill_course():
             except:
                 return jsonify({ "message": "An error occurred when deleting the SABC from the database.", "code":500 })
 
-        if have_error:
-            message="Course did not exist or Course does not has skill with id "
-            for i in len(error_sabc_list):
-                cur_skill_id=error_sabc_list[i]
-                message+=str(cur_skill_id)
+    if have_error:
+        message="Course did not exist or Course does not has skill with id "
+        for i in len(error_sabc_list):
+            cur_skill_id=error_sabc_list[i]
+            message+=str(cur_skill_id)
 
-                if i!=len(error_sabc_list)-1:
-                    message+=", "
+            if i!=len(error_sabc_list)-1:
+                message+=", "
 
-            if addition_happen:
-                message+="The rest of the skills are deleted"
+        if addition_happen:
+            message+="The rest of the skills are deleted"
 
-            return jsonify({ "message": message }), 500
-        return { "CourseID": cid,"Success":True, "code": 201 }
+        return jsonify({ "message": message }), 500
+    return { "CourseID": cid,"Success":True, "code": 201 }
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
