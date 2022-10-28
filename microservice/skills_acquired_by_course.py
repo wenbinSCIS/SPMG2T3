@@ -43,7 +43,7 @@ class SABC(db.Model):
 
     def json(self):
         return {
-            "SABC": self.SRBR, 
+            "SABC": self.SABC, 
             "CourseID": self.CourseID, 
             "SkillsID": self.SkillsID,
         }
@@ -54,6 +54,71 @@ def get_all_by_skillid():
     sid = args.get('sid')
     select = SABC.query.filter_by(SkillsID=sid)
     return jsonify({ "data": [item.to_dict() for item in select] }), 200
+
+@app.route("/addskillcourse",methods=["POST"])
+def add_skill_course():
+    data = request.get_json()
+    if not all(key in data.keys() for key in ('Skills', 'CourseID')):
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+    
+    sabc_list = SABC.query.all()
+    skill_list=data["Skills"]
+
+    if skill_list==[]:
+        return { "CourseID": data["CourseID"],"Success":True, "code": 201 }
+
+    for cur_skill in skill_list:
+        add_skill_course = SABC(
+            CourseID = data["CourseID"],
+            SkillsID = cur_skill["SkillsID"]
+        )
+        try:
+            db.session.add(add_skill_course)
+            db.session.commit()
+        except:
+            return jsonify({ "message": "An error occurred when adding the SABC to the database.", "code":500 })
+    return { "course data": add_skill_course.json(), "code": 201 }
+skill_course
+@app.route("/deletebyskillcourse/",methods=["POST"])
+def delete_by_skill_course():
+    data = request.get_json()
+    cid = data["CourseID"]
+    skill_list = data["Skills"]
+    error_sabc_list=[]
+    have_error=False
+    addition_happen=False
+
+    if skill_list==[]:
+        return { "CourseID": cid,"Success":True, "code": 201 }
+    #Check if role is created in DB
+    for cur_skill in skill_list:
+        cur_skill_id = cur_skill["SkillsID"]
+        skill_course = SABC.query.filter_by(CourseID=cid,SkillsID=cur_skill_id).first()
+        if not skill_course:
+            error_sabc_list.append(cur_skill_id)
+            have_error=True
+        else:
+            try:
+                skill_course.query.filter_by(CourseID = cid,SkillsID=cur_skill_id).delete()
+                db.session.commit()
+                addition_happen=True
+            except:
+                return jsonify({ "message": "An error occurred when deleting the SABC from the database.", "code":500 })
+
+        if have_error:
+            message="Course did not exist or Course does not has skill with id "
+            for i in len(error_sabc_list):
+                cur_skill_id=error_sabc_list[i]
+                message + = str(cur_skill_id)
+
+                if i!=len(error_sabc_list)-1:
+                    message + =  ", "
+
+            if addition_happen:
+                message + = "The rest of the skills are deleted"
+
+            return jsonify({ "message": message }), 500
+        return { "CourseID": cid,"Success":True, "code": 201 }
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5003, debug=True)
