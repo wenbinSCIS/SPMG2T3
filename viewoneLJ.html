@@ -38,6 +38,7 @@ body {
   padding: 0;
   margin: 0;
   overflow: auto;
+  background: #F8F9FB !important;
 }
 
 .page-container {
@@ -47,66 +48,131 @@ body {
 
 /* horizontal panel*/
 
-.panel-container {
+.container {
   display: flex;
-  flex-direction: row;
-  border: 1px solid silver;
   overflow: hidden;
-  left:10%;
+ 
+
 }
 
 .panel-left {
-  flex: 0 0 auto;
+
   /* only manually resize */
   padding: 10px;
-  width: 30%;
+
   min-height: 200px;
 
-  white-space: nowrap;
-  background: #838383;
-  color: white;
+  text-align: center;
+  
+  background: rgb(255, 254, 254) !important;
+  border-radius:10px;
+  border:1px solid rgb(236, 230, 230);
 }
 
 .splitter {
-  flex: 0 0 auto;
-  width: 5%;  
-  background: #535353;
+ 
+ 
+  background: #F8F9FB !important;
   min-height: 200px;
-  cursor: col-resize;  
+ 
+  
 }
 
 .panel-right {
-  flex: 1 1 auto;
+ 
   /* resizable */
   padding: 10px;
-  width: 30%;
-  min-height: 200px;
 
-  background: #eee;
+  min-height: 200px;
+  text-align: center;
+  background:white;
+  border-radius:10px;
+  border:1px solid rgb(236, 230, 230);
 }
 
+h6{
+    color:white;
+}
+.card-header{
+  background:#FFF !important;
+  border-top:none;
+  border-left:none;
+  border-right:0px;
+}
+.card{
+  border-top:0px !important;
+  border-left:0px !important;
+  border-right:0px !important;
+  background:#FFF !important;
+  border-bottom:0px !important;
+  color:black !important;
+}
+h2{
+  font-size:16px !important;
+  color:rgb(44, 35, 35);
+}
+.elem{
+  border-bottom:1px solid rgb(236, 230, 230);
+}
     </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
-    
     <div id="viewoneLJ">
 
-      
-        <div class="panel-container">
+        <div style="width:90%;margin-top:3%;text-align: center;margin-left:5%;">
+        <div class="container-fluid">
 
-            <div class="panel-left">
-                left panel
+            <div class="row">
+                <div class="col panel-left">
+                    <div class="card" style="background:white !important;">
+                    
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                          <h2 class="card-header-title">Skills not Satisfied</h2>
+                        </div>
+
+                        <div id="notfulfilled" class="card-body">
+
+
+                        </div>
+
+                    
+
+
+                    </div>
+
+                </div>
+
+                <div class="col-1 splitter">
+                    
+                </div>
+
+                <div class="col panel-right">
+                  <div class="card" style="background:white !important;">
+                    
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h2 class="cart-header-title">Skills Satisfied</h2>
+                    </div>
+                    <div class="card-body" id='fulfilled'>
+
+   
+                    </div>
+
+
+                
+
+
+                </div>
+                </div>
             </div>
 
-            <div class="splitter">
-            </div>
 
-            <div class="panel-right">
-                right panel
             </div>
+            
+
+
         </div>
-      
+    </div>
     </div>
 
 
@@ -150,6 +216,104 @@ body {
 </script>
 
 <script>
-			
+
+
+var checkSatisfied = async () => {
+                try {
+                    
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var selectedljid = urlParams.get('ljid');
+
+                    var getLJ = await axios.get('http://127.0.0.1:5010/LJ/getLJByLJID?ljid=' + selectedljid);
+                    var getLJData = getLJ.data.data
+                
+                    var roleidofLJ = getLJData[0].RoleID
+                    var resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + roleidofLJ);
+				          	SRBR = resp2.data.data;
+                    var unsatisfied = {}
+                    var satisfied = {}
+                    var notfulfilleddiv = document.getElementById("notfulfilled")
+               
+                    var fulfilleddiv = document.getElementById("fulfilled")
+                    var notfulfilledstr = ''
+
+                            for(sr of SRBR){
+                      
+                      var skillname = await getSkill(roleidofLJ,sr.SkillsID)
+                      name = skillname[0].Skillname
+                      unsatisfied[sr.SkillsID]  = name
+                     
+                      notfulfilledstr+=
+                      `
+                      <div class="row align-items-center elem" id=${sr.SkillsID}>
+                            <div class="col-md-4 mb-1 mb-md-0">
+                              <span>S${sr.SkillsID}</span>
+                            </div>
+
+                            <div class="col-md-8 font-weight-medium">
+
+                              <span>${name}</span>
+                            </div>
+                      </div>
+                          `
+                    
+                      
+                
+              
+                    }
+                    notfulfilleddiv.innerHTML = notfulfilledstr;
+                  
+                    var selectedCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + selectedljid);
+                    if(selectedCourses.data.code == "404"){
+
+                    }
+                    else{
+                    SCofLJ = selectedCourses.data.data
+                    for(sc of SCofLJ){
+                      console.log(sc)
+                      var skillname = await getSkill(roleidofLJ,sc.SkillsID)
+                      name = skillname[0].Skillname
+                     
+                      if(sc.SkillsID in unsatisfied){
+                        $("#" +sc.SkillsID).appendTo("#" +fulfilleddiv);
+                      }
+                     satisfied[sc.SkillsID]= name
+                      fulfilledstr+=
+                      `
+                      <div class="row align-items-center elem" id=${sc.SkillsID}>
+                            <div class="col-md-4 mb-1 mb-md-0">
+                              <span>S${sc.SkillsID}</span>
+                            </div>
+
+                            <div class="col-md-8 font-weight-medium">
+
+                              <span>${name}</span>
+                            </div>
+                      </div>
+                          `
+                    }
+                    fulfilleddiv.innerHTML = fulfilledstr
+            
+                  }
+                } catch (err) {
+                    // Handle Error Here
+                    console.error(err);
+                }
+            };  
+            var getSkill = async (roleid,skillid) => {
+			try {
+				var resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
+				
+				return resp3.data.data
+				
+		
+		
+				
+			} catch (err) {
+				// Handle Error Here
+				console.error(err);
+			}
+		};
+checkSatisfied();
 </script>
 </html>

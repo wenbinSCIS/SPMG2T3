@@ -143,6 +143,20 @@ def get_savedLJByID():
         return jsonify({ "code": 404, "message": 0 })
 
 
+@app.route("/LJ/getLJByLJID")
+def get_getLJByLJID():
+    args = request.args
+    ljid = args.get('ljid')
+    lj_list = learningjourney.query.filter( learningjourney.LJID==ljid).all()
+
+    # print(role_list, flush=True)
+    try:
+    
+        return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
+    except:
+        return jsonify({ "code": 404, "message": 0 })
+
+
 @app.route("/LJ/deleteLJbyLJID/")
 def delete_LJ_by_LJID():
     '''
