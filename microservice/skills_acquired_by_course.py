@@ -78,8 +78,8 @@ def add_skill_course():
         except:
             return jsonify({ "message": "An error occurred when adding the SABC to the database.", "code":500 })
     return { "course data": add_skill_course.json(), "code": 201 }
-skill_course
-@app.route("/deletebyskillcourse/",methods=["POST"])
+
+@app.route("/deletebyskillcourse",methods=["POST"])
 def delete_by_skill_course():
     data = request.get_json()
     cid = data["CourseID"]
@@ -109,13 +109,13 @@ def delete_by_skill_course():
             message="Course did not exist or Course does not has skill with id "
             for i in len(error_sabc_list):
                 cur_skill_id=error_sabc_list[i]
-                message + = str(cur_skill_id)
+                message+=str(cur_skill_id)
 
                 if i!=len(error_sabc_list)-1:
-                    message + =  ", "
+                    message+=", "
 
             if addition_happen:
-                message + = "The rest of the skills are deleted"
+                message+="The rest of the skills are deleted"
 
             return jsonify({ "message": message }), 500
         return { "CourseID": cid,"Success":True, "code": 201 }
