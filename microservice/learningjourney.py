@@ -61,8 +61,10 @@ def get_UnsavedLJByID():
 
     # print(role_list, flush=True)
     try:
-    
-        return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
+        if(len(lj_list)):
+            return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
+        else:
+            return jsonify({ "code": 404, "message": 0 })
     except:
         return jsonify({ "code": 404, "message": 0 })
 
@@ -77,6 +79,17 @@ def saveLJById():
         return jsonify({"message": "An error occurred when updating the description.", "code":500})
     return {"Success":True, "code": 201 }
 
+
+@app.route("/LJ/unsaveLJById")
+def unsaveLJById():
+    args = request.args
+    ljid = args.get('ljid')
+    try:
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'Saved': 0 })
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"Success":True, "code": 201 }
 
 @app.route("/LJ/updateRoleIDByLJID")
 def UpdateRoleIDByLJId():
@@ -115,6 +128,38 @@ def insertgetLJID():
     except:
         return jsonify({"message": "An error occurred when updating the description.", "code":500})
     return {"LJID": createLJ.LJID, "Success":True, "code": 201 }
+
+@app.route("/LJ/getsavedLJById")
+def get_savedLJByID():
+    args = request.args
+    userid = args.get('userid')
+    lj_list = learningjourney.query.filter(learningjourney.Saved=="1", learningjourney.UserID==userid).all()
+
+    # print(role_list, flush=True)
+    try:
+    
+        return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
+    except:
+        return jsonify({ "code": 404, "message": 0 })
+
+
+@app.route("/LJ/deleteLJbyLJID/")
+def delete_LJ_by_LJID():
+    '''
+
+    '''
+    args = request.args
+
+    ljid = args.get('ljid')
+
+
+
+    try:
+        learningjourney.query.filter_by(LJID=ljid).delete()
+        db.session.commit()
+    except:
+        return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
+    return { "Success":True, "code": 201 }
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5010, debug=True)
