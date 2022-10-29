@@ -546,7 +546,7 @@ async function AddToLJ(cid){
       for(SABC of SABCbyCIDdata){
        
           var skilltoremove = document.getElementById(SABC.SkillsID)
-          skilldict[SABC.SkillsID] -=1
+
           if(skilldict[SABC.SkillsID] == 0){
           notfulfilleddiv.appendChild(skilltoremove)
           }
