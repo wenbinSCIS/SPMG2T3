@@ -118,13 +118,21 @@ h2{
 .elem:hover{
   background:rgb(180, 239, 255)
 }
+.elem2{
+  border-bottom:1px solid rgb(236, 230, 230);
+}
+
+.second{
+  margin-top:5%;
+}
+
     </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
     <div id="viewoneLJ">
 
-        <div style="width:90%;margin-top:3%;text-align: center;margin-left:5%;">
+        <div style="width:90%;margin-top:3%;text-align: center;margin-left:5%;padding-bottom:100px;">
         <div class="container-fluid">
 
             <div class="row">
@@ -175,7 +183,80 @@ h2{
             
 
 
+
+
+
+            <div class="container-fluid second">
+
+              <div class="row">
+                  <div class="col panel-left">
+                      <div class="card" style="background:white !important;">
+                      
+                          <div class="card-header d-flex justify-content-between align-items-center">
+                            <h2 class="card-header-title">List of Courses</h2>
+                          </div>
+  
+                          <div id="courseacq" class="card-body">
+  
+  
+                          </div>
+  
+                      
+  
+  
+                      </div>
+  
+                  </div>
+  
+                  <div class="col-1 splitter">
+                      
+                  </div>
+  
+                  <div class="col panel-right">
+                    <div class="card" style="background:white !important;">
+                      
+                      <div class="card-header d-flex justify-content-between align-items-center">
+                        <h2 class="cart-header-title">Your Cart</h2>
+                      </div>
+                      <div class="card-body" id='cartcourses'>
+  
+     
+                      </div>
+  
+  
+                  
+  
+  
+                  </div>
+                  </div>
+              </div>
+  
+  
+              </div>
+              <button type="button" style="float:right;margin-right:1%;margin-top:2%;" onclick="savelj()" class="btn btn-primary">Save my Learning Journey</button>
         </div>
+
+        <div id="infoModel" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+					
+								<div class="modal-header">						
+									<h4 class="modal-title" id="selectedTitle"></h4>
+									<button type="button" class="close" onclick="closeInfo()" data-dismiss="modal" aria-hidden="true">&times;</button>
+								</div>
+								<div class="modal-body">					
+									<p id="selectedDescription">Test</p>
+									
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary" onclick="closeInfo()" data-dismiss="modal"> Close </button>
+
+								</div>
+						
+						</div>
+					</div>
+				</div>
+
     </div>
     </div>
 
@@ -223,11 +304,20 @@ h2{
 var unsatisfied = {}
 var satisfied = {}
 var basketCourses = []
+var currentBasketCourses = []
+var skilldict = {}
+var urlParams = new URLSearchParams(window.location.search);
+var selectedljid = urlParams.get('ljid');
+if(selectedljid === null){
+                      window.location.href = "learningjourney.html";
+                    }
+                    function closeInfo(){
+				
+				$('#infoModel').modal('hide')
+
+			}
 var checkSatisfied = async () => {
                 try {
-                    
-                    var urlParams = new URLSearchParams(window.location.search);
-                    var selectedljid = urlParams.get('ljid');
 
                     var getLJ = await axios.get('http://127.0.0.1:5010/LJ/getLJByLJID?ljid=' + selectedljid);
                     var getLJData = getLJ.data.data
@@ -239,8 +329,10 @@ var checkSatisfied = async () => {
                     var notfulfilleddiv = document.getElementById("notfulfilled")
                
                     var fulfilleddiv = document.getElementById("fulfilled")
+                    var cartcourses = document.getElementById("cartcourses")
                     var notfulfilledstr = ''
                     var fulfilledstr = ''
+                    var cartcoursesstr = ''
 
                             for(sr of SRBR){
                       
@@ -254,11 +346,11 @@ var checkSatisfied = async () => {
                     
                       <div class="row align-items-center elem" id=${sr.SkillsID} onclick=getCoursesForSkill(${sr.SkillsID})>
                        
-                            <div class="col-md-4 mb-1 mb-md-0">
+                            <div class="col-md-3 mb-1 mb-md-0">
                               <span>S${sr.SkillsID}</span>
                             </div>
 
-                            <div class="col-md-8 font-weight-medium">
+                            <div class="col-md-9 font-weight-medium">
 
                               <span>${name}</span>
                             </div>
@@ -271,6 +363,7 @@ var checkSatisfied = async () => {
                 
               
                     }
+                    notfulfilleddiv.style.visibility="hidden";
                     notfulfilleddiv.innerHTML = notfulfilledstr;
                   
                     var selectedCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + selectedljid);
@@ -283,12 +376,13 @@ var checkSatisfied = async () => {
                     for(sc of SCofLJ){
       
                       basketCourses.push(sc.CourseID)
-                  
+                    currentBasketCourses.push(sc.CourseID)
                       var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + sc.CourseID);
                       var SABCbyCIDdata = SABCbyCID.data.data
                       for(SABC of SABCbyCIDdata){
               
                         skillsidtocheck.push(SABC.SkillsID)
+                        skilldict[SABC.SkillsID] = (skilldict[SABC.SkillsID] || 0) + 1;
                       }
                     }
 
@@ -301,10 +395,44 @@ var checkSatisfied = async () => {
                         fulfilleddiv.appendChild(document.getElementById(skill))
                         delete unsatisfied[skill]
                       }
+                      notfulfilleddiv.style.visibility="visible";
                      satisfied[skill]= name
 
                     }
-             
+                    
+                    for(crse of basketCourses){
+                      var cse = await getCourse(crse)
+
+                      cartcoursesstr +=`
+
+                      <div class="row align-items-center elem2" id=coursebasket${crse}>
+                       
+                       <div class="col-md-3 mb-1 mb-md-0">
+                         <span>C${crse}</span>
+                       </div>
+
+                       <div class="col-md-7 font-weight-medium">
+
+                         <span>${cse[0].CourseName}</span>
+
+                        
+                       </div>
+
+                       <div class="col-md-1 font-weight-medium">
+                        <button class="btn" onclick=getMoreDetails(${crse})><i class="fa fa-info-circle"></i></button>
+                   
+                       </div>
+
+                       <div class="col-md-1 font-weight-medium">
+                      
+                       <button class="btn" onclick=removeCourseFromLJ(${crse})><i class="fa fa-trash"></i></button>
+                       </div>
+                 </div>
+                
+                     `
+                    }
+
+                    cartcourses.innerHTML = cartcoursesstr
                   }
                 } catch (err) {
                     // Handle Error Here
@@ -326,11 +454,217 @@ var checkSatisfied = async () => {
 			}
 		};
 
-    async function getCoursesForSkill(skillid){
-      console.log(skillid)
+    async function getMoreDetails(cid){
+      var bodystr = ""
+      
+      var title = document.getElementById("selectedTitle")
+      var body = document.getElementById("selectedDescription")
+      title.innerHTML = "CourseID : C" + cid
+
+      var courseDetails = await getCourse(cid)
+      bodystr += "Overview : " + courseDetails[0].CourseDescription + "<br>"
+      bodystr +=`You will gain the following Skills upon completion of this Course
+      <ol>`
+
+
+      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + cid);
+                      var SABCbyCIDdata = SABCbyCID.data.data
+                      for(SABC of SABCbyCIDdata){
+              
+                        bodystr += `<li style="font-size:14px;"class="badge badge-pill badge-success"> S${SABC.SkillsID} </li>
+
+                        `
+                      }
+                     
+
+
+      bodystr += "</ol>"
+      body.innerHTML= bodystr
+      $('#infoModel').modal('show')
+
+
+}
+async function AddToLJ(cid){
+ 
+  var cartcourses = document.getElementById("cartcourses")
+  var index = currentBasketCourses.indexOf(String(cid))
+
+  if(index >-1){
+
+    iziToast.error({
+                                title: 'Error',
+                                message: 'Selected course is already added.'
+                            });
+  
+  }
+  else{
+    var coursetoadd = document.getElementById("course" + cid)
+    var clone = coursetoadd.cloneNode(true);
+
+    
+    clone.id = 'coursebasket' + cid;
+    var addicon = document.getElementById("add" + cid)
+    cartcourses.appendChild(clone)
+    var changeClass = document.getElementById("coursebasket" + cid)
+    changeClass.lastElementChild.innerHTML = `<button class="btn" onclick=removeCourseFromLJ(${cid})><i class="fa fa-trash"></i></button>`
+
+
+
+    currentBasketCourses.push(String(cid))
+ 
+
+    var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + cid);
+      SABCbyCIDdata = SABCbyCID.data.data
+      var fulfilleddiv = document.getElementById("fulfilled")
+      for(SABC of SABCbyCIDdata){
+          
+          var skilltoremove = document.getElementById(SABC.SkillsID)
+
+          skilldict[SABC.SkillsID] = (skilldict[SABC.SkillsID] || 0) + 1;
+          if(skilldict[SABC.SkillsID] == 1){
+            fulfilleddiv.appendChild(skilltoremove)
+          }
+          delete satisfied[SABC.SkillsID]
+          satisfied[SABC.SkillsID] = skilltoremove.innerText
+     }
+  }
+
+}
+    async function removeCourseFromLJ(cid){
+      var index = currentBasketCourses.indexOf(String(cid))
+
+      if(index >-1){
+   
+        currentBasketCourses.splice(index,1)
+      }
+      var coursetoremove = document.getElementById("coursebasket" + cid)
+      coursetoremove.remove();
+
+      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + cid);
+      SABCbyCIDdata = SABCbyCID.data.data
+      var notfulfilleddiv = document.getElementById("notfulfilled")
+      for(SABC of SABCbyCIDdata){
+       
+          var skilltoremove = document.getElementById(SABC.SkillsID)
+          skilldict[SABC.SkillsID] -=1
+          if(skilldict[SABC.SkillsID] == 0){
+          notfulfilleddiv.appendChild(skilltoremove)
+          }
+          delete satisfied[SABC.SkillsID]
+          unsatisfied[SABC.SkillsID] = skilltoremove.innerText
+     }
+  
+  
     }
+    function arrayEquals(a, b) {
+    return Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val == b[index]);
+}
+    async function savelj(){
+     
+      basketCourses.sort()
+      currentBasketCourses.sort()
+      if(arrayEquals(basketCourses,currentBasketCourses)){
+        
+      }
+      else{
+        for(currentCourse of currentBasketCourses){
+         
+          if (basketCourses.includes(currentCourse)){
+
+          }
+          else{
+          
+          var addCourse = await axios.get('http://127.0.0.1:5011/LJC/addCourseIntoBasket?ljid=' + selectedljid + '&cid=' + currentCourse);
+  
+      
+          if(addCourse.data.code==201){
+
+          }
+          else{
+            iziToast.error({
+                                title: 'Error',
+                                message: 'Update unsuccessful. Please contact adminstrator for help.'
+                            });
+  
+          }
+
+          }
+        }
+
+        for(prevCourse of basketCourses){
+          if (currentBasketCourses.includes(prevCourse)){
+            
+            }
+            else{
+              var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + prevCourse + "&ljid=" + selectedljid);
+            }
+        }
+      }
+
+      window.location.href = "learningjourney.html";
+    }
+    async function getCoursesForSkill(skillid){
+
+      var SABCbySID = await axios.get('http://127.0.0.1:5003/getSABCbySkillID?sid=' + skillid);
+                      var SABCbySIDdata = SABCbySID.data.data
+                      var courseacq = document.getElementById("courseacq")
+                      var courseacqstr = ''
+                      for(SABC of SABCbySIDdata){
+              
+                        var cid = SABC.CourseID
+                        var coursedetails = await getCourse(cid)
+                        courseacqstr += `
+                        <div class="row align-items-center elem2" id=course${cid}>
+                       
+                       <div class="col-md-3 mb-1 mb-md-0">
+                         <span>C${cid}</span>
+                       </div>
+
+                       <div class="col-md-7 font-weight-medium">
+
+                         <span>${coursedetails[0].CourseName}</span>
+
+                        
+                       </div>
+
+                       <div class="col-md-1 font-weight-medium">
+                        <button class="btn" onclick=getMoreDetails(${cid})><i class="fa fa-info-circle"></i></button>
+                   
+                       </div>
+
+                       <div class="col-md-1 font-weight-medium">
+                      
+                       <button class="btn" onclick=AddToLJ(${cid})><i id='add${cid}' class="fa fa-plus-circle"></i></button>
+                       </div>
+                  </div>
+                
+                     
+                        `
+                      }
+                      courseacq.innerHTML = courseacqstr
+
+    }
+
+    var getCourse = async (cid) => {
+    try {
+        const resp3 = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
+      
+        return resp3.data.data
+        
+
+
+        
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+};
+
 checkSatisfied();
 
-console.log(basketCourses)
+
 </script>
 </html>
