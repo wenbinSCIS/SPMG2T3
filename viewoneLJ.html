@@ -23,6 +23,7 @@
         <!--
         CSS
         ============================================= -->
+        <link rel="stylesheet" href="css/iziToast.min.css">
         <link rel="stylesheet" href="css/linearicons.css">
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="css/bootstrap.css">
@@ -265,7 +266,7 @@ h2{
  
 </body>
 
-
+<script src="js/iziToast.min.js" type="text/javascript"></script>
 <script src="js/vendor/jquery-2.2.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="js/vendor/bootstrap.min.js"></script>			
@@ -305,9 +306,18 @@ var currentBasketCourses = []
 var skilldict = {}
 var urlParams = new URLSearchParams(window.location.search);
 var selectedljid = urlParams.get('ljid');
-if(selectedljid === null){
+var actionid = urlParams.get('action');
+var roleid = 0;
+if(actionid === null){
+  window.location.href = "learningjourney.html";
+}
+if(selectedljid === null && actionid == 2){
                       window.location.href = "learningjourney.html";
                     }
+if(actionid  == 1){
+  roleid = urlParams.get('roleid');
+  selectedljid = 0
+}
                     function closeInfo(){
 				
 				$('#infoModel').modal('hide')
@@ -315,11 +325,16 @@ if(selectedljid === null){
 			}
 var checkSatisfied = async () => {
                 try {
-
-                    var getLJ = await axios.get('http://127.0.0.1:5010/LJ/getLJByLJID?ljid=' + selectedljid);
-                    var getLJData = getLJ.data.data
-                
-                    var roleidofLJ = getLJData[0].RoleID
+                    if(actionid == 1){
+                      var roleidofLJ = roleid;
+                    }
+                    else{
+                      var getLJ = await axios.get('http://127.0.0.1:5010/LJ/getLJByLJID?ljid=' + selectedljid);
+                      var getLJData = getLJ.data.data
+                  
+                      var roleidofLJ = getLJData[0].RoleID
+                    }
+                 
                     var resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + roleidofLJ);
 				          	SRBR = resp2.data.data;
     
@@ -333,7 +348,7 @@ var checkSatisfied = async () => {
 
                             for(sr of SRBR){
                       
-                      var skillname = await getSkill(roleidofLJ,sr.SkillsID)
+                      var skillname = await getSkill(sr.SkillsID)
                       name = skillname[0].Skillname
                       unsatisfied[sr.SkillsID]  = name
                      
@@ -365,7 +380,7 @@ var checkSatisfied = async () => {
                   
                     var selectedCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + selectedljid);
                     if(selectedCourses.data.code == "404"){
-
+                      notfulfilleddiv.style.visibility="visible";
                     }
                     else{
                     SCofLJ = selectedCourses.data.data
@@ -385,7 +400,7 @@ var checkSatisfied = async () => {
 
                     for(skill of skillsidtocheck){
                  
-                      var skillname = await getSkill(roleidofLJ,skill)
+                      var skillname = await getSkill(skill)
                       name = skillname[0].Skillname
               
                       if(skill in unsatisfied){
@@ -436,7 +451,7 @@ var checkSatisfied = async () => {
                     console.error(err);
                 }
             };  
-            var getSkill = async (roleid,skillid) => {
+            var getSkill = async (skillid) => {
 			try {
 				var resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
 				
@@ -560,21 +575,28 @@ async function AddToLJ(cid){
         a.every((val, index) => val == b[index]);
 }
     async function savelj(){
-     
+      if(currentBasketCourses.length == 0){
+        iziToast.error({
+                                  title: 'Error',
+                                  message: 'Save unsuccessful. Please Add at least 1 Course in your learning Journey.'
+                              });
+      }
+     else{
       basketCourses.sort()
       currentBasketCourses.sort()
-      if(arrayEquals(basketCourses,currentBasketCourses)){
-        
-      }
-      else{
-        for(currentCourse of currentBasketCourses){
-         
+      if(actionid ==1){
+        var insertGetLJIDSuccess = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' + userid + '&roleid=' + roleid);
+        if(insertGetLJIDSuccess.data.code == 201){
+          var newLJID = insertGetLJIDSuccess.data.LJID
+
+          for(currentCourse of currentBasketCourses){
+          
           if (basketCourses.includes(currentCourse)){
 
           }
           else{
           
-          var addCourse = await axios.get('http://127.0.0.1:5011/LJC/addCourseIntoBasket?ljid=' + selectedljid + '&cid=' + currentCourse);
+          var addCourse = await axios.get('http://127.0.0.1:5011/LJC/addCourseIntoBasket?ljid=' + newLJID + '&cid=' + currentCourse);
   
       
           if(addCourse.data.code==201){
@@ -591,17 +613,52 @@ async function AddToLJ(cid){
           }
         }
 
-        for(prevCourse of basketCourses){
-          if (currentBasketCourses.includes(prevCourse)){
-            
+        }
+    
+
+      }
+      else{
+      
+        if(arrayEquals(basketCourses,currentBasketCourses)){
+          
+        }
+        else{
+          for(currentCourse of currentBasketCourses){
+          
+            if (basketCourses.includes(currentCourse)){
+
             }
             else{
-              var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + prevCourse + "&ljid=" + selectedljid);
-            }
-        }
-      }
+            
+            var addCourse = await axios.get('http://127.0.0.1:5011/LJC/addCourseIntoBasket?ljid=' + selectedljid + '&cid=' + currentCourse);
+    
+        
+            if(addCourse.data.code==201){
 
+            }
+            else{
+              iziToast.error({
+                                  title: 'Error',
+                                  message: 'Update unsuccessful. Please contact adminstrator for help.'
+                              });
+    
+            }
+
+            }
+          }
+
+          for(prevCourse of basketCourses){
+            if (currentBasketCourses.includes(prevCourse)){
+              
+              }
+              else{
+                var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + prevCourse + "&ljid=" + selectedljid);
+              }
+          }
+        }
+    }
       window.location.href = "learningjourney.html";
+  }
     }
     async function getCoursesForSkill(skillid){
 
