@@ -1356,27 +1356,17 @@ span.error:after {
 	                        <h4 class="mb-3">Login</h4>
 	                        <div class="input_style_1">
 	                            <div class="form-group">
-	                                <label for="email_address">Role</label>
-	                                <input type="text" name="role" id="role" class="form-control">
+                                  <label for="cars"></label>
+                                      <select name="role" id="role"  class="form-control">
+                                        <option value="staff">Staff</option>
+                                        <option value="manager">Manager</option>
+                                        <option value="hr">HR</option>
+                                      </select>
 	                            </div>
-	                            <div class="form-group">
-	                                <label for="userid">User ID</label>
-	                                <input type="text" name="userid" id="userid" class="form-control">
-	                            </div>
-	                            <div class="clearfix mb-3">
-	                                <div class="float-left">
-	                                    <label class="container_check">Remember Me
-	                                        <input type="checkbox">
-	                                        <span class="checkmark"></span>
-	                                    </label>
-	                                </div>
-	                                <div class="float-right">
-	                                    <a id="forgot" href="javascript:void(0);">Forgot Password?</a>
-	                                </div>
-	                            </div>
+
+	           
 	                            <button type="submit" onclick="login()" class="btn_1 full-width">Login</button>
 	                        </form>
-	                        <p class="text-center mt-3 mb-0">Don't have an account? <a href="#">Sign Up</a></p>
 
 	                    </div>
 	                </div>
@@ -1392,6 +1382,18 @@ span.error:after {
 
   
     <script>
+      function login() {
+        role=document.getElementById("role").value
+        console.log(role)
+
+        if (role=="staff") {
+          window.location.replace("role.html");
+        }
+
+        if (role=="manager") {
+          window.location.replace("manager_all_role.html");
+        }
+      }
 
     </script>
   </body>
