@@ -155,14 +155,9 @@ function closeFailure(){
                 var courses = await getCourse(cid)
                 var skills="";
                 var skillsID;
-                var checkCourse = await axios.get('http://127.0.0.1:5011/LJC/checkIfCourseInLJ?ljid=' + ljidhidden.value + '&cid=' +cid);
+              
                 var classname = ""
-                if(checkCourse.data.code == 404){
-                    classname = 0
-                }
-                else{
-                    classname = 1
-                }
+     
         
 
                 innerstring += `
@@ -171,7 +166,7 @@ function closeFailure(){
                 <div class="details col-md-8">
                     <div style="width:450px !important">
                         <div class="titles" >
-                            <a href=""><h4>` + courses[0].CourseName + `</h4></a>
+                            <h4>` + courses[0].CourseName + `</h4>
                             
                         </div>
                     </div>
@@ -180,25 +175,7 @@ function closeFailure(){
 
                 
                 </div>
-                <div class="thumb">
-                    <ul class="btns">
-                        `
-                        if(classname == 0){
-                        innerstring += `
-                        <button onclick="AddCourseToLJ(this.value)" value=${cid} id='coursehtml${cid}' class="checkBtn btn btn-primary">Add to Learning Journey</a>
-                            `
-                        }
-                        else{
-                            innerstring +=
-                            `
-                            <button onclick="AddCourseToLJ(this.value)" value=${cid} id='coursehtml${cid}' class="checkBtn btn btn-success">Already added</a>
-                            `
 
-                        }
-                          innerstring +=  `
-                    </ul>
-              
-                </div>
                 </div>
                     `
             }
@@ -237,64 +214,8 @@ function closeFailure(){
         console.error(err);
     }
 };
-    var AddCourseToLJ = async (cidfrombtn) => {
-            var checkRoleRequireSkill= await checkIfRoleRequireSkill();
 
-            if(checkRoleRequireSkill == 1){
-				try {
-                    var checkCourse = await axios.get('http://127.0.0.1:5011/LJC/checkIfCourseInLJ?ljid=' + ljidhidden.value + '&cid=' +cidfrombtn);
-
-                    if(checkCourse.data.code == 404){
-                        var addCourse = await axios.get('http://127.0.0.1:5011/LJC/addCourseIntoBasket?ljid=' + ljidhidden.value + '&cid=' +cidfrombtn);
-                
-                    
-                        if(addCourse.data.code==201){
-                            var checkCourse = document.getElementById('coursehtml' + cidfrombtn)
-                            if (checkCourse == null){
-
-                            }
-                            else{
-                                checkCourse.classList.remove('btn-primary')
-                                checkCourse.classList.add('btn-success')
-                                checkCourse.innerText = "Already added"
-                                iziToast.success({
-                                title: 'Success',
-                                message: 'Course is added to your current Learning Journey'
-                            });
-                            }
-                            getLJCart();
-            
-                        }
-                        else{
-                          
-                            iziToast.error({
-                                title: 'Error',
-                                message: 'Add unsuccessful'
-                            });
-                        }
-                    }
-                    else{
-                        iziToast.error({
-                                title: 'Error',
-                                message: 'Add unsuccessful, course is already in your basket'
-                            });
-           
-                    }
-					
-				} catch (err) {
-					// Handle Error Here
-					console.error(err);
-				}
-			}
-            else{
-                $('#failModel').modal('show')
-            };
-            
-        }
-          
-    
-
-    
+        
     $(function(){
           $("#includedContent").load("sidecart.html"); 
         });

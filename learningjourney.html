@@ -40,7 +40,7 @@
     
     <div id="learningjourney">
         <input type="hidden" id="ljtodelete">
-        <input type="hidden" id="ljtoupdate">
+       
         <section class="bg-light pt-5 pb-5 shadow-sm">
             <div class="container">
           
@@ -71,27 +71,8 @@
         </div>
     </div>
 
-    <div id="deleteSaveModel" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form>
-                    <div class="modal-header">						
-                        <h4 class="modal-title">Warning</h4>
-                        <button type="button" class="close" onclick="closeDeleteSave()" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">					
-                        <p>You have an unsaved Learning Journey, would you like to save and proceed?</p>
-                        <p class="text-warning"><small>You can only proceed if you save your existing Learning Journey.</small></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="closeDeleteSave()" data-dismiss="modal"> No, Cancel </button>
-                        <button type="button" class="btn btn-danger" onclick="saveAndUpdate()" > Yes, Save and Proceed </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div id="includedContent"></div>
+
+
 </body>
 
 
@@ -122,9 +103,6 @@
 
 
 
-    		$(function(){
-			  $("#includedContent").load("sidecart.html"); 
-			});
       var userid = 8
 
            
@@ -135,82 +113,14 @@
 				
 				$('#warningModel').modal('hide')
 			}	
-            function closeDeleteSave(){
-				
-				$('#closeDeleteSave').modal('hide')
-			}	
+
             function deleteModal(ljid){
                 var hiddendelete = document.getElementById("ljtodelete")
                 hiddendelete.value = ljid
                 $('#warningModel').modal('show')
             }
-            async function saveAndUpdate(){
-                var hiddenupdate = document.getElementById("ljtoupdate")
 
-                var ljid = ljidhidden.value
-                    var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljid);
-           
-                    if(updateLJ.data.code==201){
 
-                        var updateSuccess = await axios.get('http://127.0.0.1:5010/LJ/unsaveLJById?ljid=' + hiddenupdate.value);
-                            if(updateSuccess.data.code==201){
-                                window.location.href = "role.html";
-                
-                            }
-                            else{
-                                iziToast.error({
-                                title: 'Error.',
-                                message: 'Update unsuccessful. Please contact adminstrator for help.'
-                            });
-                            }
-        
-                    }
-                    else{
-                        console.log("failure")
-                    }
-                
-            }
-            async function updateModal(ljid){
-                try{
-                var resp2 = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid=' + userid);
-                if(resp2.data.code == "404"){
-                    unsaveLJ(ljid)
-                }
-                else{
-                    if(noitems.value == 0){
-                        var deleteSuccess = await axios.get('http://127.0.0.1:5010/LJ/deleteLJbyLJID/?ljid=' + ljidhidden.value);
-                        if(deleteSuccess.data.code == 201){
-                            var updateSuccess = await axios.get('http://127.0.0.1:5010/LJ/unsaveLJById?ljid=' + ljid);
-                            if(updateSuccess.data.code==201){
-                                window.location.href = "role.html";
-                
-                            }
-                            else{
-                                iziToast.error({
-                                title: 'Error.',
-                                message: 'Update unsuccessful. Please contact adminstrator for help.'
-                            });
-                            }
-                        }
-                        else{
-                            iziToast.error({
-                                title: 'Error.',
-                                message: 'Delete unsuccessful. Please contact adminstrator for help.'
-                            });
-                        }
-                    }
-                    else{
-                        var hiddenupdate = document.getElementById("ljtoupdate")
-                        hiddenupdate.value = ljid
-                    $('#deleteSaveModel').modal('show')
-                    }
-                }
-                }
-                catch(error){
-                    console.log(error)
-                }
-
-            }
             async function deleteLJ(){
                 var ljidtodelete = document.getElementById("ljtodelete").value
                 try{
@@ -236,35 +146,7 @@
                 }
             }
 
-            var unsaveLJ = async (ljid) => {
-                try {
-                    
-                    
-                    var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/unsaveLJById?ljid=' + ljid);
-           
-                    if(updateLJ.data.code==201){
-
-                        await iziToast.success({
-                                title: 'Success',
-                                message: 'Learning Journey selected!'
-                            });
-                        window.location.href = "role.html";
-                     
-        
-                    }
-                    else{
-                        iziToast.error({
-                                title: 'Error',
-                                message: 'An unknown error occured. Please contact your adminstrator for more help!'
-                            });
-                    }
-            
-                    
-                } catch (err) {
-                    // Handle Error Here
-                    console.error(err);
-                }
-            };   
+ 
 var getLearningJourney = async () => {
     try {
 
@@ -289,7 +171,7 @@ var getLearningJourney = async () => {
              
                 var LJcourses = getLJCourses.data.data;
                 htmlstring +=`
-                <div class="col-lg-4 mb-3 d-flex align-items-stretch" id="lj${LJLJID}" style="cursor: pointer;" onclick="location.href='viewoneLJ.html?ljid=${LJLJID}'"">
+                <div class="col-lg-4 mb-3 d-flex align-items-stretch" id="lj${LJLJID}">
                    
                     <div class="card">
                      
@@ -325,7 +207,7 @@ var getLearningJourney = async () => {
                     </p>
                        <div class ="mt-auto align-self-start">
                         <button onclick="deleteModal(this.value)" value=${LJLJID} class="btn btn-primary">Delete</button>
-                        <button onclick="updateModal(this.value)" value=${LJLJID} class="btn btn-success">Modify</button>
+                        <button onclick="goNext(this.value)" value=${LJLJID} class="btn btn-success">Select</button>
                         </div>
                     </div>
                     </div>
@@ -348,7 +230,9 @@ var getLearningJourney = async () => {
         console.error(err);
     }
 };
-
+function goNext(LJLJID){
+    window.location.href = "viewoneLJ.html?ljid=" + LJLJID;
+}
 var getCourseName = async (cid) => {
                 try {
                     var courses = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);

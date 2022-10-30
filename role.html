@@ -101,50 +101,10 @@
 						</div>
 					</div>	
 				</section>
-				<div id="warningModel" class="modal fade">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form>
-								<div class="modal-header">						
-									<h4 class="modal-title">Warning</h4>
-									<button type="button" class="close" onclick="closeWarning()" data-dismiss="modal" aria-hidden="true">&times;</button>
-								</div>
-								<div class="modal-body">					
-									<p>You currently have an unsaved Learning Journey, would you like to save it before proceeding?</p>
-									<p class="text-warning"><small>This action cannot be undone.</small></p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger" onclick="clearAndProceed()" data-dismiss="modal"> No, Proceed </button>
-									<button type="button" class="btn btn-primary" onclick="saveAndProceed()" > Yes, Save and Proceed </button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
 
 
-				<div id="successModel" class="modal fade">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form>
-								<div class="modal-header">						
-									<h4 class="modal-title">Success</h4>
-									<button type="button" class="close" onclick="closeSuccess()" data-dismiss="modal" aria-hidden="true">&times;</button>
-								</div>
-								<div class="modal-body">					
-									<p>Learning Journey saved successfully!</p>
-								
-								</div>
-								<div class="modal-footer">
-									
-									<button type="button" class="btn btn-primary" onclick="closeSuccess()" data-dismiss="modal" aria-hidden="true">OK</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div id="includedContent"></div>
-			</div>
+
+
 			
 		</body>
 
@@ -181,80 +141,7 @@
 			var skills=[]
 			var currRoleToBeChanged;
 
-			function closeWarning(){
-				
-				$('#warningModel').modal('hide')
-			}		
 
-			function closeSuccess(){
-				
-				$('#successModel').modal('hide')
-
-			}
-			var clearAndProceed = async () => {
-
-				var deleteSuccess = await deleteByLJID();
-			
-				if (deleteSuccess == 1){
-					console.log("Success")
-					var proceedWithNew = await updateRoleID();
-
-					if(proceedWithNew == 1){
-						
-
-						await getLJCart();
-						iziToast.success({
-                                title: 'Success!',
-                                message: 'New Learning Journey selected!'
-                            });
-						setBtns();
-					}
-				}
-				else{
-					iziToast.error({
-                                title: 'Error!',
-                                message: 'Unable to select new Learning Journey. Please contact adminstrator.'
-                            });
-				}
-				$('#warningModel').modal('hide')
-
-
-
-			}
-			var saveAndProceed = async () => {
-
-			var saveSuccess = await saveLJRole();
-			
-			if (saveSuccess == 1){
-			
-			
-					var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + currRoleToBeChanged);
-						cartResults = createCart.data;
-						if(cartResults.code == 201){
-							
-							iziToast.success({
-                                title: 'Success!',
-                                message: 'New Learning Journey selected!'
-                            });
-							await getLJCart();
-							setBtns();
-							
-				
-				
-			}
-		}
-			else{
-				
-				iziToast.error({
-                                title: 'Error',
-                                message: 'Unable to select new Learning Journey. Please contact adminstrator.'
-                            });
-			}
-			$('#warningModel').modal('hide')
-
-
-
-			}
 															
 			var saveLJRole = async () => {
 				try {
@@ -296,29 +183,7 @@
 			}
 		};
 
-		var updateRoleID = async () => {
-			try {
-			
 
-				var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/updateRoleIDByLJID?ljid=' + ljidhidden.value + '&role=' + currRoleToBeChanged);
-				
-			
-		   
-				if(updateLJ.data.code == 201){
-					
-					return 1
-				}
-				else{
-					return 0
-				}	
-		
-		
-				
-			} catch (err) {
-				// Handle Error Here
-				console.error(err);
-			}
-		};
 			var sendGetRequest = async () => {
 			try {
 			
@@ -369,12 +234,12 @@
 					var dateneeded = date.toString().substring(4,15)
 
 					innerstring += `
-					<div class="single-post d-flex flex-row">
+					<div class="single-post d-flex flex-row" style="border-radius:4px;">
 			
 					<div class="details col-md-8">
 						<div>
 							<div class="titles" >
-								<a href=""> <h4> <i class="fa fa-user" aria-hidden="true"></i>`  + role.RoleName + `</h4></a>
+								<h4> <i class="fa fa-user" aria-hidden="true"></i> `  + role.RoleName + `</h4>
 								</br>
 								<h5 id="text`+role.RoleName+`">`+ role.Description  + `</h5>
 							</div>
@@ -389,16 +254,11 @@
 					<div class="thumb">
 						<ul class="btns">
 							`
-							if(currRoleID.value == role.RoleID){
-								innerstring += `
-								<button onclick="addRoleLJ(this.value)"  value=${role.RoleID} class="checkBtns btn btn-success">Selected</a>
-									`
-							}
-							else{
+
+
 								innerstring += `
 								<button onclick="addRoleLJ(this.value)"  value=${role.RoleID} class="checkBtns btn btn-primary">Create a Learning Journey</a>
 									`
-							}
 							
 								innerstring += 
 								`
@@ -427,87 +287,8 @@
 		
 		var skillstext = "";
 		
-		var addRoleLJ = async (roleid) => {
-			try {
-				currRoleToBeChanged = roleid
-				var resp2 = await axios.get('http://127.0.0.1:5010/LJ/getUnsavedLJById?userid=' + userid);
-				
-			
-		
-
-				skillstext = "";
-				if(resp2.data.code !="404"){
-					getRole = resp2.data.data
-					if(roleid == getRole[0].RoleID){
-						iziToast.warning({
-                                title: 'Warning!',
-                                message: 'This role is already your selected Learning Journey!'
-                            });
-					}
-					else{
-						if(noitems.value == 0){
-							var res = await updateRoleID();
-
-							if(res==1){
-							iziToast.success({
-                                title: 'Success!',
-                                message: 'New Learning Journey selected!'
-                            });
-							await getLJCart();
-							setBtns();
-							}
-						}
-						else{
-						$('#warningModel').modal('show')
-						}
-					}
-				} else {
-					//successful
 
 
-						var createCart = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' +userid + ' &roleid=' + roleid);
-						cartResults = createCart.data;
-						if(cartResults.code == 201){
-							ljidhidden.value = cartResults.LJID
-							await getLJCart();
-							iziToast.success({
-                                title: 'Success!',
-                                message: 'New Learning Journey selected!'
-                            });
-							setBtns();
-						
-					}
-					
-				}
-				
-		
-		
-				
-			} catch (err) {
-				// Handle Error Here
-				console.error(err);
-			}
-		};
-		
-		function setBtns(){
-			var btns=  document.getElementsByClassName("checkBtns")
-			for(i = 0;i < btns.length; ++i) {
-      
-
-				if(btns[i].value == currRoleID.value){
-				
-					btns[i].classList.remove('btn-primary')
-					btns[i].classList.add('btn-success')
-					btns[i].innerText = "Selected"
-				
-				}
-				else{
-					btns[i].classList.remove('btn-success')
-					btns[i].classList.add('btn-primary')
-					btns[i].innerText = "Create a Learning Journey"
-				}
-    }
-		}
 		var getSkill = async (roleid,skillid) => {
 			try {
 				var resp3 = await axios.get('http://127.0.0.1:5002/getSkillbyId?skillid=' + skillid);
@@ -532,11 +313,7 @@
 			var strTime = hours + ':' + minutes + ' ' + ampm;
 			return strTime;
 			}
-		
-		$(function(){
-			  $("#includedContent").load("sidecart.html"); 
-			});
-		
+
 		</script>
 
 
