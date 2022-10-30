@@ -112,7 +112,7 @@ def insertgetLJID():
     createLJ = learningjourney(
     # RoleID = 3,
     UserID = userid,
-    Saved = 0,
+    Saved = 1,
     RoleID = roleid,
 
     )

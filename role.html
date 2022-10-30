@@ -23,6 +23,7 @@
 			<!--
 			CSS
 			============================================= -->
+			<link rel="stylesheet" href="css/iziToast.min.css">
 			<link rel="stylesheet" href="css/linearicons.css">
 			<link rel="stylesheet" href="css/font-awesome.min.css">
 			<link rel="stylesheet" href="css/bootstrap.css">
@@ -109,7 +110,7 @@
 		</body>
 
 					<!-- End footer Area -->		
-
+					<script src="js/iziToast.min.js" type="text/javascript"></script>
 					<script src="js/vendor/jquery-2.2.4.min.js"></script>
 					<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 					<script src="js/vendor/bootstrap.min.js"></script>			
@@ -143,45 +144,8 @@
 
 
 															
-			var saveLJRole = async () => {
-				try {
-			
-					var updateLJ = await axios.get('http://127.0.0.1:5010/LJ/saveLJById?ljid=' + ljidhidden.value);
-			
-				
-					if(updateLJ.data.code==201){
-						return 1
-		
-					}
-					else{
-						return 0
-					}
-			
-					
-				} catch (err) {
-					// Handle Error Here
-					console.error(err);
-				}
-			};    
 
-			var deleteByLJID = async () => {
-			try {
-				var deleteResult = await axios.get('http://127.0.0.1:5011/LJC/deleteAllLJCbyLJID/?ljid=' + ljidhidden.value);
-				console.log(deleteResult)
-				if(deleteResult.data.code == 201){
-					
-					return 1
-				}
-				else{
-					return 0
-				}
 
-				
-			} catch (err) {
-				// Handle Error Here
-				console.error(err);
-			}
-		};
 
 
 			var sendGetRequest = async () => {
@@ -257,7 +221,7 @@
 
 
 								innerstring += `
-								<button onclick="addRoleLJ(this.value)"  value=${role.RoleID} class="checkBtns btn btn-primary">Create a Learning Journey</a>
+								<button onclick="createRole(this.value)"  value=${role.RoleID} class="checkBtns btn btn-primary">Create a Learning Journey</a>
 									`
 							
 								innerstring += 
@@ -287,7 +251,9 @@
 		
 		var skillstext = "";
 		
-
+		function createRole(roleid){
+			window.location.href = "viewoneLJ.html?roleid=" + roleid +"&action=1";
+		}
 
 		var getSkill = async (roleid,skillid) => {
 			try {
