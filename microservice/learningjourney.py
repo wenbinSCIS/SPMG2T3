@@ -53,6 +53,21 @@ class learningjourney(db.Model):
         }
 
 
+
+@app.route("/LJ/getLJByUserId")
+def get_savedLJByID():
+    args = request.args
+    userid = args.get('userid')
+    lj_list = learningjourney.query.filter(learningjourney.UserID==userid).all()
+
+    # print(role_list, flush=True)
+    try:
+    
+        return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
+    except:
+        return jsonify({ "code": 404, "message": 0 })
+
+
 @app.route("/LJ/updateRoleIDByLJID")
 def UpdateRoleIDByLJId():
     args = request.args

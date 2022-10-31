@@ -152,7 +152,7 @@ var getLearningJourney = async () => {
     try {
 
         
-        var getSavedLJ = await axios.get('http://127.0.0.1:5010/LJ/getsavedLJById?userid=' + userid);
+        var getSavedLJ = await axios.get('http://127.0.0.1:5010/LJ/getLJByUserId?userid=' + userid);
 		var ljlist = getSavedLJ.data.data
         var htmlstring = ''
       
