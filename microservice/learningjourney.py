@@ -28,7 +28,7 @@ class learningjourney(db.Model):
 
     LJID = db.Column(db.Integer, primary_key=True)
     UserID = db.Column(db.Integer, nullable=False)
-    Saved = db.Column(db.Integer, nullable=False)
+    LJName = db.Column(db.Integer, nullable=False)
     RoleID = db.Column(db.Integer, nullable=False)
 
 
@@ -47,49 +47,11 @@ class learningjourney(db.Model):
         return {
             "LJID": self.LJID, 
             "UserID": self.UserID, 
-            "Saved": self.Saved,
+            "LJName": self.LJName,
             "RoleID" : self.RoleID,
 
         }
 
-
-@app.route("/LJ/getUnsavedLJById")
-def get_UnsavedLJByID():
-    args = request.args
-    userid = args.get('userid')
-    lj_list = learningjourney.query.filter(learningjourney.Saved=="0", learningjourney.UserID==userid).all()
-
-    # print(role_list, flush=True)
-    try:
-        if(len(lj_list)):
-            return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
-        else:
-            return jsonify({ "code": 404, "message": 0 })
-    except:
-        return jsonify({ "code": 404, "message": 0 })
-
-@app.route("/LJ/saveLJById")
-def saveLJById():
-    args = request.args
-    ljid = args.get('ljid')
-    try:
-        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'Saved': 1 })
-        db.session.commit()
-    except:
-        return jsonify({"message": "An error occurred when updating the description.", "code":500})
-    return {"Success":True, "code": 201 }
-
-
-@app.route("/LJ/unsaveLJById")
-def unsaveLJById():
-    args = request.args
-    ljid = args.get('ljid')
-    try:
-        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'Saved': 0 })
-        db.session.commit()
-    except:
-        return jsonify({"message": "An error occurred when updating the description.", "code":500})
-    return {"Success":True, "code": 201 }
 
 @app.route("/LJ/updateRoleIDByLJID")
 def UpdateRoleIDByLJId():
@@ -98,6 +60,18 @@ def UpdateRoleIDByLJId():
     ljid = args.get('ljid')
     try:
         db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'RoleID': roleid })
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred when updating the description.", "code":500})
+    return {"Success":True, "code": 201 }
+
+@app.route("/LJ/updateLJNameByLJID")
+def UpdateRoleIDByLJId():
+    args = request.args
+    ljname = args.get('ljname')
+    ljid = args.get('ljid')
+    try:
+        db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'LJName': ljname })
         db.session.commit()
     except:
         return jsonify({"message": "An error occurred when updating the description.", "code":500})
