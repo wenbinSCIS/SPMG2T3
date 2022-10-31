@@ -277,7 +277,122 @@
                 }
             },
 
+            edit_course_skill(cur_course){
+                let cur_course_id = cur_course.CourseID
+                let new_skill_list = this.editted_skill_selected
 
+                let delete_skill_list=[]
+                let added_skill_list=[]
+
+                let non_deleted_skill_index=[]
+                let non_added_skill_index=[]
+
+                //fill delete_skill_list with all existing skill id
+                for (i=0;i<this.course_skill_list[cur_course_id].length;i++)
+                {
+                    delete_skill_list.push({"SkillsID":this.course_skill_list[cur_course_id][i][0]})
+                }
+
+                //fill added_skill_list with all new skill id
+                for (i=0;i<new_skill_list.length;i++)
+                {
+                    added_skill_list.push({"SkillsID":new_skill_list[i].SkillsID})
+                }
+
+                //find out which skill id is existing and is not deleted and add to non_deleted_skill_index
+                for (i=0;i<new_skill_list.length;i++)
+                {
+                    for (j=0;j<this.course_skill_list[cur_course_id].length;j++)
+                    {
+                        if(new_skill_list[i].SkillsID==this.course_skill_list[cur_course_id][j][0])
+                        {
+
+                            if (!non_deleted_skill_index.includes(j))
+                            {
+                                non_deleted_skill_index.push(j)
+                            }
+                        }
+                    }
+                }
+
+                if(non_deleted_skill_index.length>0)
+                {
+                    non_deleted_skill_index=non_deleted_skill_index.reverse()
+
+                    //remove all skills not needed to be deleted from delete_skill_list
+                    for (i=0;i<non_deleted_skill_index.length;i++)
+                    {
+                        delete_skill_list.splice(non_deleted_skill_index[i],1)
+                    }
+                }
+
+                //find out which skill id is existing and is not added and add to non_deleted_skill_index
+                for (i=0;i<this.course_skill_list[cur_course_id].length;i++)
+                {
+                    for (j=0;j<new_skill_list.length;j++)
+                    {
+                        if(new_skill_list[j].SkillsID==this.course_skill_list[cur_course_id][i][0])
+                        {
+                            if(!non_added_skill_index.includes(j))
+                            {
+                                non_added_skill_index.push(j)
+                            }
+                        }
+                    }
+
+                }
+
+                
+                if (non_added_skill_index.length>0)
+                {
+                    non_added_skill_index=non_added_skill_index.reverse()
+
+                    //remove all skills not needed to be added from delete_skill_list
+                    for (i=0;i<non_added_skill_index.length;i++)
+                    {
+                        added_skill_list.splice(non_added_skill_index[i],1)
+                    }
+                }
+
+                if(delete_skill_list.length>0)
+                {
+                    axios.post('http://127.0.0.1:5003/deletebyskillcourse', {
+                    "CourseID": cur_course_id,
+                    "Skills": delete_skill_list
+                    })
+                    .then(function (response) {
+                        console.log(response)
+                    })
+                    .catch(function (error) {
+                        console.log(error.response.data);
+                    });
+
+                }
+
+                if(added_skill_list.length>0)
+                {
+                    axios.post('http://127.0.0.1:5003/addskillcourse', {
+                        "CourseID": cur_course_id,
+                        "Skills": added_skill_list
+                        })
+                        .then(function (response) {
+                            console.log(response)
+                        })
+                        .catch(function (error) {
+                            console.log(error.response.data);
+                        });
+                }
+                //to change data so page is updated
+
+                this.course_skill_list[cur_course_id]=[]
+                for (i=0;i<this.editted_skill_selected.length;i++)
+                {
+                    this.course_skill_list[cur_course_id].push([this.editted_skill_selected[i].SkillsID,this.editted_skill_selected[i].Skillname])
+                }
+
+                this.editted_skill_selected=[]
+                
+            },
 
             remove_selected_skill(){
                 this.editted_skill_selected=[]
