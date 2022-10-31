@@ -66,7 +66,7 @@ def UpdateRoleIDByLJId():
     return {"Success":True, "code": 201 }
 
 @app.route("/LJ/updateLJNameByLJID")
-def UpdateRoleIDByLJId():
+def UpdateLJNameByLjId():
     args = request.args
     ljname = args.get('ljname')
     ljid = args.get('ljid')
@@ -83,15 +83,14 @@ def insertgetLJID():
     args = request.args
     userid = args.get('userid')
     roleid = args.get('roleid')
+    ljname = args.get('ljname')
     createLJ = learningjourney(
     # RoleID = 3,
     UserID = userid,
-    Saved = 1,
+    LJName = ljname,
     RoleID = roleid,
 
     )
-
-
 
     try:
         db.session.add(createLJ)
@@ -103,18 +102,7 @@ def insertgetLJID():
         return jsonify({"message": "An error occurred when updating the description.", "code":500})
     return {"LJID": createLJ.LJID, "Success":True, "code": 201 }
 
-@app.route("/LJ/getsavedLJById")
-def get_savedLJByID():
-    args = request.args
-    userid = args.get('userid')
-    lj_list = learningjourney.query.filter(learningjourney.Saved=="1", learningjourney.UserID==userid).all()
 
-    # print(role_list, flush=True)
-    try:
-    
-        return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
-    except:
-        return jsonify({ "code": 404, "message": 0 })
 
 
 @app.route("/LJ/getLJByLJID")
