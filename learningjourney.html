@@ -161,13 +161,14 @@ var getLearningJourney = async () => {
                
                 var LJRoleID = ljlist[lj].RoleID
                 var LJLJID = ljlist[lj].LJID
-
+                var LJName = ljlist[lj].LJName
 
                 var ljRole = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ LJRoleID);
                 var ljRoleData =ljRole.data.data;
                 var ljRoleName = ljRoleData[0].RoleName;
                 var ljRoleStatus = ljRoleData[0].Fulfilled;
-           
+                console.log(LJName)
+         
                 var getLJCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + LJLJID);
              
                 var LJcourses = getLJCourses.data.data;
@@ -178,7 +179,7 @@ var getLearningJourney = async () => {
                      
                     <img src="images/placeholder.jpg" class="card-img-top" alt="Card Image">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${ljRoleName}</h5>
+                        <h5 class="card-title">Learning Journey Name : ${LJName} <br> ${ljRoleName}</h5>
                         <p class="card-text mb-4">
                             `
                         if(ljRoleStatus== "" || ljRoleStatus==" "){

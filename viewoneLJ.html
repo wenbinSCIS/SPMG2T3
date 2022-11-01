@@ -74,7 +74,7 @@ body {
  
  
   background: #F8F9FB !important;
-  min-height: 200px;
+  min-height: 50px;
  
   
 }
@@ -127,6 +127,15 @@ h2{
   margin-top:5%;
 }
 
+.panel-title{
+  padding: 10px;
+  padding-top:20px;
+  text-align: center;
+  background:white;
+  border-radius:10px;
+  border:1px solid rgb(236, 230, 230);
+}
+
     </style>
 </head>
 <body>
@@ -135,8 +144,34 @@ h2{
 
         <div style="width:90%;margin-top:3%;text-align: center;margin-left:5%;padding-bottom:100px;">
         <div class="container-fluid">
-
             <div class="row">
+                    <div class="col panel-title">
+
+                    
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                          <h5 class="card-header-title" id="ljRoleFor">Role</h5>
+                        </div>
+
+
+                </div>
+                <div class="col-1 splitter">
+                    
+                </div>
+
+
+                <div class="col panel-title">
+
+                    
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5>Your Learning Journey Name:</h5><input type="text" id="ljName" placeholder="Enter a Name">
+                   
+                    </div>
+
+
+                </div>
+           
+            </div>
+            <div class="row" style="margin-top:20px;">
                 <div class="col panel-left">
                     <div class="card" style="background:white !important;">
                     
@@ -307,6 +342,8 @@ var skilldict = {}
 var urlParams = new URLSearchParams(window.location.search);
 var selectedljid = urlParams.get('ljid');
 var actionid = urlParams.get('action');
+var ljnameele = document.getElementById("ljName")
+var initialljname = ljnameele.value;
 var roleid = 0;
 if(actionid === null){
   window.location.href = "learningjourney.html";
@@ -327,13 +364,25 @@ var checkSatisfied = async () => {
                 try {
                     if(actionid == 1){
                       var roleidofLJ = roleid;
+
                     }
                     else{
                       var getLJ = await axios.get('http://127.0.0.1:5010/LJ/getLJByLJID?ljid=' + selectedljid);
                       var getLJData = getLJ.data.data
                   
                       var roleidofLJ = getLJData[0].RoleID
+                      var ljname = getLJData[0].LJName
+                      ljnameele.value = ljname
                     }
+
+                    var ljRole = await axios.get('http://127.0.0.1:5000/roles/getById?roleid='+ roleidofLJ);
+                    var ljRoleData =ljRole.data.data;
+                    var ljRoleName = ljRoleData[0].RoleName;
+                  
+                    var roleNameDiv = document.getElementById("ljRoleFor")
+                    roleNameDiv.innerHTML = `<h5>  Learning Journey for <span class="badge badge-pill badge-success">${ljRoleName}</span></h5>
+                      `
+
                  
                     var resp2 = await axios.get('http://127.0.0.1:5001/getSRBRbyRoleID?RoleID=' + roleidofLJ);
 				          	SRBR = resp2.data.data;
@@ -389,7 +438,7 @@ var checkSatisfied = async () => {
       
                       basketCourses.push(sc.CourseID)
                     currentBasketCourses.push(sc.CourseID)
-                      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + sc.CourseID);
+                      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?CourseID=' + sc.CourseID);
                       var SABCbyCIDdata = SABCbyCID.data.data
                       for(SABC of SABCbyCIDdata){
               
@@ -479,7 +528,7 @@ var checkSatisfied = async () => {
       <ol>`
 
 
-      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + cid);
+      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?CourseID=' + cid);
                       var SABCbyCIDdata = SABCbyCID.data.data
                       for(SABC of SABCbyCIDdata){
               
@@ -497,7 +546,7 @@ var checkSatisfied = async () => {
 
 }
 async function AddToLJ(cid){
- 
+
   var cartcourses = document.getElementById("cartcourses")
   var index = currentBasketCourses.indexOf(String(cid))
 
@@ -517,23 +566,26 @@ async function AddToLJ(cid){
     clone.id = 'coursebasket' + cid;
     var addicon = document.getElementById("add" + cid)
     cartcourses.appendChild(clone)
+   
     var changeClass = document.getElementById("coursebasket" + cid)
     changeClass.lastElementChild.innerHTML = `<button class="btn" onclick=removeCourseFromLJ(${cid})><i class="fa fa-trash"></i></button>`
 
 
 
     currentBasketCourses.push(String(cid))
- 
 
-    var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + cid);
+
+    var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?CourseID=' + cid);
       SABCbyCIDdata = SABCbyCID.data.data
       var fulfilleddiv = document.getElementById("fulfilled")
+   
       for(SABC of SABCbyCIDdata){
           
           var skilltoremove = document.getElementById(SABC.SkillsID)
 
           skilldict[SABC.SkillsID] = (skilldict[SABC.SkillsID] || 0) + 1;
           if(skilldict[SABC.SkillsID] == 1){
+       
             fulfilleddiv.appendChild(skilltoremove)
           }
           delete satisfied[SABC.SkillsID]
@@ -552,7 +604,7 @@ async function AddToLJ(cid){
       var coursetoremove = document.getElementById("coursebasket" + cid)
       coursetoremove.remove();
 
-      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?cid=' + cid);
+      var SABCbyCID = await axios.get('http://127.0.0.1:5003/getSABCbyCourseID?CourseID=' + cid);
       SABCbyCIDdata = SABCbyCID.data.data
       var notfulfilleddiv = document.getElementById("notfulfilled")
       for(SABC of SABCbyCIDdata){
@@ -574,6 +626,9 @@ async function AddToLJ(cid){
         a.length === b.length &&
         a.every((val, index) => val == b[index]);
 }
+function isEmpty(str) {
+    return !str.trim().length;
+}
     async function savelj(){
       if(currentBasketCourses.length == 0){
         iziToast.error({
@@ -585,7 +640,18 @@ async function AddToLJ(cid){
       basketCourses.sort()
       currentBasketCourses.sort()
       if(actionid ==1){
-        var insertGetLJIDSuccess = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' + userid + '&roleid=' + roleid);
+        var ljnameele = document.getElementById("ljName")
+        if(isEmpty(ljnameele.value))
+        {
+   
+          iziToast.error({
+                                  title: 'Error',
+                                  message: 'Save unsuccessful. Please enter a name for this Learning Journey.'
+                              });
+        }
+        else{
+    
+        var insertGetLJIDSuccess = await axios.get('http://127.0.0.1:5010/LJ/insertgetLJID?userid=' + userid + '&roleid=' + roleid + '&ljname=' + ljnameele.value);
         if(insertGetLJIDSuccess.data.code == 201){
           var newLJID = insertGetLJIDSuccess.data.LJID
 
@@ -600,7 +666,7 @@ async function AddToLJ(cid){
   
       
           if(addCourse.data.code==201){
-
+            
           }
           else{
             iziToast.error({
@@ -614,13 +680,25 @@ async function AddToLJ(cid){
         }
 
         }
-    
-
+        window.location.href = "learningjourney.html";
+      }
       }
       else{
-      
+        var ljnameele = document.getElementById("ljName")
+        if(isEmpty(ljnameele.value))
+        {
+   
+          iziToast.error({
+                                  title: 'Error',
+                                  message: 'Save unsuccessful. Please enter a name for this Learning Journey.'
+                              });
+        }
+        else{
         if(arrayEquals(basketCourses,currentBasketCourses)){
-          
+          if(initialljname != ljnameele.value){
+            var updateLJName = await axios.get('http://127.0.0.1:5010/LJ/updateLJNameByLJID?ljid=' + selectedljid + "&ljname=" + ljnameele.value);
+          }
+          window.location.href = "learningjourney.html";
         }
         else{
           for(currentCourse of currentBasketCourses){
@@ -655,9 +733,13 @@ async function AddToLJ(cid){
                 var res = await axios.get('http://127.0.0.1:5011/LJC/deleteLJCbyLJIDCID?cid=' + prevCourse + "&ljid=" + selectedljid);
               }
           }
+        
+
+          window.location.href = "learningjourney.html";
         }
+      }
     }
-      window.location.href = "learningjourney.html";
+      
   }
     }
     async function getCoursesForSkill(skillid){
