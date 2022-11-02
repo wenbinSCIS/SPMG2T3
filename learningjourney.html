@@ -167,7 +167,7 @@ var getLearningJourney = async () => {
                 var ljRoleData =ljRole.data.data;
                 var ljRoleName = ljRoleData[0].RoleName;
                 var ljRoleStatus = ljRoleData[0].Fulfilled;
-                console.log(LJName)
+          
          
                 var getLJCourses = await axios.get('http://127.0.0.1:5011/LJC/getLJCoursesById?ljid=' + LJLJID);
              

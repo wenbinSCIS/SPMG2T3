@@ -168,28 +168,40 @@
 					SRBR = resp2.data.data;
 					var skills="";
 					var skillsID;
-
+					var skilllist =[]
 
 					if(SRBR.length>0){
 						for(sr of SRBR){
-							var skillname = await getSkill(roles.RoleID,sr.SkillsID)
-							name = skillname[0].Skillname
-					
-	
-							skillsID=Number(sr.SkillsID)
-				
-							skills+=`
-							<li>
-								<a href="course.html?sid=`+skillsID+`">`+name+` </a>
-							</li>
 							
-							`
+					
+						
+							if(skilllist.includes("role" + role.RoleID + "skill" +sr.SkillsID)){
+
+							}
+							else{
+								skilllist.push("role" + role.RoleID + "skill" +sr.SkillsID)
+								var skillname = await getSkill(roles.RoleID,sr.SkillsID)
+								name = skillname[0].Skillname
+					
+		
+								skillsID=Number(sr.SkillsID)
+					
+								skills+=`
+								<li>
+									<a href="course.html?sid=`+skillsID+`">`+name+` </a>
+								</li>
+								
+								`
+
+
+							}
+
 						
 							
 				
 			
 						}
-				
+						var skilllist =[]
 			
 					} 
 
