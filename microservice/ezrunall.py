@@ -8,8 +8,8 @@ load_dotenv()
 # change the path in env based on your local path, e.g.:
 
 # MICROSERVICE_PATH="C:\\Users\\wenbi\Desktop\\SPMG2T3\\microservice\\"
-#MICROSERVICE_PATH=os.environ.get("MICROSERVICE_PATH")
-MICROSERVICE_PATH = "C:\\wamp64\\www\\IS212\\microservice\\"
+MICROSERVICE_PATH=os.environ.get("MICROSERVICE_PATH")
+#MICROSERVICE_PATH = "C:\\wamp64\\www\\IS212\\microservice\\"
 
 def run_app1():
     os.system(f'python {MICROSERVICE_PATH}courses.py') 

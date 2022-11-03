@@ -56,6 +56,13 @@
     <script src="js/parallax.min.js"></script>		
     <script src="js/mail-script.js"></script>	
     <script src="js/main.js"></script>
+    <script>
+        if(sessionStorage.getItem("role") != "manager" || sessionStorage.getItem("role")===null){
+            alert("You are not allowed to access this page, please login again");
+            window.location.replace("login.html")
+        }
+
+    </script>
 </head>
 <body>
     <div id="nav-placeholder"></div>
