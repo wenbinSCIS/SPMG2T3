@@ -116,7 +116,7 @@ def delete_by_skill_role():
     skill_list = data["Skills"]
 
     if skill_list==[]:
-        return { "RoleID": rid,"Success":True, "code": 201 }
+        return { "RoleID": data["RoleID"],"message":"No Skills to add to role.", "code": 500 }
     #Check if role is created in DB
     for cur_skill in skill_list:
         cur_skill_id = cur_skill["SkillsID"]
