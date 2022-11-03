@@ -104,14 +104,14 @@
                             <div class="single-post d-flex flex-column" v-for="cur_role in role_list">
                                 <div class="title d-flex justify-content-between">
                                     <div class="titles">
-                                        <a href="single.html"><h4>{{cur_role.RoleName}}</h4></a>
+                                        <a href="#"><h4>{{cur_role.RoleName}}</h4></a>
                                     </div>
                                     <a class="btn btn-outline-success" :href="'#edit_role_modal'+ cur_role.RoleID"  data-toggle="modal" :data-target="'#editrole'+cur_role.RoleID">Edit Role</a></li>
                                 </div>
                                 <a class="btn btn-outline-success" v-on:click="markAsFilled(cur_role.RoleID)">Mark as Filled</a></li>
                                 <div class="d-flex">
-                                    <div class="details">
-                                        <h5 :id="`text${cur_role.RoleID}`">{{cur_role.Description}}</h5>
+                                    <div class="details col-lg-8">
+                                        <h5 :id="`text${cur_role.RoleID}`">{{cur_role.Description}} </h5>
                                         <p class="address">
                                             <i class="fa fa-calendar"></i>
                                             Created On: <strong>
