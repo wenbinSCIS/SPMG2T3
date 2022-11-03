@@ -155,7 +155,7 @@
 												<div class="modal-body">					
 													<div class="form-group">
 														<label>Enter new skill name</label>
-														<input id="addNewSKill" type="text" class="form-control" required>
+														<input id="addNewSKill" type="text" class="form-control" v-model="addskilltext" required>
 													</div>
 												</div>
 												<div class="modal-footer">
@@ -266,6 +266,7 @@
 					  skillSearchText:"",
 					  skillSearchList:[],
 					  cachedSkillList:[],
+					  addskilltext:'',
 					};
 				},
 				methods:
@@ -276,24 +277,45 @@
 							// this gets the data, which is an array, and pass the data to Vue instance's posts property
 						  this.all_skills = response.data.data
 						  this.cachedSkillList = response.data.data
-						  console.log(this.all_skills)
 					  })
 					  .catch(error => {
 						  this.skill_list = [{ entry: 'There was an error: ' + error.message }]
 					  })
+					  
 				  },
 				addSkill(){
-					var newSkill = document.getElementById("addNewSKill").value;
+					console.log(this.cachedSkillList)
+					duplicate = false
+					for (i of this.cachedSkillList){
+							if (i['Skillname'].toLowerCase()==this.addskilltext.toLowerCase()){
+								duplicate = true
+								break
+							}
+						}
+					if (this.addskilltext==''){
+						alert('Skill name cannot be empty')
+					}
+					else if(this.addskilltext.match(/^[0-9]+$/) != null){
+						alert('Skill name cannot all be numbers')
+					}
+					else if(duplicate){
+						alert('Skill already exists in database')
+						
+					}
+					else{
+						var newSkill = this.addskilltext;
                 	
-					axios.post('http://localhost:5002/addSkill',{
-						"Skillname": newSkill,
-					})
-					  .then(response => {
-						  window.location.reload()
-					  })
-					  .catch(error => {
-						console.log(error);
-					  })
+						axios.post('http://localhost:5002/addSkill',{
+							"Skillname": newSkill,
+						})
+						.then(response => {
+							window.location.reload()
+						})
+						.catch(error => {
+							console.log(error);
+						})
+					}
+					
 				},
 				saveskillname(skillid){
                 	var newname = document.getElementById("newskillname").value;
@@ -343,6 +365,7 @@
 					}
 
 				},
+				
 		
 	  
 				},
