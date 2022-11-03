@@ -1390,14 +1390,20 @@ span.error:after {
   
     <script>
       function login() {
-        role=document.getElementById("role").value
-        console.log(role)
+        var role=document.getElementById("role").value
+        var userid=document.getElementById("userid").value
+       
 
         if (role=="staff") {
+          sessionStorage.setItem("role", role);
+          sessionStorage.setItem("userid", userid);
           window.location.replace("role.html");
+
         }
 
         if (role=="manager") {
+          sessionStorage.setItem("role", role);
+          sessionStorage.setItem("userid", userid);
           window.location.replace("manager_all_role.html");
         }
       }
