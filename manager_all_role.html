@@ -102,13 +102,13 @@
 
                         <div class="container">
                             <div class="single-post d-flex flex-column" v-for="cur_role in role_list">
-                                <div class="title d-flex justify-content-between">
+                                <div class="title d-flex">
                                     <div class="titles">
                                         <a href="#"><h4>{{cur_role.RoleName}}</h4></a>
                                     </div>
-                                    <a class="btn btn-outline-success" :href="'#edit_role_modal'+ cur_role.RoleID"  data-toggle="modal" :data-target="'#editrole'+cur_role.RoleID">Edit Role</a></li>
+
                                 </div>
-                                <a class="btn btn-outline-success" v-on:click="markAsFilled(cur_role.RoleID)">Mark as Filled</a></li>
+                                
                                 <div class="d-flex">
                                     <div class="details col-lg-8">
                                         <h5 :id="`text${cur_role.RoleID}`">{{cur_role.Description}} </h5>
@@ -122,6 +122,12 @@
                                     <div class="thumb">
                                         <img src="img/post.png" alt="">
                                         <ul class="tags">
+                                            <div style="margin-bottom:20px;">
+                                            <a class="btn btn-outline-success" :href="'#edit_role_modal'+ cur_role.RoleID"  data-toggle="modal" :data-target="'#editrole'+cur_role.RoleID">Edit Role</a>
+                                  
+                                            <a class="btn btn-outline-success" style="margin-left:20px;" v-on:click="markAsFilled(cur_role.RoleID)">Mark as Filled</a>
+
+                                            </div>
                                             <li v-for="cur_skill in role_skill_list[cur_role.RoleID]" class="btn">
                                                 <a :href="`course.html?sid=${cur_skill[0]}`">{{cur_skill[1]}}</a>
                                             </li>
