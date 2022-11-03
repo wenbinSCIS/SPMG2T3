@@ -216,5 +216,26 @@ def update_description_by_ID():
             return jsonify({"message": "An error occurred when updating the description.", "code":500})
         return { "RoleID": data["Role ID"],"Success":True, "code": 201 }
 
+
+@app.route("/roles/updateRoleStatus",methods=["POST"])
+def update_role_status():
+    data = request.get_json()
+    if not all(key in data.keys() for key in ('Role ID', 'Status')):
+        return jsonify({ "message": "Incorrect JSON object provided."}), 500
+    #Check if role is created in DB
+    role = Roles.query.filter_by(RoleID=data["Role ID"]).first()
+    if not role:
+        return jsonify({ "message": "RoleID is not valid." }), 500
+    else:
+        if role.Fulfilled == data["Status"]:
+            return jsonify({ "message": "Role is already the thing you are changing to" }), 501
+        else:
+            try:
+                db.session.query(Roles).filter(Roles.RoleID == data["Role ID"]).update({'Fulfilled': data["Status"] })
+                db.session.commit()
+            except:
+                return jsonify({"message": "An error occurred when updating the Fulfilled status.", "code":500})
+        return { "RoleID": data["Role ID"],"Success":True,"Status": data["Status"], "code": 201 }
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
