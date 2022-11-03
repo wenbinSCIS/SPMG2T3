@@ -318,10 +318,12 @@
 					
 				},
 				saveskillname(skillid){
-                	var newname = document.getElementById("newskillname").value;
-                	
+                	var newname = document.getElementById("newskill").value;
+                	console.log(newname)
 					axios.post('http://localhost:5002/updateskillnamebyID',{
-						"Skillname": this.newname,
+						"Skill ID": skillid,
+						"Skillname": newname,
+						
 					})
 					  .then(response => {
 							// this gets the data, which is an array, and pass the data to Vue instance's posts property
