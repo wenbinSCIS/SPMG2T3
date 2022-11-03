@@ -325,10 +325,29 @@ h2{
         $("#nav-placeholder").load("sidebar_staff.html");
     });
 
+    if (sessionStorage.getItem("role") === null) {
+					alert("No role detected. Redirecting you to the login page")
+					window.location.replace("login.html")
+
+				}
+
+				else{
+
+				}
 
 
+				if (sessionStorage.getItem("userid") === null) {
+					alert("No UserID detected. Redirecting you to the login page")
+					window.location.replace("login.html")
 
-      var userid = 8
+				}
+
+				else{
+          var userid = sessionStorage.getItem("userid")
+				}
+
+
+    
 
            
 </script>
