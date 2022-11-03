@@ -102,9 +102,28 @@
 
 
 
+    if (sessionStorage.getItem("role") === null) {
+					alert("No role detected. Redirecting you to the login page")
+					window.location.replace("login.html")
+
+				}
+
+				else{
+
+				}
 
 
-      var userid = 8
+				if (sessionStorage.getItem("userid") === null) {
+					alert("No UserID detected. Redirecting you to the login page")
+					window.location.replace("login.html")
+
+				}
+
+				else{
+          var userid = sessionStorage.getItem("userid")
+				}
+
+
 
            
 </script>
