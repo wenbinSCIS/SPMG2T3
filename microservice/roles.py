@@ -64,7 +64,7 @@ def get_all():
     if len(role_list):
         return jsonify({ "code": 200,"data": [role.to_dict() for role in role_list] }), 200
     else:
-        return jsonify({ "code": 404, "message": "There are no role." }), 404
+        return jsonify({ "code": 404, "message": "There are no role." })
     
     
 @app.route("/roles/getUnfilled")
@@ -138,7 +138,7 @@ def update_all_by_ID():
         }
     '''
     data = request.get_json()
-    if not all(key in data.keys() for key in ('Role ID', 'Description','RoleName')):
+    if not all(key in data.keys() for key in ('Role ID', 'Description')):
         return jsonify({ "message": "Incorrect JSON object provided."}), 500
     #Check if role is created in DB
     role = Roles.query.filter_by(RoleID=data["Role ID"]).first()
