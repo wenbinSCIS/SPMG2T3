@@ -436,3 +436,52 @@ class TestUpdateRoleNameById(TestApp):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json, 
                     { "message": "Incorrect JSON object provided."})
+
+class TestGetRoleById(TestApp):
+    def test_get_role_by_id(self):
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+                    Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
+        db.session.add(r1)
+        db.session.commit()
+        
+
+        response = self.client.get("/roles/getById?roleid="+str(r1.RoleID))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, 
+                    { "code": 200,"data": 
+                    [{
+                    'RoleID': r1.RoleID,
+                    'RoleName': r1.RoleName,
+                    'CreatedBy': r1.CreatedBy,
+                    "Fulfilled": r1.Fulfilled,
+                    "Description":r1.Description,
+                    "TimeAdded": r1.TimeAdded
+                    }]})
+
+
+    def test_get_role_by_id_invalid_id(self):
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+                    Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
+        db.session.add(r1)
+        db.session.commit()
+        
+
+        response = self.client.get("/roles/getById?roleid="+str(2))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json, 
+                    {"code": 404, "message": "There are no role."})
+
+    def test_get_role_by_id_no_id(self):
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+                    Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
+        db.session.add(r1)
+        db.session.commit()
+        
+
+        response = self.client.get("/roles/getById?roleid=")
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json, 
+                    {"code": 404, "message": "There are no role."})
