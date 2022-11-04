@@ -5,11 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
 import os
-from dotenv import load_dotenv
+
 from datetime import datetime
 import requests
 
-load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
