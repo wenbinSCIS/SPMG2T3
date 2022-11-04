@@ -1,5 +1,5 @@
 #This is an optional tag. This will be the workflow name appearing on the Actions tab of your git repo
-name: Demo Workflow
+name: Test Workflow
 
 #Specifies the trigger for this workflow. This workflow will be triggered on push event, 
 #that is every time someone pushes a change to the repository or merges a pull request. 
