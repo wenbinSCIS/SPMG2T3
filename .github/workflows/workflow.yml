@@ -54,10 +54,10 @@ jobs:
         #runs the unittest
         run: |
           #TODO: Add the command to run all the unittest here.
-          python ../microservice/role_unit_tests.py
+          python microservice/role_unit_test.py
 
       - name: Test with integrationtest
         #runs the integrationtest
         run: |
           #TODO: Add the command to run all the integrationtest here.
-          python ../microservice/role_unit_tests.py
+          python microservice/role_unit_test.py
