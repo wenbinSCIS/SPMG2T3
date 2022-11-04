@@ -41,7 +41,7 @@ class TestGetAll(TestApp):
     def test_get_all_no_role(self):
         response = self.client.get("/roles/getAll")
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, { "code": 404, "message": "There are no role." })
 
 class TestGetUnfilled(TestApp):
