@@ -56,6 +56,12 @@
     <script src="js/parallax.min.js"></script>		
     <script src="js/mail-script.js"></script>	
     <script src="js/main.js"></script>
+
+    <style>
+        .single-post > *{
+            flex:1;
+        }
+    </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
@@ -80,8 +86,8 @@
 
         <!-- Start post Area -->
         <section class="post-area section-gap">
-            <div class="container" id="role_table">
-                <div class="row justify-content-center d-flex">
+            <div class="container" id="role_table" style='display: flex; flex-wrap: wrap;'>
+                <div class="row justify-content-center">
                     <div class="col-lg-8 post-list">
                         <div class="input-group rounded">
                             <input type="search" class="form-control rounded" v-model="roleSearchText"  v-on:keyup="searchRole" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
@@ -95,23 +101,18 @@
 
                         <div class="container">
                             <div class="single-post d-flex flex-column" v-for="cur_course in course_list">
-                                <div class="title d-flex justify-content-between">
+                                <div class="title d-flex justify-content-between" >
                                     <div class="titles">
-                                        <a href="single.html"><h4>{{cur_course.CourseName}}</h4></a>
+                                        <a href="#"><h4>{{cur_course.CourseName}}</h4></a>
                                     </div>
                                     <a class="btn btn-outline-success" :href="'#edit_role_modal'+ cur_course.CourseID"  data-toggle="modal" :data-target="'#editcourse'+cur_course.CourseID">Edit Course</a></li>
                                 </div>
-                                <div class="d-flex">
+                                <div class="d-flex col-lg-8" >
                                     <div class="details">
-                                        <h5 :id="`text${cur_course.CourseID}`">{{cur_course.CourseDescription}}</h5>
+                                        <h5 :id="`text${cur_course.CourseID}`">{{cur_course.CourseDescription}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                  </h5>
                                     </div>
                                     <div class="thumb">
-                                        <img src="img/post.png" alt="">
-                                        <ul class="tags">
-                                            <li v-for="cur_skill in course_skill_list[cur_course.CourseID]" class="btn">
-                                                <a :href="`course.html?sid=${cur_skill[0]}`">{{cur_skill[1]}}</a>
-                                            </li>
-                                        </ul>
+
                                     </div>
                                 </div>
                             

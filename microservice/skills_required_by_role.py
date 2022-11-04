@@ -82,12 +82,20 @@ def add_skill_role():
     if not all(key in data.keys() for key in ('Skills', 'RoleID')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
-    srbr_list = SRBR.query.all()
+    srbr_list = SRBR.query.filter_by(RoleID = data["RoleID"]).all()
+    all_skills_srbr = [] #List of skills that are currently tied with the Role
+    for srbr in srbr_list:
+        all_skills_srbr.append(srbr.SkillsID)
+    
+    for skill in data["Skills"]:
+        if skill in all_skills_srbr:
+            return jsonify({ "message": "Error Occured. Skill already tied to Role." }), 500
+        
     # print(role_list, flush=True)
     skill_list=data["Skills"]
 
     if skill_list==[]:
-        return { "RoleID": data["RoleID"],"Success":True, "code": 201 }
+        return { "RoleID": data["RoleID"],"message":"No Skills to add to role.", "code": 500 }
 
     for cur_skill in skill_list:
         add_skill_role = SRBR(
@@ -108,7 +116,7 @@ def delete_by_skill_role():
     skill_list = data["Skills"]
 
     if skill_list==[]:
-        return { "RoleID": rid,"Success":True, "code": 201 }
+        return { "RoleID": data["RoleID"],"message":"No Skills to add to role.", "code": 500 }
     #Check if role is created in DB
     for cur_skill in skill_list:
         cur_skill_id = cur_skill["SkillsID"]
