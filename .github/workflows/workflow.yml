@@ -41,7 +41,6 @@ jobs:
           python -m pip install flask-cors
           python -m pip install flask
           python -m pip install flask_sqlalchemy
-          python -m pip install os
           python -m pip install datetime
           python -m pip install dotenv
           #TODO: Install flak8 using pip command here
