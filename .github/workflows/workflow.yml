@@ -37,6 +37,13 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8
           python -m pip install freezegun
+          python -m pip install requests
+          python -m pip install flask-cors
+          python -m pip install flask
+          python -m pip install flask_sqlalchemy
+          python -m pip install os
+          python -m pip install datetime
+          python -m pip install dotenv
           #TODO: Install flak8 using pip command here
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
