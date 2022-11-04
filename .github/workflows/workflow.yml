@@ -68,4 +68,4 @@ jobs:
         #runs the integrationtest
         run: |
           #TODO: Add the command to run all the integrationtest here.
-          python microservice/role_unit_test.py
+          python microservice/role_integration_test.py
