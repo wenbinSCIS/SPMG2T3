@@ -45,7 +45,6 @@ jobs:
           python -m pip install mysql
           python -m pip install mysql-connector
           python -m pip install flask_testing
-          python -m pip install json
           #TODO: Install flak8 using pip command here
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
