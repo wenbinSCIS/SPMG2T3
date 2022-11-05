@@ -163,6 +163,16 @@
             },
 
             create_role(){
+                if (this.role_name=='' || this.description==''){
+                    alert('role name and description cannot be empty')
+                }
+                else if(this.role_name.match(/^[0-9]+$/) != null || this.description.match(/^[0-9]+$/) != null){
+                    alert('role name and description cannot all be numbers')
+                }
+                else if(Object.keys(this.skill_selected).length==0){
+                    alert('Please assign at least 1 skill to the role')
+                }
+                else{        	
                     axios.post('http://127.0.0.1:5020/add_role', {
                         "Role Name": this.role_name,
                         "Created By": "function test",
@@ -176,6 +186,8 @@
                             console.log(error);
                         });
                         window.location.href="manager_all_role.html"
+                }
+  
             },
             return_to_role(){
                 window.location.href="manager_all_role.html"
