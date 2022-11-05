@@ -38,7 +38,7 @@ class GetLJCoursesById(TestApp):
     def test_get_LJCoursesById_no_ljid_item(self):
         response = self.client.get("/LJC/getLJCoursesById?ljid="+str(2))
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, { "code": 404, "message": 0 })
 
 

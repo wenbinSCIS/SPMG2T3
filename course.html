@@ -216,10 +216,7 @@ function closeFailure(){
 };
 
         
-    $(function(){
-          $("#includedContent").load("sidecart.html"); 
-        });
-    
+
     </script>
 
 
@@ -231,7 +228,7 @@ function closeFailure(){
 var getCourse = async (cid) => {
     try {
         const resp3 = await axios.get('http://127.0.0.1:5004/getCoursebyId?cid=' + cid);
-        console.log(resp3)
+       
         return resp3.data.data
         
 

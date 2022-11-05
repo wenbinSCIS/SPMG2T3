@@ -61,7 +61,7 @@ def get_LJCoursesById():
     if len(lj_list):
         return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
     else:
-        return jsonify({ "code": 404, "message": 0 }), 404
+        return jsonify({ "code": 404, "message": 0 })
 
 @app.route("/LJC/deleteLJCbyLJIDCID/")
 def delete_LJC_by_ID():

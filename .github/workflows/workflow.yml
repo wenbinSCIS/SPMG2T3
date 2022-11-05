@@ -68,6 +68,8 @@ jobs:
           python microservice/srbr_unit_test.py
           python microservice/skills_unit_test.py
           python microservice/courses_unit_test.py
+          python microservice/learningjourney_unit_test.py
+          python microservice/learningjourneycourses_unit_test.py
 
 
       - name: Test with integrationtest
