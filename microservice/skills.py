@@ -146,7 +146,7 @@ def delete_skillname_by_ID():
     data = request.get_json()
     all_pass = True
     try:
-        skills = data["Skill IDs"]
+        the_skills = data["Skill IDs"]
         if len(data["Skill IDs"])<=0:
             return jsonify({ "message": "Skill ID list is empty"}), 500
     except:
@@ -156,7 +156,7 @@ def delete_skillname_by_ID():
         return jsonify({ "message": "Incorrect JSON object provided."}), 500
     
     #Check if skills is created in DB
-    for each_skill in skills:
+    for each_skill in data["Skill IDs"]:
         skill = skills.query.filter_by(SkillsID=each_skill).first()
         if not skill:
             all_pass = False

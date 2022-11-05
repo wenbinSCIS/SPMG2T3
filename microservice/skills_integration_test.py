@@ -97,7 +97,7 @@ class TestDeleteSkillById(TestApp):
         db.session.commit()
         
         request_body ={
-            "Skill IDs":[1]
+            "Skill IDs":[1  ]
         }
 
         response = self.client.post("/deleteskillsbyID",
@@ -108,7 +108,7 @@ class TestDeleteSkillById(TestApp):
         self.assertEqual(response.json, 
                     { "Skill IDs": [1],"Success":True, "code": 201 })
 
-    def test_delete_skill_by_id_singular(self):
+    def test_delete_skill_by_id_multiple(self):
         sk1 = skills(SkillsID=1,Skillname='Being on Time')
         sk2 = skills(SkillsID=2,Skillname='Alwways Late')
         db.session.add(sk1)
