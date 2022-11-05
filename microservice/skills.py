@@ -147,7 +147,7 @@ def delete_skillname_by_ID():
     all_pass = True
     try:
         the_skills = data["Skill IDs"]
-        if len(data["Skill IDs"])<=0:
+        if len(the_skills)<=0:
             return jsonify({ "message": "Skill ID list is empty"}), 500
     except:
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
