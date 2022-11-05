@@ -130,9 +130,11 @@ def delete_role_by_ID():
 
 @app.route("/roles/getById")
 def get_roleById():
-  
     args = request.args
     roleid = args.get('roleid')
+
+    if roleid==None or roleid=="":
+        return jsonify({ "message": "Incorrect JSON object provided."}), 500
 
     role_list = Roles.query.filter(Roles.RoleID==roleid).all()
     # print(role_list, flush=True)

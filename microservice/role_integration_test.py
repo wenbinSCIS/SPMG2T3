@@ -478,10 +478,9 @@ class TestGetRoleById(TestApp):
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
-        
 
         response = self.client.get("/roles/getById?roleid=")
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json, 
-                    {"code": 404, "message": "There are no role."})
+                    { "message": "Incorrect JSON object provided."})
