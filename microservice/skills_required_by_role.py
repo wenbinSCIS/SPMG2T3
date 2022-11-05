@@ -53,13 +53,18 @@ class SRBR(db.Model):
 def get_all_by_roleid():
     args = request.args
     rid = args.get('RoleID')
-    select = SRBR.query.filter_by(RoleID=rid)
-    return jsonify(
-        {
-            "data": [role.to_dict()
-                    for role in select]
-        }
-    ), 200
+    if rid==None:
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+    select = SRBR.query.filter_by(RoleID=rid).all()
+    if len(select):
+        return jsonify(
+            {
+                "data": [role.to_dict()
+                        for role in select]
+            }
+        ), 200
+    else:
+        return jsonify({ "code": 404, "message": "There are no SRBR." }), 404
 
 
 @app.route("/getByRIDSID")
@@ -69,12 +74,15 @@ def get_byRIDSID():
     roleid = args.get('roleid')
     skillid = args.get('sid')
 
+    if roleid==None or skillid==None or roleid=="" or skillid=="":
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+
     res = SRBR.query.filter(SRBR.RoleID==roleid,SRBR.SkillsID== skillid).all()
     # print(role_list, flush=True)
     if len(res):
         return jsonify({ "code": 201,"message": "Required." })
     else:
-        return jsonify({ "code": 404, "message": "Not required." })
+        return jsonify({ "code": 404, "message": "Not required." }),404
 
 @app.route("/addskillrole",methods=["POST"])
 def add_skill_role():
@@ -88,14 +96,14 @@ def add_skill_role():
         all_skills_srbr.append(srbr.SkillsID)
     
     for skill in data["Skills"]:
-        if skill in all_skills_srbr:
+        if skill["SkillsID"] in all_skills_srbr:
             return jsonify({ "message": "Error Occured. Skill already tied to Role." }), 500
         
     # print(role_list, flush=True)
     skill_list=data["Skills"]
 
     if skill_list==[]:
-        return { "RoleID": data["RoleID"],"message":"No Skills to add to role.", "code": 500 }
+        return { "RoleID": data["RoleID"],"message":"No Skills to add to role.", "code": 500 },500
 
     for cur_skill in skill_list:
         add_skill_role = SRBR(
@@ -116,7 +124,7 @@ def delete_by_skill_role():
     skill_list = data["Skills"]
 
     if skill_list==[]:
-        return { "RoleID": data["RoleID"],"message":"No Skills to add to role.", "code": 500 }
+        return { "RoleID": data["RoleID"],"message":"No Skills to add to role.", "code": 500 },500
     #Check if role is created in DB
     for cur_skill in skill_list:
         cur_skill_id = cur_skill["SkillsID"]

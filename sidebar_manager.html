@@ -249,17 +249,17 @@
         </a>
 
         <!--Add pages below here inside the ul tag-->
-        <!--find icons from here: https://icon-sets.iconify.design/uil/apple-alt/-->
+        <!--find icons from here: https://icon-sets.iconify.design/uil/apple-alt/ -->
 
         <ul class="categories list-unstyled">
           <li class="sidebar-item" id="manager_all_role1" >
-            <i class="uil-user-check"></i><a href="manager_all_role.html">Roles</a>
+            <i class="uil-user-check"></i><a href="manager_all_role.html">Manage Roles</a>
           </li>
           <li class="sidebar-item" id="allskills_manager1" >
-            <i class="uil-dumbbell"></i><a href="allskills_manager.html">Skills</a>
+            <i class="uil-dumbbell"></i><a href="allskills_manager.html">Manage Skills</a>
           </li>
-          <li class="sidebar-item" id="learningjourney1">
-            <i class="uil-rocket"></i><a href="learningjourney.html">Learning Journey</a>
+          <li class="sidebar-item" id="manager_all_course1">
+            <i class="uil-book-open"></i><a href="manager_all_course.html">Manage Courses</a>
           </li>
           <li class="sidebar-item">
             <i class="uil-power"></i><a href="#" onclick="logout()">Logout</a>
@@ -301,7 +301,13 @@
       var path = window.location.pathname;
       var page = path.split("/").pop();
       var selectedPage=page.split(".")[0];
-      document.getElementById(selectedPage+"1").setAttribute("selected", "active")
+
+      if(selectedPage == "manager_create_role"){
+        document.getElementById("manager_all_role"+"1").setAttribute("selected", "active")
+      }
+      else{
+        document.getElementById(selectedPage+"1").setAttribute("selected", "active")
+      }
 
       function toggleSidebar() {
         if (mini) {
