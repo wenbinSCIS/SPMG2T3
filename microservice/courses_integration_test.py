@@ -20,7 +20,7 @@ class TestApp(flask_testing.TestCase):
         db.drop_all()
 
 class TestGetAllCourses(TestApp):
-    def test_get_all_courses(self):
+    def test_get_all_courses_multiple(self):
         c1 = courses(CourseID = 1,CourseName='Figma',CourseDescription="UI Creation and artistic vision")
         c2 = courses(CourseID = 2,CourseName='Canva',CourseDescription="UI Creation and artistic vision as well")
         db.session.add(c1)
@@ -30,7 +30,7 @@ class TestGetAllCourses(TestApp):
         response = self.client.get("/courses/getAll")
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json["data"], [{
+        self.assertEqual(response.json[0]["data"], [{
             'CourseID': c1.CourseID,
             'CourseName': c1.CourseName,
             "CourseDescription": c1.CourseDescription,
@@ -40,12 +40,46 @@ class TestGetAllCourses(TestApp):
             "CourseDescription": c2.CourseDescription,
         }
         ])
-
+    def test_get_all_courses_singular(self):
+        c1 = courses(CourseID = 1,CourseName='Figma',CourseDescription="UI Creation and artistic vision")
+        db.session.add(c1)
+        db.session.commit()
         
+        response = self.client.get("/courses/getAll")
 
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["data"], [{
+            'CourseID': c1.CourseID,
+            'CourseName': c1.CourseName,
+            "CourseDescription": c1.CourseDescription,
+        }
+        ])
     def test_get_all_no_courses(self):
         response = self.client.get("/courses/getAll")
 
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json, { "code": 404, "message": "No Courses Found." })
+
+class TestGetCourseByID(TestApp):
+    def test_get_course_by_ID(self):
+        c1 = courses(CourseID = 1,CourseName='Figma',CourseDescription="UI Creation and artistic vision")
+        c2 = courses(CourseID = 2,CourseName='Canva',CourseDescription="UI Creation and artistic vision as well")
+        db.session.add(c1)
+        db.session.add(c2)
+        db.session.commit()
+        
+        response = self.client.get("/getCoursebyId?cid=1")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["data"], [{
+            'CourseID': c1.CourseID,
+            'CourseName': c1.CourseName,
+            "CourseDescription": c1.CourseDescription,
+        }])
+
+    def test_get_course_by_ID_no_courses(self):
+        response = self.client.get("/getCoursebyId?cid=3")
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, { "message": "CourseID is not valid." })
 
