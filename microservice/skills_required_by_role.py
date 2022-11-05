@@ -137,7 +137,7 @@ def delete_by_skill_role():
                 db.session.commit()
             except:
                 return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
-        return { "RoleID": rid,"Success":True, "code": 201 }
+    return { "RoleID": rid,"Success":True, "code": 201 }
 
 
 if __name__ == '__main__':
