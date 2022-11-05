@@ -53,13 +53,14 @@ class skills(db.Model):
 def get_skill_by_skillid():
     args = request.args
     sid = args.get('skillid')
-    select = skills.query.filter_by(SkillsID=sid)
-    return jsonify(
-        {
-            "data": [skill.to_dict()
-                     for skill in select]
-        }
-    ), 200
+    if sid:
+        select = skills.query.filter_by(SkillsID=sid).all()
+        if len(select)==1:
+            return jsonify({ "code": 200,"data": [skill.to_dict() for skill in select] }), 200
+        else:
+            return jsonify({ "code": 404, "message": "No skill with this skill ID present in DB." }), 404
+    else:
+        return jsonify({ "code": 404, "message": "No Skill ID provided" }), 404
 
 @app.route("/getAllSkill")
 def get_all_skill():
@@ -70,11 +71,11 @@ def get_all_skill():
                 "code": 200,
                 "data":  [skill.to_dict() for skill in skill_list] # edited to same format as /getSkillbyId
             }
-        )
+        ),200
     return jsonify(
         {
             "code": 404,
-            "message": "There are no skill creation."
+            "message": "There are no skills created."
         }
     ), 404
 @app.route("/updateskillnamebyID",methods=["POST"])
@@ -89,6 +90,8 @@ def update_skillname_by_ID():
     data = request.get_json()
     if not all(key in data.keys() for key in ('Skill ID', 'Skillname')):
         return jsonify({ "message": "Incorrect JSON object provided."}), 500
+    if data["Skillname"] == "" or data["Skillname"] == " ":
+        return jsonify({ "message": "Skill name cannot be empty."}), 500
     #Check if role is created in DB
     skill = skills.query.filter_by(SkillsID=data["Skill ID"]).first()
     if not skill:
@@ -112,12 +115,20 @@ def create_skill():
     '''
     data = request.get_json()
 
-    if not (key in data.keys() for key in ( 'Skillname')):
+    try:
+        skill = data["Skillname"]
+        if data["Skillname"] == '' or data["Skillname"] == ' ':
+            return jsonify({ "message": "Skillname should not be blank" }), 500
+    except:
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
+
+    if not (key in data.keys() for key in ('Skillname')):
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+
     
     Add_skills = skills(
         
-        Skillname = data["Skillname"]
+        Skillname = skill
 
     )
     try:
@@ -134,10 +145,18 @@ def delete_skillname_by_ID():
     '''Skillid is in a list'''
     data = request.get_json()
     all_pass = True
+    try:
+        skills = data["Skill IDs"]
+        if len(data["Skill IDs"])<=0:
+            return jsonify({ "message": "Skill ID list is empty"}), 500
+    except:
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+
     if not (key in data.keys() for key in ('Skill IDs')):
         return jsonify({ "message": "Incorrect JSON object provided."}), 500
+    
     #Check if skills is created in DB
-    for each_skill in data["Skill IDs"]:
+    for each_skill in skills:
         skill = skills.query.filter_by(SkillsID=each_skill).first()
         if not skill:
             all_pass = False

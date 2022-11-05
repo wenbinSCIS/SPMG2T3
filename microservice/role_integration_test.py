@@ -19,7 +19,7 @@ class TestApp(flask_testing.TestCase):
         db.session.remove()
         db.drop_all()
 
-class TestGetAll(TestApp):
+class TestGetAllRoles(TestApp):
     def test_get_all(self):
         r1 = Roles(RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
@@ -43,6 +43,7 @@ class TestGetAll(TestApp):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, { "code": 404, "message": "There are no role." })
+
 
 class TestGetUnfilled(TestApp):
     def test_get_Unfilled(self):

@@ -136,7 +136,7 @@ def get_roleById():
 
     role_list = Roles.query.filter(Roles.RoleID==roleid).all()
     # print(role_list, flush=True)
-    if len(role_list):
+    if len(role_list)==1:
         return jsonify({ "code": 200,"data": [role.to_dict() for role in role_list] }), 200
     else:
         return jsonify({ "code": 404, "message": "There are no role." }), 404

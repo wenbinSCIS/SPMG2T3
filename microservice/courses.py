@@ -52,11 +52,14 @@ class courses(db.Model):
 def get_course_by_courseid():
     args = request.args
     cid = args.get('cid')
-    select = courses.query.filter_by(CourseID=cid).all()
-    if len(select)<1:
-        return jsonify({ "message": "CourseID is not valid." }), 500
+    if cid:
+        select = courses.query.filter_by(CourseID=cid).all()
+        if len(select)<1:
+            return jsonify({ "message": "CourseID is not valid." }), 500
+        else:
+            return jsonify({ "data": [course.to_dict() for course in select] }), 200
     else:
-        return jsonify({ "data": [course.to_dict() for course in select] }), 200
+        return jsonify({ "message": "No Course ID provided" }), 500
         
 
 @app.route("/courses/getAll")
