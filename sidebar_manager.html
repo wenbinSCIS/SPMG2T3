@@ -301,7 +301,13 @@
       var path = window.location.pathname;
       var page = path.split("/").pop();
       var selectedPage=page.split(".")[0];
-      document.getElementById(selectedPage+"1").setAttribute("selected", "active")
+
+      if(selectedPage == "manager_create_role"){
+        document.getElementById("manager_all_role"+"1").setAttribute("selected", "active")
+      }
+      else{
+        document.getElementById(selectedPage+"1").setAttribute("selected", "active")
+      }
 
       function toggleSidebar() {
         if (mini) {

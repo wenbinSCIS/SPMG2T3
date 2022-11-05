@@ -86,8 +86,16 @@
 				<section class="blog-posts-area section-gap">
 					<div id="skills">
 					<div class="container-fluid" >
+						<div class="rightbar">
+							<div class="single-widget search-widget">
+								<form class="example" action="#" style="margin:auto;max-width:300px">
+								  <input type="text" v-model="skillSearchText"  v-on:keyup="searchSkill"  placeholder="Search skills" name="search2">
+								  <button type="submit"><i class="fa fa-search"></i></button>
+								</form>								
+							</div>
+						</div>
 						<div class="row">
-							<div class="col-lg-8 post-list blog-post-list">
+							<div class="post-list blog-post-list">
 								<div class="table-responsive">
 									<div class="table-wrapper">
 										<div class="table-title">
@@ -129,18 +137,6 @@
 												</tr>
 											</tbody>
 										</table>
-										<div class="clearfix">
-											<div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-											<ul class="pagination">
-												<li class="page-item disabled"><a href="#">Previous</a></li>
-												<li class="page-item"><a href="#" class="page-link">1</a></li>
-												<li class="page-item"><a href="#" class="page-link">2</a></li>
-												<li class="page-item active"><a href="#" class="page-link">3</a></li>
-												<li class="page-item"><a href="#" class="page-link">4</a></li>
-												<li class="page-item"><a href="#" class="page-link">5</a></li>
-												<li class="page-item"><a href="#" class="page-link">Next</a></li>
-											</ul>
-										</div>
 									</div>
 								</div>
 								<!--addSkill Modal HTML-->
@@ -178,7 +174,7 @@
 												<div class="modal-body">					
 													<div class="form-group">
 														<label>Ente new skill name</label>
-														<input id="newskill" type="text" class="form-control" required>
+														<input id="newskill" type="text" class="form-control" v-model="renameskilltext" required>
 													</div>
 												</div>
 												<div class="modal-footer">
@@ -213,19 +209,6 @@
 										</div>
 									</div>
 								</div>													
-							</div>
-							<div class="col-lg-4 rightbar">
-								<div class="single-widget search-widget">
-									<form class="example" action="#" style="margin:auto;max-width:300px">
-									  <input type="text" v-model="skillSearchText"  v-on:keyup="searchSkill"  placeholder="Search skills" name="search2">
-									  <button type="submit"><i class="fa fa-search"></i></button>
-									</form>								
-								</div>
-	
-								
-			
-	
-					
 							</div>
 						</div>
 					</div>	
@@ -267,6 +250,7 @@
 					  skillSearchList:[],
 					  cachedSkillList:[],
 					  addskilltext:'',
+					  renameskilltext:'',
 					};
 				},
 				methods:
@@ -284,7 +268,6 @@
 					  
 				  },
 				addSkill(){
-					console.log(this.cachedSkillList)
 					duplicate = false
 					for (i of this.cachedSkillList){
 							if (i['Skillname'].toLowerCase()==this.addskilltext.toLowerCase()){
@@ -300,13 +283,10 @@
 					}
 					else if(duplicate){
 						alert('Skill already exists in database')
-						
 					}
-					else{
-						var newSkill = this.addskilltext;
-                	
+					else{        	
 						axios.post('http://localhost:5002/addSkill',{
-							"Skillname": newSkill,
+							"Skillname": this.addskilltext,
 						})
 						.then(response => {
 							window.location.reload()
@@ -318,20 +298,37 @@
 					
 				},
 				saveskillname(skillid){
-                	var newname = document.getElementById("newskill").value;
-                	console.log(newname)
-					axios.post('http://localhost:5002/updateskillnamebyID',{
+                	duplicate = false
+					for (i of this.cachedSkillList){
+							if (i['Skillname'].toLowerCase()==this.renameskilltext.toLowerCase()){
+								duplicate = true
+								break
+							}
+						}
+					if (this.renameskilltext==''){
+						alert('Skill name cannot be empty')
+					}
+					else if(this.renameskilltext.match(/^[0-9]+$/) != null){
+						alert('Skill name cannot all be numbers')
+					}
+					else if(duplicate){
+						alert('Skill already exists in database')
+					}
+					else{
+						axios.post('http://localhost:5002/updateskillnamebyID',{
 						"Skill ID": skillid,
-						"Skillname": newname,
+						"Skillname": this.renameskilltext,
 						
-					})
-					  .then(response => {
-							// this gets the data, which is an array, and pass the data to Vue instance's posts property
-						  window.location.reload()
-					  })
-					  .catch(error => {
-						console.log(error);
-					  })
+						})
+						.then(response => {
+								// this gets the data, which is an array, and pass the data to Vue instance's posts property
+							window.location.reload()
+						})
+						.catch(error => {
+							console.log(error);
+						})
+					}
+					
             	},
 				deleteskills(deleteskillslist){
 					axios.post('http://localhost:5002/deleteskillsbyID',{
@@ -352,7 +349,6 @@
 					this.deleteskillslist = [skillid]
 				},
 				searchSkill(){
-					
 					this.skillSearchList=[]
 					if (this.skillSearchText.length !=0){
 						for (i of this.cachedSkillList){
@@ -365,7 +361,6 @@
 					else{
 						this.all_skills=this.cachedSkillList
 					}
-
 				},
 				
 		
