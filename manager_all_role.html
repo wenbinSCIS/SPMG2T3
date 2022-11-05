@@ -354,17 +354,34 @@
             .then(response => {
                 // this gets the data, which is an array, and pass the data to Vue instance's posts property
                 this.skill_list = response.data.data
-            })
+                })
             .catch(error => {
                 this.skill_list = [{ entry: 'There was an error: ' + error.message }]
-            })
-        },
+                })
+            },
 
             edit_role_name(cur_role){
                 cur_role_id = cur_role.RoleID
                 new_role_name = this.editted_role_name
 
-                axios.post('http://127.0.0.1:5000/roles/updateNamebyID', {
+                duplicate = false
+                for (i of this.cachedRoleList){
+                        if (i['RoleName'].toLowerCase()==this.editted_role_name.toLowerCase()){
+                            duplicate = true
+                            break
+                        }
+                    }
+                if (this.editted_role_name==''){
+                    alert('Role name cannot be empty')
+                }
+                else if(this.editted_role_name.match(/^[0-9]+$/) != null){
+                    alert('Role name cannot all be numbers')
+                }
+                else if(duplicate){
+                    alert('Role already exists in database')
+                }
+                else{
+                    axios.post('http://127.0.0.1:5000/roles/updateNamebyID', {
                         "Role ID": cur_role_id,
                         "RoleName": new_role_name
                         })
@@ -375,13 +392,16 @@
                             console.log(error);
                         });
 
-                for(i=0;i<this.role_list.length;i++){
-                    if (this.role_list[i].RoleID==cur_role_id)
-                    {
-                        this.role_list[i].RoleName=new_role_name
+                    for(i=0;i<this.role_list.length;i++){
+                        if (this.role_list[i].RoleID==cur_role_id)
+                        {
+                            this.role_list[i].RoleName=new_role_name
+                        }
                     }
+                    this.editted_role_name=""
                 }
-                this.editted_role_name=""
+
+                
             },
 
             markAsFilled(RoleID){
@@ -413,8 +433,14 @@
             edit_description(cur_role){
                 cur_role_id = cur_role.RoleID
                 new_description = this.editted_description
-
-                axios.post('http://127.0.0.1:5000/roles/updateDescriptionbyID', {
+                if (this.editted_description==''){
+                    alert('Description cannot be empty')
+                }
+                else if(this.editted_description.match(/^[0-9]+$/) != null){
+                    alert('Description cannot all be numbers')
+                }
+                else{
+                    axios.post('http://127.0.0.1:5000/roles/updateDescriptionbyID', {
                         "Role ID": cur_role_id,
                         "Description": new_description
                         })
@@ -425,13 +451,14 @@
                             console.log(error);
                         });
 
-                for(i=0;i<this.role_list.length;i++){
-                    if (this.role_list[i].RoleID==cur_role_id)
-                    {
-                        this.role_list[i].Description=new_description
+                    for(i=0;i<this.role_list.length;i++){
+                        if (this.role_list[i].RoleID==cur_role_id)
+                        {
+                            this.role_list[i].Description=new_description
+                        }
                     }
+                    this.editted_description=""
                 }
-                this.editted_description=""
             },
 
             clear_editted_description(){
@@ -523,7 +550,11 @@
                 }
 
                 console.log(delete_skill_list.length)
-                if(delete_skill_list.length>0)
+                if(Object.keys(this.editted_skill_selected).length==0){
+                    alert('Please assign at least 1 skill to the role')
+                }
+                else{
+                    if(delete_skill_list.length>0)
                 {
                     axios.post('http://127.0.0.1:5001/deletebyskillrole/', {
                     "RoleID": cur_role_id,
@@ -560,6 +591,8 @@
                 }
 
                 this.editted_skill_selected=[]
+                }
+                
                 
             },
 
