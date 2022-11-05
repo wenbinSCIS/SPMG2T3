@@ -66,6 +66,8 @@ jobs:
           #TODO: Add the command to run all the unittest here.
           python microservice/role_unit_test.py
           python microservice/srbr_unit_test.py
+          python microservice/skills_unit_test.py
+          python microservice/courses_unit_test.py
 
       - name: Test with integrationtest
         #runs the integrationtest
@@ -73,3 +75,5 @@ jobs:
           #TODO: Add the command to run all the integrationtest here.
           python microservice/role_integration_test.py
           python microservice/srbr_integration_test.py
+          python microservice/skills_integration_test.py
+          python microservice/courses_integration_test.py
