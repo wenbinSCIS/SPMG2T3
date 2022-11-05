@@ -61,7 +61,7 @@ def get_LJCoursesById():
     if len(lj_list):
         return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
     else:
-        return jsonify({ "code": 404, "message": 0 })
+        return jsonify({ "code": 404, "message": 0 }), 404
 
 @app.route("/LJC/deleteLJCbyLJIDCID/")
 def delete_LJC_by_ID():
@@ -71,14 +71,13 @@ def delete_LJC_by_ID():
     args = request.args
     cid = args.get('cid')
     ljid = args.get('ljid')
+    ljc = learningjourneycourses.query.filter(learningjourneycourses.LJID == ljid, learningjourneycourses.CourseID == cid).first()
+    if not ljc:
+        return jsonify({"message": "LJID or/and CourseID is not valid."}), 404
 
 
-
-    try:
-        learningjourneycourses.query.filter_by(CourseID=cid,LJID=ljid).delete()
-        db.session.commit()
-    except:
-        return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
+    learningjourneycourses.query.filter_by(CourseID=cid,LJID=ljid).delete()
+    db.session.commit()
     return { "Success":True, "code": 201 }
 
 
@@ -90,8 +89,9 @@ def delete_ALLLJC_by_LJID():
     args = request.args
 
     ljid = args.get('ljid')
-
-
+    ljc = learningjourneycourses.query.filter(learningjourneycourses.LJID == ljid).all()
+    if not ljc:
+        return jsonify({"message": "No Such LJID in LJC."}), 404
 
     try:
         learningjourneycourses.query.filter_by(LJID=ljid).delete()
@@ -105,6 +105,11 @@ def addCourseIntoBaskets():
     args = request.args
     ljid = args.get('ljid')
     courseid = args.get('cid')
+
+    if not ljid:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+    if not courseid:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
     createLJC = learningjourneycourses(
     LJID = ljid,
     CourseID = courseid,
@@ -127,13 +132,18 @@ def checkIfCourseInLJs():
     args = request.args
     ljids = args.get('ljid')
     cid = args.get('cid')
+
+    if not ljids:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+    if not cid:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
     lj_list = learningjourneycourses.query.filter(learningjourneycourses.LJID==ljids, learningjourneycourses.CourseID==cid).all()
 
     # print(role_list, flush=True)
     if len(lj_list):
         return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
     else:
-        return jsonify({ "code": 404, "message": 0 })
+        return jsonify({ "code": 404, "message": 0 }), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5011, debug=True)

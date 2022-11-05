@@ -61,11 +61,10 @@ def get_savedLJByID():
     lj_list = learningjourney.query.filter(learningjourney.UserID==userid).all()
 
     # print(role_list, flush=True)
-    try:
-    
+    if len(lj_list):
         return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
-    except:
-        return jsonify({ "code": 404, "message": 0 })
+    else:
+        return jsonify({ "code": 404, "message": 0 }), 404
 
 
 @app.route("/LJ/updateRoleIDByLJID")
@@ -73,24 +72,41 @@ def UpdateRoleIDByLJId():
     args = request.args
     roleid = args.get('role')
     ljid = args.get('ljid')
-    try:
+
+    if not roleid:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+    if not ljid:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+    lj = learningjourney.query.filter(learningjourney.LJID == ljid).first()
+    if not lj:
+        return jsonify({ "message": "LJID is not valid." }), 500
+    else:
+
         db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'RoleID': roleid })
         db.session.commit()
-    except:
-        return jsonify({"message": "An error occurred when updating the description.", "code":500})
-    return {"Success":True, "code": 201 }
+        return {"Success":True, "code": 201 }  
+    
 
 @app.route("/LJ/updateLJNameByLJID")
 def UpdateLJNameByLjId():
     args = request.args
     ljname = args.get('ljname')
     ljid = args.get('ljid')
-    try:
+
+    if not ljname:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+    if not ljid:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+
+    lj = learningjourney.query.filter(learningjourney.LJID == ljid).first()
+    if not lj:
+        return jsonify({ "message": "LJID is not valid." }), 500
+    else:
         db.session.query(learningjourney).filter(learningjourney.LJID == ljid).update({ 'LJName': ljname })
         db.session.commit()
-    except:
-        return jsonify({"message": "An error occurred when updating the description.", "code":500})
-    return {"Success":True, "code": 201 }
+
+  
+        return {"Success":True, "code": 201 }
 
 
 @app.route("/LJ/insertgetLJID")
@@ -99,6 +115,14 @@ def insertgetLJID():
     userid = args.get('userid')
     roleid = args.get('roleid')
     ljname = args.get('ljname')
+
+    if not userid:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+    if not roleid:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+    if not ljname:
+        return jsonify({ "message": "Incorrect JSON object provided."}), 404
+
     createLJ = learningjourney(
     # RoleID = 3,
     UserID = userid,
@@ -127,11 +151,10 @@ def get_getLJByLJID():
     lj_list = learningjourney.query.filter( learningjourney.LJID==ljid).all()
 
     # print(role_list, flush=True)
-    try:
-    
+    if len(lj_list):
         return jsonify({ "data": [lj.to_dict() for lj in lj_list] }), 200
-    except:
-        return jsonify({ "code": 404, "message": 0 })
+    else:
+        return jsonify({ "code": 404, "message": 0 }), 404
 
 
 @app.route("/LJ/deleteLJbyLJID/")
@@ -145,11 +168,14 @@ def delete_LJ_by_LJID():
 
 
 
-    try:
-        learningjourney.query.filter_by(LJID=ljid).delete()
-        db.session.commit()
-    except:
-        return jsonify({ "message": "An error occurred when deleting the role from the database.", "code":500 })
+
+    lj = learningjourney.query.filter(learningjourney.LJID == ljid).first()
+
+    if not lj:
+        return jsonify({"message": "LJID is not valid."}), 404
+    learningjourney.query.filter_by(LJID=ljid).delete()
+    db.session.commit()
+
     return { "Success":True, "code": 201 }
 
 if __name__ == '__main__':

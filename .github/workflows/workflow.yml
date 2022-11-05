@@ -69,6 +69,7 @@ jobs:
           python microservice/skills_unit_test.py
           python microservice/courses_unit_test.py
 
+
       - name: Test with integrationtest
         #runs the integrationtest
         run: |
@@ -77,3 +78,5 @@ jobs:
           python microservice/srbr_integration_test.py
           python microservice/skills_integration_test.py
           python microservice/courses_integration_test.py
+          python microservice/learningjourney_integration_test.py
+          python microservice/learningjourneycourses_integration_test.py
