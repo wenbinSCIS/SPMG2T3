@@ -292,3 +292,39 @@ class TestDeleteSkillRole(TestApp):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json,
                         { "message": "SRBR is not valid." })
+
+    def test_delete_skill_role_no_role_id(self):
+        srbr1 = SRBR(SRBR=1,RoleID=1,SkillsID=1)
+        srbr2 = SRBR(SRBR=2,RoleID=1,SkillsID=2)
+        db.session.add(srbr1)
+        db.session.add(srbr2)
+        db.session.commit()
+
+        request_body = {
+            "Skills":[{"SkillName":"Python","SkillsID":1}]
+        }
+        
+        response = self.client.post("/deletebyskillrole/",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json,{ "message": "Incorrect JSON object provided." })
+
+    def test_delete_skill_role_no_skill_list(self):
+        srbr1 = SRBR(SRBR=1,RoleID=1,SkillsID=1)
+        srbr2 = SRBR(SRBR=2,RoleID=1,SkillsID=2)
+        db.session.add(srbr1)
+        db.session.add(srbr2)
+        db.session.commit()
+
+        request_body = {
+            "CourseID":1
+        }
+        
+        response = self.client.post("/deletebyskillrole/",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json,{ "message": "Incorrect JSON object provided." })

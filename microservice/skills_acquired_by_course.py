@@ -52,15 +52,30 @@ class SABC(db.Model):
 def get_all_by_skillid():
     args = request.args
     sid = args.get('sid')
-    select = SABC.query.filter_by(SkillsID=sid)
-    return jsonify({ "data": [item.to_dict() for item in select] }), 200
+    if sid==None or sid=="":
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+
+    select = SABC.query.filter_by(SkillsID=sid).all()
+    if len(select):
+        return jsonify({ "data": [item.to_dict() for item in select] }), 200
+    else:
+        return jsonify({ "code": 404, "message": "There are no SABC." }), 404
 
 @app.route("/getSABCbyCourseID")
 def get_all_by_courseid():
     args = request.args
     cid = args.get('CourseID')
-    select = SABC.query.filter_by(CourseID=cid)
-    return jsonify({ "data": [item.to_dict() for item in select] }), 200
+
+    if cid==None or cid=="":
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+
+    select = SABC.query.filter_by(CourseID=cid).all()
+
+    if len(select):
+        return jsonify({ "data": [item.to_dict() for item in select] }), 200
+
+    else:
+        return jsonify({ "code": 404, "message": "There are no SABC." }), 404
 
 
 @app.route("/addskillcourse",methods=["POST"])
@@ -73,7 +88,16 @@ def add_skill_course():
     skill_list=data["Skills"]
 
     if skill_list==[]:
-        return { "CourseID": data["CourseID"],"Success":True, "code": 201 }
+        return { "CourseID": data["CourseID"],"message":"No Skills to add to course.", "code": 500 },500
+
+    all_skill_sabc=[]
+
+    for sabc in sabc_list:
+        all_skill_sabc.append(sabc.SkillsID)
+    
+    for skill in data["Skills"]:
+        if skill["SkillsID"] in all_skill_sabc:
+            return jsonify({ "message": "Error Occured. Skill already tied to Course." }), 500
 
     for cur_skill in skill_list:
         add_skill_course = SABC(
@@ -90,6 +114,8 @@ def add_skill_course():
 @app.route("/deletebyskillcourse",methods=["POST"])
 def delete_by_skill_course():
     data = request.get_json()
+    if not all(key in data.keys() for key in ('Skills', 'CourseID')):
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
     cid = data["CourseID"]
     skill_list = data["Skills"]
     error_sabc_list=[]
@@ -97,7 +123,7 @@ def delete_by_skill_course():
     addition_happen=False
 
     if skill_list==[]:
-        return { "CourseID": cid,"Success":True, "code": 201 }
+        return { "CourseID": data["CourseID"],"message":"No Skills to add to role.", "code": 500 },500
     #Check if role is created in DB
     for cur_skill in skill_list:
         cur_skill_id = cur_skill["SkillsID"]
@@ -115,7 +141,7 @@ def delete_by_skill_course():
 
     if have_error:
         message="Course did not exist or Course does not has skill with id "
-        for i in len(error_sabc_list):
+        for i in range(len(error_sabc_list)):
             cur_skill_id=error_sabc_list[i]
             message+=str(cur_skill_id)
 
@@ -123,7 +149,7 @@ def delete_by_skill_course():
                 message+=", "
 
         if addition_happen:
-            message+="The rest of the skills are deleted"
+            message+=". The rest of the skills are deleted"
 
         return jsonify({ "message": message }), 500
     return { "CourseID": cid,"Success":True, "code": 201 }

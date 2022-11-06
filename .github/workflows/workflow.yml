@@ -70,6 +70,7 @@ jobs:
           python microservice/courses_unit_test.py
           python microservice/learningjourney_unit_test.py
           python microservice/learningjourneycourses_unit_test.py
+          python microservice/sabc_unit_test.py
 
 
       - name: Test with integrationtest
@@ -82,3 +83,4 @@ jobs:
           python microservice/courses_integration_test.py
           python microservice/learningjourney_integration_test.py
           python microservice/learningjourneycourses_integration_test.py
+          python microservice/sabc_integration_test.py

@@ -120,6 +120,9 @@ def add_skill_role():
 @app.route("/deletebyskillrole/",methods=["POST"])
 def delete_by_skill_role():
     data = request.get_json()
+    if not all(key in data.keys() for key in ('Skills', 'RoleID')):
+        return jsonify({ "message": "Incorrect JSON object provided." }), 500
+
     rid = data["RoleID"]
     skill_list = data["Skills"]
 
