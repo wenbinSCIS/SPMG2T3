@@ -354,15 +354,27 @@
                         added_skill_list.splice(non_added_skill_index[i],1)
                     }
                 }
-                if(Object.keys(this.editted_skill_selected).length==0){
-                    alert('Please assign at least 1 skill to the role')
+
+                if(delete_skill_list.length>0)
+                {
+                    axios.post('http://127.0.0.1:5003/deletebyskillcourse', {
+                    "CourseID": cur_course_id,
+                    "Skills": delete_skill_list
+                    })
+                    .then(function (response) {
+                        console.log(response)
+                    })
+                    .catch(function (error) {
+                        console.log(error.response.data);
+                    });
+
                 }
-                else{
-                    if(delete_skill_list.length>0)
-                    {
-                        axios.post('http://127.0.0.1:5003/deletebyskillcourse', {
+
+                if(added_skill_list.length>0)
+                {
+                    axios.post('http://127.0.0.1:5003/addskillcourse', {
                         "CourseID": cur_course_id,
-                        "Skills": delete_skill_list
+                        "Skills": added_skill_list
                         })
                         .then(function (response) {
                             console.log(response)
@@ -370,33 +382,16 @@
                         .catch(function (error) {
                             console.log(error.response.data);
                         });
+                }
+                //to change data so page is updated
 
-                    }
-
-                    if(added_skill_list.length>0)
-                    {
-                        axios.post('http://127.0.0.1:5003/addskillcourse', {
-                            "CourseID": cur_course_id,
-                            "Skills": added_skill_list
-                            })
-                            .then(function (response) {
-                                console.log(response)
-                            })
-                            .catch(function (error) {
-                                console.log(error.response.data);
-                            });
-                    }
-                    //to change data so page is updated
-
-                    this.course_skill_list[cur_course_id]=[]
-                    for (i=0;i<this.editted_skill_selected.length;i++)
-                    {
-                        this.course_skill_list[cur_course_id].push([this.editted_skill_selected[i].SkillsID,this.editted_skill_selected[i].Skillname])
-                    }
-
-                    this.editted_skill_selected=[]
+                this.course_skill_list[cur_course_id]=[]
+                for (i=0;i<this.editted_skill_selected.length;i++)
+                {
+                    this.course_skill_list[cur_course_id].push([this.editted_skill_selected[i].SkillsID,this.editted_skill_selected[i].Skillname])
                 }
 
+                this.editted_skill_selected=[]
                 
             },
 
