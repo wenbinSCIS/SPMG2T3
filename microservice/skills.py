@@ -27,7 +27,7 @@ class skills(db.Model):
 
     SkillsID = db.Column(db.Integer, primary_key=True)
     Skillname = db.Column(db.String(255), nullable=False)
-   
+
 
 
     def to_dict(self):

@@ -31,7 +31,7 @@ class Roles(db.Model):
 
     RoleID = db.Column(db.Integer, primary_key=True)
     RoleName = db.Column(db.String(255), nullable=False)
-    CreatedBy = db.Column(db.String(255), nullable=False)
+    CreatedBy = db.Column(db.Integer, nullable=False)
     Fulfilled = db.Column(db.String(255), nullable=False)
     Description = db.Column(db.String(255), nullable=False)
     TimeAdded = db.Column(db.String(255),nullable=True)
@@ -95,7 +95,7 @@ def create_role():
     
     Add_Role = Roles(
         RoleName = data["Role Name"],
-        CreatedBy = data["Created By"],
+        CreatedBy = int(data["Created By"]),
         Fulfilled = " ",
         Description = data["Description"],
         TimeAdded = cur_time

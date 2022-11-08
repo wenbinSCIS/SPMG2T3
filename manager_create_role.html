@@ -147,6 +147,7 @@
             description:"",
             skill_selected:[],
             new_role_id:"",
+            user_id:null,
             };
         },
         methods:
@@ -175,7 +176,7 @@
                 else{        	
                     axios.post('http://127.0.0.1:5020/add_role', {
                         "Role Name": this.role_name,
-                        "Created By": "function test",
+                        "Created By": this.user_id,
                         "Description": this.description,
                         "skill_list": this.skill_selected
                         })
@@ -185,19 +186,26 @@
                         .catch(function (error) {
                             console.log(error);
                         });
-                        window.location.href="manager_all_role.html"
+                    window.location.href="manager_all_role.html"
                 }
   
             },
             return_to_role(){
                 window.location.href="manager_all_role.html"
             },
+
+            get_user()
+            {
+                this.user_id = parseInt(sessionStorage.getItem("userid"))
+                console.log(this.user_id)
+            }
         },
         computed:
         {
         
         },
         created(){
+            this.get_user()
             this.get_all_skill()
         },
         components: { vuemultiselect: window.Vue3Multiselect.default },

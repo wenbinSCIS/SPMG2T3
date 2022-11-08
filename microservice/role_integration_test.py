@@ -21,7 +21,7 @@ class TestApp(flask_testing.TestCase):
 
 class TestGetAllRoles(TestApp):
     def test_get_all(self):
-        r1 = Roles(RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -47,9 +47,9 @@ class TestGetAllRoles(TestApp):
 
 class TestGetUnfilled(TestApp):
     def test_get_Unfilled(self):
-        r1 = Roles(RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
-        r2 = Roles(RoleName='Coder', CreatedBy='Brian Lee', Fulfilled="Filled",
+        r2 = Roles(RoleName='Coder', CreatedBy=2, Fulfilled="Filled",
                     Description="For coding",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.add(r2)
@@ -68,7 +68,7 @@ class TestGetUnfilled(TestApp):
         }])
 
     def test_get_Unfilled_no_unfilled(self):
-        r1 = Roles(RoleName='Coder', CreatedBy='Brian Lee', Fulfilled="Filled",
+        r1 = Roles(RoleName='Coder', CreatedBy=2, Fulfilled="Filled",
                     Description="For coding",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -83,7 +83,7 @@ class TestAddRole(TestApp):
     def test_add_role(self):
         request_body = {
             'Role Name': 'Programmer',
-            'Created By': 'Ryan Tan',
+            'Created By': 1,
             "Description":"To programme the newest project"
         }
 
@@ -95,7 +95,7 @@ class TestAddRole(TestApp):
         self.assertEqual(response.json["data"], {
             'RoleID': 1,
             'RoleName': 'Programmer',
-            'CreatedBy': 'Ryan Tan',
+            'CreatedBy': 1,
             "Fulfilled": " ",
             "Description":"To programme the newest project",
             "CreatedTime": "2022-10-05 09:19:17"
@@ -103,7 +103,7 @@ class TestAddRole(TestApp):
 
     def test_add_role_no_name(self):
         request_body = {
-            'Created By': 'Ryan Tan',
+            'Created By': 1,
             "Description":"To programme the newest project"
         }
 
@@ -130,7 +130,7 @@ class TestAddRole(TestApp):
     def test_add_role_no_description(self):
         request_body = {
             'RoleName': 'Programmer',
-            'CreatedBy': 'Ryan Tan'
+            'CreatedBy': 1
         }
 
         response = self.client.post("/roles/create",
@@ -142,7 +142,7 @@ class TestAddRole(TestApp):
 
 class TestDeleteRoleById(TestApp):
     def test_delete_role_by_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -159,7 +159,7 @@ class TestDeleteRoleById(TestApp):
         self.assertEqual(response.json, {"RoleID": 1,"Success":True, "code": 201})
 
     def test_delete_role_by_id_invalid_role_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -177,7 +177,7 @@ class TestDeleteRoleById(TestApp):
 
 class TestUpdateDescriptionById(TestApp):
     def test_update_description_by_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -196,7 +196,7 @@ class TestUpdateDescriptionById(TestApp):
                     { "RoleID": r1.RoleID,"Success":True, "code": 201 })
 
     def test_update_description_by_id_invalid_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -215,7 +215,7 @@ class TestUpdateDescriptionById(TestApp):
                     { "message": "RoleID is not valid." })
 
     def test_update_description_by_id_no_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -233,7 +233,7 @@ class TestUpdateDescriptionById(TestApp):
                     { "message": "Incorrect JSON object provided."})
 
     def test_update_description_by_id_no_description(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -252,7 +252,7 @@ class TestUpdateDescriptionById(TestApp):
 
 class TestUpdateRoleStatus(TestApp):
     def test_update_status(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -271,7 +271,7 @@ class TestUpdateRoleStatus(TestApp):
                     { "RoleID": r1.RoleID,"Success":True,"Status": "Filled", "code": 201 })
 
     def test_update_status_status_already_filled(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled="Filled",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled="Filled",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -290,7 +290,7 @@ class TestUpdateRoleStatus(TestApp):
                     { "message": "Role is already the thing you are changing to" })
 
     def test_update_status_invalid_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -309,7 +309,7 @@ class TestUpdateRoleStatus(TestApp):
                     { "message": "RoleID is not valid." })
 
     def test_update_status_no_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -327,7 +327,7 @@ class TestUpdateRoleStatus(TestApp):
                     { "message": "Incorrect JSON object provided."})
 
     def test_update_status_no_status(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -346,7 +346,7 @@ class TestUpdateRoleStatus(TestApp):
 
 class TestUpdateRoleNameById(TestApp):
     def test_update_role_name_by_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -365,7 +365,7 @@ class TestUpdateRoleNameById(TestApp):
                     { "RoleID": r1.RoleID,"Success":True, "code": 201 })
 
     def test_update_role_name_by_id_invalid_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -384,7 +384,7 @@ class TestUpdateRoleNameById(TestApp):
                     { "message": "RoleID is not valid." })
 
     def test_update_role_name_by_id_no_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -402,7 +402,7 @@ class TestUpdateRoleNameById(TestApp):
                     { "message": "Incorrect JSON object provided."})
 
     def test_update_role_name_by_id_invalid_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -421,7 +421,7 @@ class TestUpdateRoleNameById(TestApp):
                     { "message": "RoleID is not valid." })
 
     def test_update_role_name_by_id_no_name(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -440,7 +440,7 @@ class TestUpdateRoleNameById(TestApp):
 
 class TestGetRoleById(TestApp):
     def test_get_role_by_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -462,7 +462,7 @@ class TestGetRoleById(TestApp):
 
 
     def test_get_role_by_id_invalid_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
@@ -475,7 +475,7 @@ class TestGetRoleById(TestApp):
                     {"code": 404, "message": "There are no role."})
 
     def test_get_role_by_id_no_id(self):
-        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy='Ryan Tan', Fulfilled=" ",
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
         db.session.commit()
