@@ -148,6 +148,7 @@
             skill_selected:[],
             new_role_id:"",
             user_id:null,
+            rolelist:[]
             };
         },
         methods:
@@ -163,7 +164,28 @@
                 })
             },
 
+            get_all_role(){
+                axios.get('http://127.0.0.1:5000//roles/getAll')
+                .then(response => {
+                    // this gets the data, which is an array, and pass the data to Vue instance's posts property
+                    this.rolelist = response.data.data
+                })
+                .catch(error => {
+                    this.rolelist = [{ entry: 'There was an error: ' + error.message }]
+                })
+            },
+
             create_role(){
+                
+                
+                
+                duplicate = false
+                for (i of this.rolelist){
+                        if (i['RoleName'].toLowerCase()==this.role_name.toLowerCase()){
+                            duplicate = true
+                            break
+                        }
+                    }
                 if (this.role_name=='' || this.description==''){
                     alert('Role name and description cannot be empty')
                 }
@@ -172,6 +194,9 @@
                 }
                 else if(Object.keys(this.skill_selected).length==0){
                     alert('Please assign at least 1 skill to the role')
+                }
+                else if(duplicate){
+                    alert('Role already exists in database')
                 }
                 else{        	
                     axios.post('http://127.0.0.1:5020/add_role', {
@@ -207,6 +232,7 @@
         created(){
             this.get_user()
             this.get_all_skill()
+            this.get_all_role()
         },
         components: { vuemultiselect: window.Vue3Multiselect.default },
     }).mount('#add_role_modal')
