@@ -164,8 +164,7 @@
                 })
             },
 
-            create_role(){
-                
+            get_all_role(){
                 axios.get('http://127.0.0.1:5000//roles/getAll')
                 .then(response => {
                     // this gets the data, which is an array, and pass the data to Vue instance's posts property
@@ -174,6 +173,11 @@
                 .catch(error => {
                     this.rolelist = [{ entry: 'There was an error: ' + error.message }]
                 })
+            },
+
+            create_role(){
+                
+                
                 
                 duplicate = false
                 for (i of this.rolelist){
@@ -228,6 +232,7 @@
         created(){
             this.get_user()
             this.get_all_skill()
+            this.get_all_role()
         },
         components: { vuemultiselect: window.Vue3Multiselect.default },
     }).mount('#add_role_modal')
