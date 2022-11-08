@@ -90,7 +90,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8 post-list">
                         <div class="input-group rounded">
-                            <input type="search" class="form-control rounded" v-model="roleSearchText"  v-on:keyup="searchRole" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                            <input type="search" class="form-control rounded" v-model="courseSearchText"  v-on:keyup="searchCourse" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                             <span class="input-group-text border-0" id="search-addon">
                                 <i class="uil-search"></i>
                             </span>
@@ -209,9 +209,9 @@
                 course_skill_list:{},
                 cur_skill_course_list:[],
                 editted_skill_selected:[],
-                roleSearchText:"",
-                roleSearchList:[],
-                cachedRoleList:[],
+                courseSearchText:"",
+                courseSearchList:[],
+                cachedCourseList:[],
             };
         },
         methods:
@@ -252,7 +252,7 @@
                             this.course_skill_list = [{ entry: 'There was an error: ' + error.message }]
                         })
                         }
-                        this.cachedRoleList=this.course_list
+                        this.cachedCourseList=this.course_list
                     })
                     .catch(error => {
                         this.course_list = [{ entry: 'There was an error: ' + error.message }]
@@ -404,19 +404,19 @@
                 this.editted_skill_selected=[]
             },
 
-            searchRole(){
-                this.roleSearchList=[]
-                if (this.roleSearchText.length !=0){
-                    for (i of this.cachedRoleList){
-                        if (i['RoleName'].toLowerCase().includes((this.roleSearchText).toLowerCase())){
-                            this.roleSearchList.push(i)
+            searchCourse(){
+                this.courseSearchList=[]
+                if (this.courseSearchText.length !=0){
+                    for (i of this.cachedCourseList){
+                        if (i['CourseName'].toLowerCase().includes((this.courseSearchText).toLowerCase())){
+                            this.courseSearchList.push(i)
                         }
                     }
-                    this.role_list=this.roleSearchList
+                    this.course_list=this.courseSearchList
                 }
 
                 else{
-                    this.role_list=this.cachedRoleList
+                    this.course_list=this.cachedCourseList
                 }
             }
         },
