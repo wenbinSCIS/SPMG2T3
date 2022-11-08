@@ -354,8 +354,11 @@
                         added_skill_list.splice(non_added_skill_index[i],1)
                     }
                 }
-
-                if(delete_skill_list.length>0)
+                if(Object.keys(this.editted_skill_selected).length==0){
+                    alert('Please assign at least 1 skill to the role')
+                }
+                else{
+                    if(delete_skill_list.length>0)
                 {
                     axios.post('http://127.0.0.1:5003/deletebyskillcourse', {
                     "CourseID": cur_course_id,
@@ -392,6 +395,8 @@
                 }
 
                 this.editted_skill_selected=[]
+                }
+
                 
             },
 
