@@ -84,7 +84,7 @@ def add_skill_course():
     if not all(key in data.keys() for key in ('Skills', 'CourseID')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
     
-    sabc_list = SABC.query.all()
+    sabc_list = SABC.query.filter_by(CourseID = data["CourseID"]).all()
     skill_list=data["Skills"]
 
     if skill_list==[]:
