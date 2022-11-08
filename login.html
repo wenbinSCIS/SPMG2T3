@@ -1404,6 +1404,12 @@ span.error:after {
         if (role=="manager") {
           sessionStorage.setItem("role", role);
           sessionStorage.setItem("userid", userid);
+          window.location.replace("role.html");
+        }
+
+        if (role=="hr") {
+          sessionStorage.setItem("role", role);
+          sessionStorage.setItem("userid", userid);
           window.location.replace("manager_all_role.html");
         }
       }
