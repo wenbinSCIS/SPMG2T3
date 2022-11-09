@@ -136,7 +136,7 @@ if (sessionStorage.getItem("role") === null) {
 
 				}
 
-				else if (sessionStorage.getItem("role") == "staff"){
+				if (sessionStorage.getItem("role") == "staff"){
                     $(function(){
                         $("#nav-placeholder").load("sidebar_staff.html");
                     });
@@ -163,9 +163,7 @@ if (sessionStorage.getItem("role") === null) {
 								else{
 
 								}
-						$(function(){
-							$("#nav-placeholder").load("sidebar_staff.html");
-						});
+
 
 					</script>
 		
