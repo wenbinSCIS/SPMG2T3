@@ -1,7 +1,7 @@
 # Documentation
 
-## Development: Running the UI
-- Open command palette and type "open live server" and press enter (need to install live server extension)
+## Development: Running the UI with VS Code
+- Open command palette and type "open live server" and press enter (need to install [live server extension](vscode:extension/ritwickdey.LiveServer))
 
 ## Development: Running the microservices
 - go to "microservice/ezrunall.py"
@@ -9,10 +9,12 @@
 ```py
 MICROSERVICE_PATH="C:\\Documents\\SPMG2T3\\microservice\\"
 ```
-- in the terminal, run "python microservice/ezrunall.py" to run all microservices
+- in the terminal, run "python microservice/ezrunall.py" to run all simple microservices
+- and in another terminal, run "python microservice/add_role.py" to run the complex microservice
 ```bash
 # may either use 'python' or 'py' depending on how your python env is set
 python microservice/ezrunall.py
+python microservice/add_role.py
 ```
 
 ## Microservice Routes

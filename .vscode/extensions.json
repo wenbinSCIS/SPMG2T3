@@ -1,3 +1,9 @@
 {
-  "recommendations": ["Vue.volar", "Vue.vscode-typescript-vue-plugin", "Tobermory.es6-string-html"]
+  "recommendations": [
+    // "vue.volar",
+    // "vue.vscode-typescript-vue-plugin",
+    "tobermory.es6-string-html",
+    "ritwickdey.liveserver",
+    "oderwat.indent-rainbow"
+  ]
 }
