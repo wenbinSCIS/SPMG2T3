@@ -175,7 +175,25 @@ def update_name_by_ID():
     if not all(key in data.keys() for key in ('Role ID', 'RoleName')):
         return jsonify({ "message": "Incorrect JSON object provided."}), 500
     #Check if role is created in DB
+
+    if data["RoleName"].replace(" ", "")=="":
+        return jsonify({ "message": "Role name cannot be blank or contain only whitespace" }), 500
+
+    has_alphabet=False
+    cur_role_name=data["RoleName"].lower()
+    for ch in "abcdefghijklmnopqrstuvwxyz":
+        if ch in cur_role_name:
+            has_alphabet=True
+            break
+
+    if not has_alphabet:
+        return jsonify({ "message": "Role name has no alphabet" }), 500
+
+    if not cur_role_name[0].isalpha():
+        return jsonify({ "message": "Role name cannot start with number or symbol" }), 500
+
     role = Roles.query.filter_by(RoleID=data["Role ID"]).first()
+
     if not role:
         return jsonify({ "message": "RoleID is not valid." }), 500
     else:

@@ -508,6 +508,63 @@ class TestUpdateRoleNameById(TestApp):
         self.assertEqual(response.json, 
                     { "message": "Incorrect JSON object provided."})
 
+    def test_update_role_name_by_id_only_white_space(self):
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
+                    Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
+        db.session.add(r1)
+        db.session.commit()
+        
+        request_body = {
+            "Role ID": r1.RoleID,
+            "RoleName":"   "
+        }
+
+        response = self.client.post("/roles/updateNamebyID",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, 
+                    { "message": "Role name cannot be blank or contain only whitespace" })
+
+    def test_update_role_name_by_id_no_alphabet(self):
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
+                    Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
+        db.session.add(r1)
+        db.session.commit()
+        
+        request_body = {
+            "Role ID": r1.RoleID,
+            "RoleName":"123456"
+        }
+
+        response = self.client.post("/roles/updateNamebyID",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, 
+                    { "message": "Role name has no alphabet" })
+
+    def test_update_role_name_by_id_start_with_number_or_symbol(self):
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
+                    Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
+        db.session.add(r1)
+        db.session.commit()
+        
+        request_body = {
+            "Role ID": r1.RoleID,
+            "RoleName":"1Programmer"
+        }
+
+        response = self.client.post("/roles/updateNamebyID",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, 
+                    { "message": "Role name cannot start with number or symbol" })
+
 class TestGetRoleById(TestApp):
     def test_get_role_by_id(self):
         r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",

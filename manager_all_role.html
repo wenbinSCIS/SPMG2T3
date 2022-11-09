@@ -379,6 +379,13 @@
                 else if(duplicate){
                     alert('Role already exists in database')
                 }
+                else if(this.editted_role_name[0].replace(/ /g,'')==""){
+                    alert('Rolename cannot contain only whitespace')
+                }
+
+                else if(!this.editted_role_name[0].toLowerCase().match(/[a-z]/i)){
+                    alert('Rolename cannot start with number or symbol')
+                }
                 else{
                     axios.post('http://127.0.0.1:5000/roles/updateNamebyID', {
                         "Role ID": cur_role_id,
@@ -437,6 +444,9 @@
                 }
                 else if(this.editted_description.match(/^[0-9]+$/) != null){
                     alert('Description cannot all be numbers')
+                }
+                else if(this.editted_role_name.toLowerCase()==this.description.toLowerCase()){
+                    alert('Description cannot be similar to role name')
                 }
                 else{
                     axios.post('http://127.0.0.1:5000/roles/updateDescriptionbyID', {
