@@ -130,15 +130,28 @@
 					
 					<script>
 
-				if (sessionStorage.getItem("role") === null) {
-									alert("No role detected. Redirecting you to the login page")
-									window.location.replace("login.html")
+if (sessionStorage.getItem("role") === null) {
+					alert("No role detected. Redirecting you to the login page")
+					window.location.replace("login.html")
 
-								}
+				}
 
-								else{
+				else if (sessionStorage.getItem("role") == "staff"){
+                    $(function(){
+                        $("#nav-placeholder").load("sidebar_staff.html");
+                    });
+				}
+                else if(sessionStorage.getItem("role") == "manager"){
+                    $(function(){
+                        $("#nav-placeholder").load("sidebar_manager.html");
+                    });
+				}
+                else if (sessionStorage.getItem("role") == "hr"){
+                    $(function(){
+                        $("#nav-placeholder").load("sidebar_manager.html");
+                    });
+				}
 
-								}
 
 
 								if (sessionStorage.getItem("userid") === null) {

@@ -96,9 +96,6 @@
 
 
 <script>
-    $(function(){
-        $("#nav-placeholder").load("sidebar_staff.html");
-    });
 
 
 
@@ -108,8 +105,20 @@
 
 				}
 
-				else{
-
+				else if (sessionStorage.getItem("role") == "staff"){
+                    $(function(){
+                        $("#nav-placeholder").load("sidebar_staff.html");
+                    });
+				}
+                else if(sessionStorage.getItem("role") == "manager"){
+                    $(function(){
+                        $("#nav-placeholder").load("sidebar_manager.html");
+                    });
+				}
+                else if (sessionStorage.getItem("role") == "hr"){
+                    $(function(){
+                        $("#nav-placeholder").load("sidebar_manager.html");
+                    });
 				}
 
 
