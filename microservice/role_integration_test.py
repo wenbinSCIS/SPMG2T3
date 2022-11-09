@@ -140,6 +140,76 @@ class TestAddRole(TestApp):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.json, { "message": "Incorrect JSON object provided." })
 
+    def test_add_role_role_name_no_alphabet(self):
+        request_body = {
+            'Role Name': '12345',
+            'Created By': 1,
+            "Description":"To programme the newest project"
+        }
+
+        response = self.client.post("/roles/create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, { "message": "Role name has no alphabet" })
+
+    def test_add_role_description_similar_to_role_name(self):
+        request_body = {
+            'Role Name': 'Programmer',
+            'Created By': 1,
+            "Description":'Programmer'
+        }
+
+        response = self.client.post("/roles/create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, { 'message': 'Description cannot be similar to rolename' })
+
+    def test_add_role_role_name_start_with_number_or_symbol(self):
+        request_body = {
+            'Role Name': '1Programmer',
+            'Created By': 1,
+            "Description":'To programme the new project'
+        }
+
+        response = self.client.post("/roles/create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, { 'message': 'Role name cannot start with number or symbol' })
+
+    def test_add_role_role_name_is_empty_string(self):
+        request_body = {
+            'Role Name': '',
+            'Created By': 1,
+            "Description":'To programme the new project'
+        }
+
+        response = self.client.post("/roles/create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, { "message": "Role name cannot be blank or contain only whitespace" })
+
+    def test_add_role_role_name_contain_only_white_space(self):
+        request_body = {
+            'Role Name': '   ',
+            'Created By': 1,
+            "Description":'To programme the new project'
+        }
+
+        response = self.client.post("/roles/create",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json, { "message": "Role name cannot be blank or contain only whitespace" })
+
 class TestDeleteRoleById(TestApp):
     def test_delete_role_by_id(self):
         r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",

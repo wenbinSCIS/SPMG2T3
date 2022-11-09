@@ -92,7 +92,26 @@ def create_role():
 
     if not all(key in data.keys() for key in ('Role Name', 'Created By', 'Description')):
         return jsonify({ "message": "Incorrect JSON object provided." }), 500
-    
+
+    if data["Role Name"].replace(" ", "")=="":
+        return jsonify({ "message": "Role name cannot be blank or contain only whitespace" }), 500
+
+    has_alphabet=False
+    cur_role_name=data["Role Name"].lower()
+    for ch in "abcdefghijklmnopqrstuvwxyz":
+        if ch in cur_role_name:
+            has_alphabet=True
+            break
+
+    if not has_alphabet:
+        return jsonify({ "message": "Role name has no alphabet" }), 500
+
+    if cur_role_name==data["Description"].lower():
+        return jsonify({ "message": "Description cannot be similar to rolename" }), 500
+
+    if not cur_role_name[0].isalpha():
+        return jsonify({ "message": "Role name cannot start with number or symbol" }), 500
+
     Add_Role = Roles(
         RoleName = data["Role Name"],
         CreatedBy = int(data["Created By"]),
