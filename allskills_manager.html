@@ -275,6 +275,7 @@
 				  },
 				addSkill(){
 					duplicate = false
+					var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 					for (i of this.cachedSkillList){
 							if (i['Skillname'].toLowerCase()==this.addskilltext.toLowerCase()){
 								duplicate = true
@@ -289,6 +290,15 @@
 					}
 					else if(duplicate){
 						alert('Skill already exists in database')
+					}
+					else if(/^\d/.test(this.addskilltext)){
+						alert('Skill name cannot start with numbers')
+					}
+					else if(this.addskilltext.trim() == ""){
+						alert('Skill name cannot be spaces')
+					}
+					else if (format.test(this.addskilltext)){
+						alert('Skill name cannot be symbols')
 					}
 					else{        	
 						axios.post('http://localhost:5002/addSkill',{
@@ -305,6 +315,7 @@
 				},
 				saveskillname(skillid){
                 	duplicate = false
+					var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 					for (i of this.cachedSkillList){
 							if (i['Skillname'].toLowerCase()==this.renameskilltext.toLowerCase()){
 								duplicate = true
@@ -319,6 +330,15 @@
 					}
 					else if(duplicate){
 						alert('Skill already exists in database')
+					}
+					else if(/^\d/.test(this.addskilltext)){
+						alert('Skill name cannot start with numbers')
+					}
+					else if(this.addskilltext.trim() == ""){
+						alert('Skill name cannot be spaces')
+					}
+					else if (format.test(this.addskilltext)){
+						alert('Skill name cannot be symbols')
 					}
 					else{
 						axios.post('http://localhost:5002/updateskillnamebyID',{
