@@ -1,21 +1,31 @@
 # Documentation
 
+## Development: Running the microservices
+<!-- - for the microservices to be able to access the database, create a local ".env" file containing the following:
+```sh
+# replace the current dbURL with the actual DB username, password, serverhost, serverport and database
+# to gain access to the actual dbURL, please message one of the collaborators
+dbURL="mysql+mysqlconnector://USERNAME:PASSWORD@HOST:PORT/DATABASE"
+``` -->
+- in the terminal, to make it easier, change to the "microservice" directory
+```sh
+# should then be in "C:\PATH_TO_REPO\SPMG2T3\microservice"
+cd microservice
+```
+- afterwards, run the following 8 microservices (in different terminals)
+```sh
+python courses.py
+python roles.py
+python skills.py
+python skills_acquired_by_course.py
+python skills_required_by_role.py
+python learningjourney.py
+python learningjourneycourses.py
+python add_role.py
+```
+
 ## Development: Running the UI with VS Code
 - Open command palette and type "open live server" and press enter (need to install [live server extension](vscode:extension/ritwickdey.LiveServer))
-
-## Development: Running the microservices
-- go to "microservice/ezrunall.py"
-- edit the file's "MICROSERVICE_PATH" to your local drive's path to the "microservice" folder
-```py
-MICROSERVICE_PATH="C:\\Documents\\SPMG2T3\\microservice\\"
-```
-- in the terminal, run "python microservice/ezrunall.py" to run all simple microservices
-- and in another terminal, run "python microservice/add_role.py" to run the complex microservice
-```bash
-# may either use 'python' or 'py' depending on how your python env is set
-python microservice/ezrunall.py
-python microservice/add_role.py
-```
 
 ## Microservice Routes
 
@@ -71,3 +81,33 @@ python microservice/add_role.py
   - GET -- http://127.0.0.1:5011/LJC/deleteAllLJCbyLJID
   - GET -- http://127.0.0.1:5011/LJC/addCourseIntoBasket
   - GET -- http://127.0.0.1:5011/LJC/checkIfCourseInLJ
+
+
+<!--
+## Development: Connecting to the Database
+- create a local .env file like so:
+```sh
+dbURL="mysql+mysqlconnector://USERNAME:PASSWORD@DB_LINK:DB_PORT/DB"
+MICROSERVICE_PATH="C:\\PATH_TO_REPO\\SPMG2T3\\microservice\\"
+```
+
+## Development: Running the microservices
+- go to "microservice/ezrunall.py" and "microservice/ez"
+- edit the file's "MICROSERVICE_PATH" to your local drive's path to the "microservice" folder
+- change "PATH_TO_REPO" to your path from your local drive to the local repository
+```py
+MICROSERVICE_PATH="C:\\PATH_TO_REPO\\SPMG2T3\\microservice\\"
+```
+- to access the database, also create a local .env file like so:
+```sh
+dbURL="mysql+mysqlconnector://USERNAME:PASSWORD@DB_LINK:DB_PORT/DB"
+MICROSERVICE_PATH="C:\\PATH_TO_REPO\\SPMG2T3\\microservice\\" # for using os.environ.get("MICROSERVICE_PATH")
+```
+- in the terminal, run "python microservice/ezrunall.py" to run all simple microservices
+- and in another terminal, run "python microservice/add_role.py" to run the complex microservice
+```sh
+# may either use 'python' or 'py' depending on how your python env is set
+python microservice/ezrunall.py
+python microservice/add_role.py
+```
+-->
