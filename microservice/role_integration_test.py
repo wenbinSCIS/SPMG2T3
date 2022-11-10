@@ -340,7 +340,7 @@ class TestUpdateRoleStatus(TestApp):
         self.assertEqual(response.json, 
                     { "RoleID": r1.RoleID,"Success":True,"Status": "Filled", "code": 201 })
 
-    def test_update_status_status_already_filled(self):
+    def test_update_status_sameStatus(self):
         r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled="Filled",
                     Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
         db.session.add(r1)
@@ -358,6 +358,25 @@ class TestUpdateRoleStatus(TestApp):
         self.assertEqual(response.status_code, 501)
         self.assertEqual(response.json, 
                     { "message": "Role is already the thing you are changing to" })
+        
+    def test_update_status_status_FilledtoAvailable(self):
+        r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled="Filled",
+                    Description="To programme the newest project",TimeAdded="2022-10-05 09:19:17")
+        db.session.add(r1)
+        db.session.commit()
+        
+        request_body = {
+            "Role ID": r1.RoleID,
+            "Status":""
+        }
+
+        response = self.client.post("/roles/updateRoleStatus",
+                                    data=json.dumps(request_body),
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, 
+                    { "RoleID": r1.RoleID,"Success":True,"Status": "", "code": 201 })
 
     def test_update_status_invalid_id(self):
         r1 = Roles(RoleID=1,RoleName='Programmer', CreatedBy=1, Fulfilled=" ",
