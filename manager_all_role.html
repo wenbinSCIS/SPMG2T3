@@ -116,6 +116,13 @@
                                             Created On: <strong>
                                                 {{  cur_role.TimeAdded.toString().substring(4,16) }}
                                             </strong>
+                                        </br>
+                                        </br>
+                                            <a v-if="cur_role.Fulfilled == ' ' || cur_role.Fulfilled == ''">
+                                                
+                                                <i class='fa fa-circle' style='color:green;'></i> Available
+                                            </a>
+                                            <a v-else><i class='fa fa-circle' style='color:red;'></i> Filled Role</a>
                                         </p>
                                     </div>
                                     <div class="thumb">
@@ -123,7 +130,6 @@
                                         <ul class="tags">
                                             <div style="margin-bottom:20px;">
                                             <a class="btn btn-outline-success" :href="'#edit_role_modal'+ cur_role.RoleID"  data-toggle="modal" :data-target="'#editrole'+cur_role.RoleID">Edit Role</a>
-                                  
                                             <a class="btn btn-outline-success" style="margin-left:20px;" v-on:click="markAsFilled(cur_role.RoleID)">Mark as Filled</a>
 
                                             </div>
@@ -305,7 +311,7 @@
         methods:
         {
             get_all_role(){
-                axios.get('http://127.0.0.1:5000/roles/getUnfilled')
+                axios.get('http://127.0.0.1:5000//roles/getAll')
                 .then(response => {
                     // this gets the data, which is an array, and pass the data to Vue instance's posts property
                     this.role_list = response.data.data
@@ -427,6 +433,7 @@
                         })
                         .catch(function (error) {
                             console.log(error);
+                            alert("This role is already filled")
                         });
 
                 
